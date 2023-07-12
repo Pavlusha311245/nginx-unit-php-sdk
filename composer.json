@@ -1,0 +1,42 @@
+{
+  "name": "pavlusha311245/unit-php-sdk",
+  "type": "library",
+  "license": "Apache License 2.0",
+  "keywords": [
+    "unit",
+    "nginx unit",
+    "sdk"
+  ],
+  "autoload": {
+    "psr-4": {
+      "Pavlusha311245\\UnitPhpSdk\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Pavel Zavadski",
+      "email": "pavel.zavadski@pavlusha.me"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": "^8.2",
+    "ext-curl": "*"
+  },
+  "require-dev": {
+    "pestphp/pest": "^2.8"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "scripts": {
+    "test": "./vendor/bin/pest"
+  }
+}
