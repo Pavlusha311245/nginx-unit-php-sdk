@@ -1,7 +1,9 @@
 {
   "name": "pavlusha311245/unit-php-sdk",
   "type": "library",
+  "description": "This project allows developers to interact with the Nginx Unit web server through php classes",
   "license": "Apache License 2.0",
+  "homepage": "https://github.com/Pavlusha311245/nginx-unit-php-sdk",
   "keywords": [
     "unit",
     "nginx unit",
@@ -25,7 +27,7 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "php": "^8.2",
+    "php": ">=8.2",
     "ext-curl": "*"
   },
   "require-dev": {
