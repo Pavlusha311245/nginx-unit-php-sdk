@@ -2,6 +2,9 @@
 
 namespace Pavlusha311245\UnitPhpSdk\Config;
 
+/**
+ * Application class
+ */
 class Application
 {
     private string $_type;
@@ -44,6 +47,8 @@ class Application
     }
 
     /**
+     * Get application arguments
+     *
      * @return array
      */
     public function getArguments(): array
@@ -51,12 +56,19 @@ class Application
         return array_values($this->_arguments);
     }
 
+    /**
+     * Get application type
+     *
+     * @return string
+     */
     public function getType(): string
     {
         return $this->_type;
     }
 
     /**
+     * Set application listener
+     *
      * @param mixed $listener
      */
     public function setListener(Listener $listener): void
@@ -64,6 +76,11 @@ class Application
         $this->_listeners[$listener->getListener()] = $listener;
     }
 
+    /**
+     * Return listener
+     *
+     * @return array
+     */
     public function getListeners(): array
     {
         return $this->_listeners;
@@ -82,11 +99,21 @@ class Application
         return $this->_data;
     }
 
+    /**
+     * Get user
+     *
+     * @return string
+     */
     public function getUser(): string
     {
         return $this->_user;
     }
 
+    /**
+     * Get group
+     *
+     * @return string
+     */
     public function getGroup(): string
     {
         return $this->_group;
