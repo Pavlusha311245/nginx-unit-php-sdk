@@ -1,14 +1,21 @@
-# PHP SDK for Nginx Unit
+# Welcome!
 
-_THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
+## About project
 
-## Quick start
-```shell
-composer require pavlusha311245/unit-php-sdk
-```
+This project allows developers to interact with the Nginx Unit web server through php classes
 
-## Changelog
-More information about changes you can see [here](CHANGELOG.md)
+## Want to jump right in?
 
-## Contribution
-More info about contribution you can read [here](https://docs.github.com/en/get-started/quickstart/contributing-to-projects)
+Feeling like an eager beaver? Jump in to the quick start docs and get making your first request:
+
+{% content-ref url="quick-start.md" %}
+[quick-start.md](quick-start.md)
+{% endcontent-ref %}
+
+## Want to deep dive?
+
+Dive a little deeper and start exploring our API reference to get an idea of everything that's possible with the API:
+
+{% content-ref url="reference/api-reference.md" %}
+[api-reference.md](reference/api-reference.md)
+{% endcontent-ref %}
