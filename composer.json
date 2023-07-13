@@ -1,0 +1,44 @@
+{
+  "name": "pavlusha311245/unit-php-sdk",
+  "type": "library",
+  "description": "This project allows developers to interact with the Nginx Unit web server through php classes",
+  "license": "Apache License 2.0",
+  "homepage": "https://github.com/Pavlusha311245/nginx-unit-php-sdk",
+  "keywords": [
+    "unit",
+    "nginx unit",
+    "sdk"
+  ],
+  "autoload": {
+    "psr-4": {
+      "Pavlusha311245\\UnitPhpSdk\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Pavel Zavadski",
+      "email": "pavel.zavadski@pavlusha.me"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=8.2",
+    "ext-curl": "*"
+  },
+  "require-dev": {
+    "pestphp/pest": "^2.8"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "scripts": {
+    "test": "./vendor/bin/pest"
+  }
+}
