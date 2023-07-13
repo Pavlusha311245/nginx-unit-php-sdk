@@ -20,6 +20,8 @@ class Route
     }
 
     /**
+     * Return Listener
+     *
      * @param  mixed  $listener
      */
     public function setListener(Listener $listener): void
@@ -33,6 +35,8 @@ class Route
     }
 
     /**
+     * Get name
+     *
      * @return mixed
      */
     public function getName()
@@ -40,6 +44,11 @@ class Route
         return $this->_name;
     }
 
+    /**
+     * Return RouteBlock (action, match)
+     *
+     * @return array
+     */
     public function getRouteBlocks(): array
     {
         return $this->_routeBlocks;
