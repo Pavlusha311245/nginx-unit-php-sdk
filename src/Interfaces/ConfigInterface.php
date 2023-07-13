@@ -8,7 +8,11 @@ interface ConfigInterface
 
     public function getRoutes();
 
+    public function getRoute($routeName);
+
     public function getApplications();
+
+    public function getApplication($applicationName);
 
     public function getUpstreams();
 

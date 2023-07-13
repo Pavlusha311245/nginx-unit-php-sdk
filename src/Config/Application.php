@@ -28,7 +28,7 @@ class Application
 
     private $_data;
 
-    private array $_arguments;
+    private array $_arguments = [];
 
     private array $_listeners = [];
 
@@ -37,6 +37,7 @@ class Application
         $this->_name = $applicationName;
         $this->_type = $applicationData['type'];
         $this->_data = $applicationData;
+
         foreach ($this->_data as $key => $value) {
             $this->{"_{$key}"} = $value;
         }
@@ -47,7 +48,7 @@ class Application
      */
     public function getArguments(): array
     {
-        return $this->_arguments;
+        return array_values($this->_arguments);
     }
 
     public function getType(): string
@@ -56,7 +57,7 @@ class Application
     }
 
     /**
-     * @param  mixed  $listener
+     * @param mixed $listener
      */
     public function setListener(Listener $listener): void
     {

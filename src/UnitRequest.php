@@ -8,7 +8,10 @@ class UnitRequest
 
     private $_data = null;
 
-    public function __construct(private string $socket, private string $address)
+    public function __construct(
+        private string $socket,
+        private string $address
+    )
     {
         //
     }

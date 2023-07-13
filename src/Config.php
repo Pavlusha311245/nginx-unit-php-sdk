@@ -18,6 +18,8 @@ class Config implements ConfigInterface
     private array $_upstreams;
 
     /**
+     * Constructor
+     *
      * @throws \Exception
      */
     public function __construct(array $data)
@@ -45,26 +47,53 @@ class Config implements ConfigInterface
         $this->_upstreams = $data['upstreams'] ?? [];
     }
 
+    /**
+     * Get listeners from config
+     *
+     * @return array
+     */
     public function getListeners(): array
     {
         return $this->_listeners ?? [];
     }
 
+    /**
+     * Get applications from config
+     *
+     * @return array
+     */
     public function getApplications(): array
     {
         return $this->_applications;
     }
 
+    /**
+     * Get application from config by name
+     *
+     * @param $applicationName
+     * @return mixed
+     */
     public function getApplication($applicationName)
     {
         return $this->_applications[$applicationName];
     }
 
+    /**
+     * Get routes from config
+     *
+     * @return array
+     */
     public function getRoutes(): array
     {
         return $this->_routes;
     }
 
+    /**
+     * Get route from config by name
+     *
+     * @param $routeName
+     * @return mixed
+     */
     public function getRoute($routeName)
     {
         return $this->_routes[$routeName];
@@ -78,6 +107,11 @@ class Config implements ConfigInterface
         return $this->_upstreams;
     }
 
+    /**
+     * Return config as array
+     *
+     * @return array
+     */
     public function toArray(): array
     {
         return [
