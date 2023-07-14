@@ -2,21 +2,31 @@
 
 namespace Pavlusha311245\UnitPhpSdk;
 
+use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+
 class UnitRequest
 {
-    private $_method = 'GET';
+    private string $_method = 'GET';
 
     private $_data = null;
 
+    /**
+     * Constructor
+     *
+     * @param string $socket
+     * @param string $address
+     */
     public function __construct(
-        private string $socket,
-        private string $address
+        private readonly string $socket,
+        private readonly string $address
     )
     {
         //
     }
 
     /**
+     * Set HTTP method
+     *
      * @param mixed $method
      */
     public function setMethod(string $method): void
@@ -25,6 +35,8 @@ class UnitRequest
     }
 
     /**
+     * Setup data
+     *
      * @param null $data
      */
     public function setData($data): void
@@ -33,7 +45,9 @@ class UnitRequest
     }
 
     /**
-     * @throws Exception
+     * Send request
+     *
+     * @throws UnitException
      */
     public function send($uri)
     {
@@ -57,7 +71,7 @@ class UnitRequest
 
         $result = curl_exec($ch);
         if (curl_errno($ch)) {
-            throw new \Exception('Error:' . curl_error($ch));
+            throw new UnitException('Error:' . curl_error($ch));
         }
         curl_close($ch);
 

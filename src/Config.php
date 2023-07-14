@@ -33,9 +33,8 @@ class Config implements ConfigInterface
 
         foreach ($data['listeners'] as $listener => $listenerData) {
             $listener = (new Listener(
-                listener: $listener
+                _listener: $listener
             ))->parseFromArray($listenerData);
-
             $typePath = $listener->getPass()[0];
             $typePathName = $listener->getPass()[1];
 
@@ -100,11 +99,35 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Get upstreams
+     *
      * @return mixed|null
      */
     public function getUpstreams(): mixed
     {
         return $this->_upstreams;
+    }
+
+    /**
+     * Setup access log file path
+     *
+     * @return void
+     */
+    public function setApplicationLogPath()
+    {
+        // TODO: Implement setApplicationLogPath() method.
+        // Implement functions from this source https://unit.nginx.org/configuration/#access-log
+    }
+
+    /**
+     * Setup access log file format
+     *
+     * @return void
+     */
+    public function setApplicationLogFormat()
+    {
+        // TODO: Implement setApplicationLogFormat() method.
+        // Implement functions from this source https://unit.nginx.org/configuration/#access-log
     }
 
     /**

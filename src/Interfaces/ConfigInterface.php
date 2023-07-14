@@ -16,5 +16,9 @@ interface ConfigInterface
 
     public function getUpstreams();
 
+    public function setApplicationLogPath();
+
+    public function setApplicationLogFormat();
+
     public function toArray(): array;
 }
