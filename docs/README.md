@@ -1,21 +1,25 @@
+---
+coverY: 0
+---
+
 # Welcome!
 
 ## About project
 
 This project allows developers to interact with the Nginx Unit web server through php classes
 
-## Want to jump right in?
+## Want to start?
 
-Feeling like an eager beaver? Jump in to the quick start docs and get making your first request:
+You can easy start work with SDK with Quick start guide below:
 
-{% content-ref url="quick-start.md" %}
-[quick-start.md](quick-start.md)
+{% content-ref url="quick-start-in-development.md" %}
+[quick-start-in-development.md](quick-start-in-development.md)
 {% endcontent-ref %}
 
-## Want to deep dive?
+## Want to learn SDK deeper?
 
-Dive a little deeper and start exploring our API reference to get an idea of everything that's possible with the API:
+Dive a deeper and start exploring our SDK API reference:
 
-{% content-ref url="reference/api-reference.md" %}
-[api-reference.md](reference/api-reference.md)
+{% content-ref url="reference/api-reference/" %}
+[api-reference](reference/api-reference/)
 {% endcontent-ref %}
