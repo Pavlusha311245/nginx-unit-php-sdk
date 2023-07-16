@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## v0.2.0 - [2023/07/16]
+
+- Added new method `getListenerByPort`
+- Added methods for implementation
+  - `setApplicationLogPath($path)`
+  - `setApplicationLogFormat($format)`
+- Replaced arrays to object in Route
+- Updated doc
+
 ## v0.1.0 - [2023/07/13] (Experimental version)
 
 - Created project
