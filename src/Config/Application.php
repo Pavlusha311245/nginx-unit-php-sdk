@@ -3,7 +3,7 @@
 namespace Pavlusha311245\UnitPhpSdk\Config;
 
 /**
- * Application class
+ * This class presents "application" section from config
  */
 class Application
 {

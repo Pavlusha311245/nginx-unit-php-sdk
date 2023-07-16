@@ -4,6 +4,9 @@ namespace Pavlusha311245\UnitPhpSdk\Config;
 
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
 
+/**
+ * This class presents "listeners" section from config
+ */
 class Listener
 {
     private string $_link;
