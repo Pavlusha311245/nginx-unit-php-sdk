@@ -7,6 +7,9 @@ use Pavlusha311245\UnitPhpSdk\Config\Listener;
 use Pavlusha311245\UnitPhpSdk\Config\Route;
 use Pavlusha311245\UnitPhpSdk\Interfaces\ConfigInterface;
 
+/**
+ * This class contains Nginx Unit config data
+ */
 class Config implements ConfigInterface
 {
     private array $_listeners;
@@ -113,7 +116,7 @@ class Config implements ConfigInterface
      *
      * @return void
      */
-    public function setApplicationLogPath()
+    public function setApplicationLogPath($path)
     {
         // TODO: Implement setApplicationLogPath() method.
         // Implement functions from this source https://unit.nginx.org/configuration/#access-log
@@ -124,7 +127,7 @@ class Config implements ConfigInterface
      *
      * @return void
      */
-    public function setApplicationLogFormat()
+    public function setApplicationLogFormat($format)
     {
         // TODO: Implement setApplicationLogFormat() method.
         // Implement functions from this source https://unit.nginx.org/configuration/#access-log

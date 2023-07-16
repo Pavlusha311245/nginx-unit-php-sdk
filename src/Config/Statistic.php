@@ -4,6 +4,9 @@ namespace Pavlusha311245\UnitPhpSdk\Config;
 
 use Pavlusha311245\UnitPhpSdk\Interfaces\StatisticsInterface;
 
+/**
+ * This class returns statistics from Nginx Unit
+ */
 class Statistic implements StatisticsInterface
 {
     private array $_connections;
