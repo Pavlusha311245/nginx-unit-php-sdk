@@ -50,6 +50,23 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Get listener by port
+     *
+     * @param int $port
+     * @return Listener|null
+     */
+    public function getListenerByPort(int $port): Listener|null
+    {
+        foreach ($this->_listeners as $listener) {
+            if ($listener->getPort() == $port) {
+                return $listener;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Get listeners from config
      *
      * @return array
