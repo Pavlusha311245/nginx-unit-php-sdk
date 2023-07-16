@@ -4,9 +4,9 @@ namespace Pavlusha311245\UnitPhpSdk\Interfaces;
 
 interface StatisticsInterface
 {
-    public function getConnections();
+    public function getConnections(): array;
 
-    public function getRequests();
+    public function getRequests(): array;
 
-    public function getApplications();
+    public function getApplications(): array;
 }

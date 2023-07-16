@@ -4,6 +4,9 @@ namespace Pavlusha311245\UnitPhpSdk\Config;
 
 use Pavlusha311245\UnitPhpSdk\Config\Routes\RouteBlock;
 
+/**
+ * This class presents "routes" section from config
+ */
 class Route
 {
     private array $_routeBlocks;

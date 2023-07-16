@@ -8,8 +8,13 @@ class RouteAction
     private string $_proxy;
     private int $_return;
     private string $_location;
-    private $_share;
+    private array|string $_share;
     private string $_rewrite;
+
+    public function __construct($data)
+    {
+        $this->_share = $data['share'] ?? null;
+    }
 
     /**
      * Receive return key
@@ -28,8 +33,7 @@ class RouteAction
      */
     public function setReturn(int $return): void
     {
-        if ($return > 999 && $return < 0)
-        {
+        if ($return > 999 && $return < 0) {
             throw new \OutOfRangeException();
         }
 

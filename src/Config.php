@@ -7,6 +7,9 @@ use Pavlusha311245\UnitPhpSdk\Config\Listener;
 use Pavlusha311245\UnitPhpSdk\Config\Route;
 use Pavlusha311245\UnitPhpSdk\Interfaces\ConfigInterface;
 
+/**
+ * This class contains Nginx Unit config data
+ */
 class Config implements ConfigInterface
 {
     private array $_listeners;
@@ -33,9 +36,8 @@ class Config implements ConfigInterface
 
         foreach ($data['listeners'] as $listener => $listenerData) {
             $listener = (new Listener(
-                listener: $listener
+                _listener: $listener
             ))->parseFromArray($listenerData);
-
             $typePath = $listener->getPass()[0];
             $typePathName = $listener->getPass()[1];
 
@@ -45,6 +47,23 @@ class Config implements ConfigInterface
         }
 
         $this->_upstreams = $data['upstreams'] ?? [];
+    }
+
+    /**
+     * Get listener by port
+     *
+     * @param int $port
+     * @return Listener|null
+     */
+    public function getListenerByPort(int $port): Listener|null
+    {
+        foreach ($this->_listeners as $listener) {
+            if ($listener->getPort() == $port) {
+                return $listener;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -100,11 +119,35 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Get upstreams
+     *
      * @return mixed|null
      */
     public function getUpstreams(): mixed
     {
         return $this->_upstreams;
+    }
+
+    /**
+     * Setup access log file path
+     *
+     * @return void
+     */
+    public function setApplicationLogPath($path)
+    {
+        // TODO: Implement setApplicationLogPath() method.
+        // Implement functions from this source https://unit.nginx.org/configuration/#access-log
+    }
+
+    /**
+     * Setup access log file format
+     *
+     * @return void
+     */
+    public function setApplicationLogFormat($format)
+    {
+        // TODO: Implement setApplicationLogFormat() method.
+        // Implement functions from this source https://unit.nginx.org/configuration/#access-log
     }
 
     /**

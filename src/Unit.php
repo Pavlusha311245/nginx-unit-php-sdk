@@ -3,8 +3,12 @@
 namespace Pavlusha311245\UnitPhpSdk;
 
 use Pavlusha311245\UnitPhpSdk\Config\Statistic;
+use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
 use Pavlusha311245\UnitPhpSdk\Interfaces\UnitInterface;
 
+/**
+ * This is main class of Nginx Unit manipulation
+ */
 class Unit implements UnitInterface
 {
     private readonly string $socket;
@@ -87,6 +91,7 @@ class Unit implements UnitInterface
      * Return Usage Statistics from Unit
      *
      * @return Interfaces\StatisticsInterface
+     * @throws UnitException
      */
     public function getStatistics(): Interfaces\StatisticsInterface
     {
