@@ -121,7 +121,7 @@ class Config implements ConfigInterface
      * @param $applicationName
      * @return mixed
      */
-    public function getApplication($applicationName)
+    public function getApplication($applicationName): ApplicationAbstract
     {
         return $this->_applications[$applicationName];
     }
@@ -165,28 +165,6 @@ class Config implements ConfigInterface
     public function getUpstreams(): mixed
     {
         return $this->_upstreams;
-    }
-
-    /**
-     * Setup access log file path
-     *
-     * @return void
-     */
-    public function setApplicationLogPath($path)
-    {
-        // TODO: Implement setApplicationLogPath() method.
-        // Implement functions from this source https://unit.nginx.org/configuration/#access-log
-    }
-
-    /**
-     * Setup access log file format
-     *
-     * @return void
-     */
-    public function setApplicationLogFormat($format)
-    {
-        // TODO: Implement setApplicationLogFormat() method.
-        // Implement functions from this source https://unit.nginx.org/configuration/#access-log
     }
 
     /**

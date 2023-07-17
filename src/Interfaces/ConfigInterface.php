@@ -2,6 +2,7 @@
 
 namespace Pavlusha311245\UnitPhpSdk\Interfaces;
 
+use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
 use Pavlusha311245\UnitPhpSdk\Config\Listener;
 
 interface ConfigInterface
@@ -14,23 +15,19 @@ interface ConfigInterface
 
     public function updateListener($data);
 
-    public function getRoutes();
+    public function getRoutes(): array;
 
     public function getRoute($routeName);
 
     public function createRoute($data);
 
-    public function getApplications();
+    public function getApplications(): array;
 
-    public function getApplication($applicationName);
+    public function getApplication($applicationName): ApplicationAbstract;
 
     public function createApplication($data);
 
     public function getUpstreams();
-
-    public function setApplicationLogPath($path);
-
-    public function setApplicationLogFormat($format);
 
     public function toArray(): array;
 }
