@@ -11,8 +11,6 @@ interface ConfigInterface
 
     public function getListenerByPort(int $port): Listener|null;
 
-    public function updateListener($data);
-
     public function getRoutes(): array;
 
     public function getRoute($routeName);
