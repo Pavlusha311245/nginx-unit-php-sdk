@@ -3,6 +3,7 @@
 namespace Pavlusha311245\UnitPhpSdk;
 
 use Pavlusha311245\UnitPhpSdk\Config\Statistic;
+use Pavlusha311245\UnitPhpSdk\Enums\HttpMethodsEnum;
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
 use Pavlusha311245\UnitPhpSdk\Interfaces\UnitInterface;
 
@@ -98,5 +99,28 @@ class Unit implements UnitInterface
         $result = (new UnitRequest($this->socket, $this->address))->send('/status');
 
         return new Statistic($result);
+    }
+
+    /**
+     * Setup access log file
+     *
+     * @return void
+     * @throws UnitException
+     */
+    public function setAccessLog($path, $format = null)
+    {
+        $data['path'] = $path;
+
+        if (!empty($format)) {
+            $data['format'] = $format;
+        }
+
+        $request = new UnitRequest($this->socket, $this->address);
+        $request->setMethod(HttpMethodsEnum::PUT->value);
+        $request->setData(json_encode($data));
+
+        return $request->send('/config/access_log');
+        // TODO: Implement setApplicationLogPath() method.
+        // Implement functions from this source https://unit.nginx.org/configuration/#access-log
     }
 }

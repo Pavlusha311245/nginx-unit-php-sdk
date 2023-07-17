@@ -13,4 +13,6 @@ interface UnitInterface
     public function getStatistics(): StatisticsInterface;
 
     public function getCertificates(): array;
+
+    public function setAccessLog($path, $format = null);
 }
