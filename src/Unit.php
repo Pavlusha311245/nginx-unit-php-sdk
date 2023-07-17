@@ -120,7 +120,5 @@ class Unit implements UnitInterface
         $request->setData(json_encode($data));
 
         return $request->send('/config/access_log');
-        // TODO: Implement setApplicationLogPath() method.
-        // Implement functions from this source https://unit.nginx.org/configuration/#access-log
     }
 }

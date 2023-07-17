@@ -105,17 +105,6 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Update listener
-     *
-     * @param $data
-     * @return void
-     */
-    public function updateListener($data)
-    {
-        // TODO: Implement updateListener() method.
-    }
-
-    /**
      * Get applications from config
      *
      * @return array
