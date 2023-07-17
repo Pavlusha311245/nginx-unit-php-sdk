@@ -15,9 +15,8 @@ class Route
 
     public function __construct(
         private readonly string $_name,
-        $data)
+                                $data)
     {
-        // TODO: implement match and action in block
         foreach ($data as $routeBlock) {
             $this->_routeBlocks[] = new RouteBlock($routeBlock);
         }
@@ -26,7 +25,7 @@ class Route
     /**
      * Return Listener
      *
-     * @param  mixed  $listener
+     * @param mixed $listener
      */
     public function setListener(Listener $listener): void
     {

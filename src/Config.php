@@ -15,12 +15,33 @@ use PHPUnit\TextUI\Configuration\Php;
  */
 class Config implements ConfigInterface
 {
+    /**
+     * Listeners accept requests
+     *
+     * @var array
+     */
     private array $_listeners;
 
+    /**
+     * Route entities defines internal request routing.
+     *
+     * @var array
+     */
     private array $_routes = [];
 
+    /**
+     * Each app that Unit runs is defined as an object
+     *
+     * @var array
+     */
     private array $_applications = [];
 
+    /**
+     * An upstream is a group of servers that comprise a single logical entity and
+     * may be used as a pass destination for incoming requests in a listener or a route.
+     *
+     * @var array|mixed
+     */
     private array $_upstreams;
 
     /**
@@ -84,17 +105,6 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Create listener
-     *
-     * @param $data
-     * @return void
-     */
-    public function createListener($data)
-    {
-        // TODO: Implement createListener() method.
-    }
-
-    /**
      * Update listener
      *
      * @param $data
@@ -126,11 +136,6 @@ class Config implements ConfigInterface
         return $this->_applications[$applicationName];
     }
 
-    public function createApplication($data)
-    {
-        // TODO: Implement createApplication() method.
-    }
-
     /**
      * Get routes from config
      *
@@ -152,11 +157,6 @@ class Config implements ConfigInterface
         return $this->_routes[$routeName];
     }
 
-    public function createRoute($data)
-    {
-        // TODO: Implement createRoute() method.
-    }
-
     /**
      * Get upstreams
      *
@@ -174,11 +174,14 @@ class Config implements ConfigInterface
      */
     public function toArray(): array
     {
-        return [
-            'listeners' => $this->_listeners,
-            'routes' => $this->_routes,
-            'applications' => $this->_applications,
-            'upstreams' => $this->_upstreams,
-        ];
+        $array = [];
+
+        foreach (array_keys(get_object_vars($this)) as $key) {
+            if (!empty($this->{$key})) {
+                $array[substr($key, 1)] = $this->{$key};
+            }
+        }
+
+        return $array;
     }
 }

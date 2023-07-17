@@ -50,11 +50,9 @@ class RouteAction
 
     private string $_chroot;
 
-    // TODO: implement getter and setter
-    private bool $_follow_symlinks;
+    protected bool $_follow_symlinks;
 
-    // TODO: implement getter and setter
-    private bool $_traverse_mounts;
+    protected bool $_traverse_mounts;
 
     private string $_rewrite;
 
@@ -239,6 +237,22 @@ class RouteAction
         $this->_fallback = $fallback;
     }
 
+    /**
+     * @param bool $follow_symlinks
+     */
+    public function setFollowSymlinks(bool $follow_symlinks): void
+    {
+        $this->_follow_symlinks = $follow_symlinks;
+    }
+
+    /**
+     * @param bool $traverse_mounts
+     */
+    public function setTraverseMounts(bool $traverse_mounts): void
+    {
+        $this->_traverse_mounts = $traverse_mounts;
+    }
+
     public function parseFromArray(array $data)
     {
         if (array_key_exists('pass', $data)) {
@@ -279,6 +293,14 @@ class RouteAction
 
         if (array_key_exists('fallback', $data)) {
             $this->setFallback($data['fallback']);
+        }
+
+        if (array_key_exists('follow_symlinks', $data)) {
+            $this->setFollowSymlinks($data['follow_symlinks']);
+        }
+
+        if (array_key_exists('traverse_mounts', $data)) {
+            $this->setTraverseMounts($data['traverse_mounts']);
         }
     }
 }
