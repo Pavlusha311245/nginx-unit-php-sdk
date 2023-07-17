@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v0.3.0 - [2023/07/17]
+
+- Removed Application class
+- Added Application classes based on abstraction
+- Updated Route action and match classes
+- Added enums (HttpSchemeEnum, HttpMethodsEnum)
+- Updated Config and Unit classes
+
 ## v0.2.0 - [2023/07/16]
 
 - Added new method `getListenerByPort`

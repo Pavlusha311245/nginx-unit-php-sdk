@@ -2,22 +2,46 @@
 
 namespace Pavlusha311245\UnitPhpSdk;
 
+use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
 use Pavlusha311245\UnitPhpSdk\Config\Application;
 use Pavlusha311245\UnitPhpSdk\Config\Listener;
 use Pavlusha311245\UnitPhpSdk\Config\Route;
+use Pavlusha311245\UnitPhpSdk\Enums\ApplicationTypeEnum;
 use Pavlusha311245\UnitPhpSdk\Interfaces\ConfigInterface;
+use PHPUnit\TextUI\Configuration\Php;
 
 /**
  * This class contains Nginx Unit config data
  */
 class Config implements ConfigInterface
 {
+    /**
+     * Listeners accept requests
+     *
+     * @var array
+     */
     private array $_listeners;
 
+    /**
+     * Route entities defines internal request routing.
+     *
+     * @var array
+     */
     private array $_routes = [];
 
+    /**
+     * Each app that Unit runs is defined as an object
+     *
+     * @var array
+     */
     private array $_applications = [];
 
+    /**
+     * An upstream is a group of servers that comprise a single logical entity and
+     * may be used as a pass destination for incoming requests in a listener or a route.
+     *
+     * @var array|mixed
+     */
     private array $_upstreams;
 
     /**
@@ -31,7 +55,11 @@ class Config implements ConfigInterface
             $this->_routes[$routeName] = new Route($routeName, $routeData);
         }
         foreach ($data['applications'] as $appName => $appData) {
-            $this->_applications[$appName] = new Application($appName, $appData);
+            // TODO: implement go and nodejs detect
+            $this->_applications[$appName] = match ($appData['type']) {
+                'php' => new Application\PhpApplication($appData),
+                'external' => new Application\NodeJsApplication($appData),
+            };
         }
 
         foreach ($data['listeners'] as $listener => $listenerData) {
@@ -41,7 +69,7 @@ class Config implements ConfigInterface
             $typePath = $listener->getPass()[0];
             $typePathName = $listener->getPass()[1];
 
-            ($this->{"_{$typePath}"}[$typePathName])->setListener($listener);
+//            ($this->{"_{$typePath}"}[$typePathName])->setListener($listener);
 
             $this->_listeners[] = $listener;
         }
@@ -92,7 +120,7 @@ class Config implements ConfigInterface
      * @param $applicationName
      * @return mixed
      */
-    public function getApplication($applicationName)
+    public function getApplication($applicationName): ApplicationAbstract
     {
         return $this->_applications[$applicationName];
     }
@@ -129,39 +157,20 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Setup access log file path
-     *
-     * @return void
-     */
-    public function setApplicationLogPath($path)
-    {
-        // TODO: Implement setApplicationLogPath() method.
-        // Implement functions from this source https://unit.nginx.org/configuration/#access-log
-    }
-
-    /**
-     * Setup access log file format
-     *
-     * @return void
-     */
-    public function setApplicationLogFormat($format)
-    {
-        // TODO: Implement setApplicationLogFormat() method.
-        // Implement functions from this source https://unit.nginx.org/configuration/#access-log
-    }
-
-    /**
      * Return config as array
      *
      * @return array
      */
     public function toArray(): array
     {
-        return [
-            'listeners' => $this->_listeners,
-            'routes' => $this->_routes,
-            'applications' => $this->_applications,
-            'upstreams' => $this->_upstreams,
-        ];
+        $array = [];
+
+        foreach (array_keys(get_object_vars($this)) as $key) {
+            if (!empty($this->{$key})) {
+                $array[substr($key, 1)] = $this->{$key};
+            }
+        }
+
+        return $array;
     }
 }
