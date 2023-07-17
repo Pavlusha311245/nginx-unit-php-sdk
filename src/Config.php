@@ -2,10 +2,13 @@
 
 namespace Pavlusha311245\UnitPhpSdk;
 
+use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
 use Pavlusha311245\UnitPhpSdk\Config\Application;
 use Pavlusha311245\UnitPhpSdk\Config\Listener;
 use Pavlusha311245\UnitPhpSdk\Config\Route;
+use Pavlusha311245\UnitPhpSdk\Enums\ApplicationTypeEnum;
 use Pavlusha311245\UnitPhpSdk\Interfaces\ConfigInterface;
+use PHPUnit\TextUI\Configuration\Php;
 
 /**
  * This class contains Nginx Unit config data
@@ -17,6 +20,7 @@ class Config implements ConfigInterface
     private array $_routes = [];
 
     private array $_applications = [];
+    private array $_new_applications = [];
 
     private array $_upstreams;
 
@@ -31,7 +35,13 @@ class Config implements ConfigInterface
             $this->_routes[$routeName] = new Route($routeName, $routeData);
         }
         foreach ($data['applications'] as $appName => $appData) {
-            $this->_applications[$appName] = new Application($appName, $appData);
+//            $this->_applications[$appName] = new Application($appName, $appData);
+
+            // TODO: implement go and nodejs detect
+            $this->_applications[$appName] = match ($appData['type']) {
+                'php' => new Application\PhpApplication($appData),
+                'external' => new Application\NodeJsApplication($appData),
+            };
         }
 
         foreach ($data['listeners'] as $listener => $listenerData) {
@@ -41,7 +51,7 @@ class Config implements ConfigInterface
             $typePath = $listener->getPass()[0];
             $typePathName = $listener->getPass()[1];
 
-            ($this->{"_{$typePath}"}[$typePathName])->setListener($listener);
+//            ($this->{"_{$typePath}"}[$typePathName])->setListener($listener);
 
             $this->_listeners[] = $listener;
         }
@@ -77,6 +87,28 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Create listener
+     *
+     * @param $data
+     * @return void
+     */
+    public function createListener($data)
+    {
+        // TODO: Implement createListener() method.
+    }
+
+    /**
+     * Update listener
+     *
+     * @param $data
+     * @return void
+     */
+    public function updateListener($data)
+    {
+        // TODO: Implement updateListener() method.
+    }
+
+    /**
      * Get applications from config
      *
      * @return array
@@ -95,6 +127,11 @@ class Config implements ConfigInterface
     public function getApplication($applicationName)
     {
         return $this->_applications[$applicationName];
+    }
+
+    public function createApplication($data)
+    {
+        // TODO: Implement createApplication() method.
     }
 
     /**
@@ -116,6 +153,11 @@ class Config implements ConfigInterface
     public function getRoute($routeName)
     {
         return $this->_routes[$routeName];
+    }
+
+    public function createRoute($data)
+    {
+        // TODO: Implement createRoute() method.
     }
 
     /**
