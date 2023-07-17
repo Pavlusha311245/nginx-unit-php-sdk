@@ -20,7 +20,6 @@ class Config implements ConfigInterface
     private array $_routes = [];
 
     private array $_applications = [];
-    private array $_new_applications = [];
 
     private array $_upstreams;
 
@@ -35,8 +34,6 @@ class Config implements ConfigInterface
             $this->_routes[$routeName] = new Route($routeName, $routeData);
         }
         foreach ($data['applications'] as $appName => $appData) {
-//            $this->_applications[$appName] = new Application($appName, $appData);
-
             // TODO: implement go and nodejs detect
             $this->_applications[$appName] = match ($appData['type']) {
                 'php' => new Application\PhpApplication($appData),

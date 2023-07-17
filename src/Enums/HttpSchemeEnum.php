@@ -5,8 +5,8 @@ namespace Pavlusha311245\UnitPhpSdk\Enums;
 /**
  * List of HTTP schemes
  */
-enum HttpSchemeEnum
+enum HttpSchemeEnum: string
 {
-    case HTTP;
-    case HTTPS;
+    case HTTP = 'http';
+    case HTTPS = 'https';
 }
