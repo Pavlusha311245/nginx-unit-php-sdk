@@ -20,6 +20,25 @@ _THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
 * Add package `composer require pavlusha311245/unit-php-sdk`
 
 Congratulations! You installed package. Now you can use the full power of this SDK.
+
+* Create `index.php` file
+* Paste code and change this line `socket: <your socket path to Nginx Unit>` for your configuration
+```php
+<?php
+
+use Pavlusha311245\UnitPhpSdk\Unit;
+
+require '../vendor/autoload.php';
+
+$unit = new Unit(
+    socket: <your socket path to Nginx Unit>,
+    address: 'http://localhost'
+);
+
+$unit->getConfig();
+```
+* Run index.php
+
 #### Happy coding 😊
 
 ## Documentation
