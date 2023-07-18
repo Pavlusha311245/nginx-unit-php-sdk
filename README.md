@@ -5,6 +5,13 @@
 
 _THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
 
+## Supported Versions
+
+| Version | Supported          |
+|---------|--------------------|
+| 0.3.x   | :white_check_mark: |
+| < 0.3.1 | :x:                |
+
 ## Quick start
 
 ### Pre-requirements
@@ -53,3 +60,9 @@ More information about changes you can see [here](CHANGELOG.md)
 
 More info about contribution you can
 read [here](https://docs.github.com/en/get-started/quickstart/contributing-to-projects)
+
+## Security Policy
+
+If you find bugs and vulnerabilities, please contact [zavadskiy.pavel2002@outlook.com](mailto:zavadskiy.pavel2002@outlook.com).
+
+More info [here](SECURITY.md)
