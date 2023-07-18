@@ -22,7 +22,8 @@
   "authors": [
     {
       "name": "Pavel Zavadski",
-      "email": "pavel.zavadski@pavlusha.me"
+      "email": "pavel.zavadski@pavlusha.me",
+      "homepage": "https://pavlusha.me/"
     }
   ],
   "minimum-stability": "stable",
