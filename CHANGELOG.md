@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.3.1 - [2023/07/18]
+
+- Removed method.
+
 ## v0.3.0 - [2023/07/17]
 
 - Removed Application class
