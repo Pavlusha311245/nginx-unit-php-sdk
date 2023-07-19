@@ -4,6 +4,7 @@ namespace Pavlusha311245\UnitPhpSdk\Interfaces;
 
 use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
 use Pavlusha311245\UnitPhpSdk\Config\Listener;
+use Pavlusha311245\UnitPhpSdk\Config\Route;
 
 interface ConfigInterface
 {
@@ -13,7 +14,7 @@ interface ConfigInterface
 
     public function getRoutes(): array;
 
-    public function getRoute($routeName);
+    public function getRoute(string $routeName): Route|null;
 
     public function getApplications(): array;
 

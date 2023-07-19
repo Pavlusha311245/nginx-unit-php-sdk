@@ -69,7 +69,7 @@ class Config implements ConfigInterface
             $typePath = $listener->getPass()[0];
             $typePathName = $listener->getPass()[1];
 
-//            ($this->{"_{$typePath}"}[$typePathName])->setListener($listener);
+            ($this->{"_{$typePath}"}[$typePathName])->setListener($listener);
 
             $this->_listeners[] = $listener;
         }
@@ -141,9 +141,9 @@ class Config implements ConfigInterface
      * @param $routeName
      * @return mixed
      */
-    public function getRoute($routeName)
+    public function getRoute(string $routeName): Route|null
     {
-        return $this->_routes[$routeName];
+        return $this->_routes[$routeName] ?? null;
     }
 
     /**
