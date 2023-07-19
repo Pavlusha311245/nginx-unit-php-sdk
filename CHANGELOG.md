@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.3.2 - [2023/07/19]
+
+- Fixed issues with nullable objects and values
+- Added `setListener($listener)` method to Application
+
 ## v0.3.1 - [2023/07/18]
 
 - Removed method.
