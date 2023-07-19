@@ -25,15 +25,15 @@ interface ApplicationInterface
 
     public function setUser(string $name): void;
 
-    public function getIsolation(): ProcessIsolation;
+    public function getIsolation(): ?ProcessIsolation;
 
     public function setIsolation(ProcessIsolation $isolation): void;
 
-    public function getLimits(): RequestLimit;
+    public function getLimits(): ?RequestLimit;
 
     public function setLimits(RequestLimit $requestLimit): void;
 
-    public function getProcesses(): ApplicationProcess|int;
+    public function getProcesses(): ApplicationProcess|int|null;
 
     public function setProcesses(ApplicationProcess|int $processes): void;
 

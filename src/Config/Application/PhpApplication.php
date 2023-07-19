@@ -7,11 +7,11 @@ use Pavlusha311245\UnitPhpSdk\Config\Application\Targets\PhpTarget;
 
 class PhpApplication extends ApplicationAbstract
 {
-    private string $_root;
+    private string $_root = '';
 
-    private string $_index;
+    private string $_index = '';
 
-    private string $_script;
+    private string $_script = '';
 
     private $_options;
 

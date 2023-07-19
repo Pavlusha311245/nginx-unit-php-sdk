@@ -11,66 +11,64 @@ class RouteAction
      *
      * @var string
      */
-    private string $_pass;
+    private string $_pass = '';
 
     /**
      * Socket address of an HTTP server to where the request is proxied.
      *
      * @var string
      */
-    private string $_proxy;
+    private string $_proxy = '';
 
     /**
      * HTTP status code with a context-dependent redirect location.
      * Integer (000–999); defines the HTTP response status code to be returned.
      *
-     * @var int
+     * @var int|null
      */
-    private int $_return;
+    private ?int $_return = null;
 
     /**
      * String URI; used if the return value implies redirection.
      *
      * @var string
      */
-    private string $_location;
+    private string $_location = '';
 
     /**
      * Lists file paths that are tried until a file is found.
      *
      * @var array|string
      */
-    private array|string $_share;
+    private array|string $_share = '';
 
-    private string $_index;
+    private string $_index = '';
 
-    private array $_fallback;
+    private array $_fallback = [];
 
-    private array $_types;
+    private array $_types = [];
 
-    private string $_chroot;
+    private string $_chroot = '';
 
     protected bool $_follow_symlinks;
 
     protected bool $_traverse_mounts;
 
-    private string $_rewrite;
+    private string $_rewrite = '';
 
     public function __construct($data = null)
     {
         if (!empty($data)) {
             $this->parseFromArray($data);
         }
-
-//        $this->_share = $data['share'] ?? null;
     }
 
     /**
      * Receive return key
      *
-     * @return mixed
+     * @return int|null
      */
-    public function getReturn()
+    public function getReturn(): ?int
     {
         return $this->_return;
     }

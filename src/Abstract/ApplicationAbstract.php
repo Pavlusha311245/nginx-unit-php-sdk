@@ -5,12 +5,15 @@ namespace Pavlusha311245\UnitPhpSdk\Abstract;
 use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ApplicationProcess;
 use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\RequestLimit;
+use Pavlusha311245\UnitPhpSdk\Config\Listener;
 use Pavlusha311245\UnitPhpSdk\Enums\ApplicationTypeEnum;
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
 use Pavlusha311245\UnitPhpSdk\Interfaces\ApplicationInterface;
 
 abstract class ApplicationAbstract implements ApplicationInterface
 {
+    private ?Listener $_listener = null;
+
     private string $_type;
 
     /**
@@ -18,30 +21,30 @@ abstract class ApplicationAbstract implements ApplicationInterface
      *
      * @var array
      */
-    private array $_environment;
+    private array $_environment = [];
 
     /**
      * Group name that runs the app process
      *
      * @var string
      */
-    protected string $_group;
+    protected string $_group = '';
 
     /**
      * Username that runs the app process
      *
      * @var string
      */
-    protected string $_user;
+    protected string $_user = '';
 
     /**
      * The app working directory.
      *
      * @var string
      */
-    private string $_working_directory;
+    private string $_working_directory = '';
 
-    private string $_name;
+    private string $_name = '';
 
     /**
      * The file path to which Unit redirects the application's error stream output in --no-daemon mode.
@@ -60,13 +63,23 @@ abstract class ApplicationAbstract implements ApplicationInterface
     /**
      * Static number of app processes or object options
      *
-     * @var ApplicationProcess|string
+     * @var string|ApplicationProcess|null
      */
-    private ApplicationProcess|string $_processes;
+    private string|null|ApplicationProcess $_processes = null;
 
-    private RequestLimit $_limits;
+    /**
+     * Control requests limits
+     *
+     * @var RequestLimit|null
+     */
+    private ?RequestLimit $_limits = null;
 
-    private ProcessIsolation $_isolation;
+    /**
+     * You can use namespace and file system isolation for your apps if Unit’s underlying OS supports them
+     *
+     * @var ProcessIsolation|null
+     */
+    private ?ProcessIsolation $_isolation = null;
 
     public function __construct(array $data = null)
     {
@@ -121,7 +134,7 @@ abstract class ApplicationAbstract implements ApplicationInterface
         $this->_environment = $environment;
     }
 
-    public function getIsolation(): ProcessIsolation
+    public function getIsolation(): ?ProcessIsolation
     {
         return $this->_isolation;
     }
@@ -131,7 +144,7 @@ abstract class ApplicationAbstract implements ApplicationInterface
         $this->_isolation = $isolation;
     }
 
-    public function getProcesses(): ApplicationProcess|int
+    public function getProcesses(): ApplicationProcess|int|null
     {
         return $this->_processes;
     }
@@ -141,7 +154,7 @@ abstract class ApplicationAbstract implements ApplicationInterface
         $this->_processes = $processes;
     }
 
-    public function getLimits(): RequestLimit
+    public function getLimits(): ?RequestLimit
     {
         return $this->_limits;
     }
@@ -250,5 +263,21 @@ abstract class ApplicationAbstract implements ApplicationInterface
         if (array_key_exists('limits', $data)) {
             $this->setLimits(new RequestLimit($data['limits']));
         }
+    }
+
+    /**
+     * @param Listener $listener
+     */
+    public function setListener(Listener $listener): void
+    {
+        $this->_listener = $listener;
+    }
+
+    /**
+     * @return Listener
+     */
+    public function getListener(): ?Listener
+    {
+        return $this->_listener;
     }
 }
