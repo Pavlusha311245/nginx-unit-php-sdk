@@ -2,7 +2,8 @@
 
 namespace Pavlusha311245\UnitPhpSdk;
 
-use Pavlusha311245\UnitPhpSdk\Config\Statistic;
+use Pavlusha311245\UnitPhpSdk\Config\AccessLog;
+use Pavlusha311245\UnitPhpSdk\Config\Statistics;
 use Pavlusha311245\UnitPhpSdk\Enums\HttpMethodsEnum;
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
 use Pavlusha311245\UnitPhpSdk\Interfaces\UnitInterface;
@@ -12,33 +13,30 @@ use Pavlusha311245\UnitPhpSdk\Interfaces\UnitInterface;
  */
 class Unit implements UnitInterface
 {
-    private readonly string $socket;
-
-    private readonly string $address;
-
     private Config $_config;
 
-    private mixed $_certificates;
+    private array $_certificates;
 
-    public function __construct(string $socket, string $address)
+    private Statistics $_statistics;
+
+    /**
+     * @throws UnitException
+     */
+    public function __construct(
+        private readonly string $socket,
+        private readonly string $address
+    )
     {
-        $this->socket = $socket;
-        $this->address = $address;
-
         $this->loadConfig();
     }
 
     /**
-     * Return full config uploaded on Nginx Unit
-     *
-     * @return Config
-     * @throws \Exception
+     * @inheritDoc
+     * @throws UnitException
      */
     public function getConfig(): Interfaces\ConfigInterface
     {
-        if (empty($this->_config)) {
-            $this->loadConfig();
-        }
+        $this->loadConfig();
 
         return $this->_config;
     }
@@ -47,7 +45,7 @@ class Unit implements UnitInterface
      * Download config from Unit
      *
      * @return void
-     * @throws \Exception
+     * @throws UnitException
      */
     private function loadConfig()
     {
@@ -57,21 +55,27 @@ class Unit implements UnitInterface
     }
 
     /**
-     * Return array of certificates uploaded on Unit
+     * @inheritDoc
      *
-     * @return mixed
      */
     public function getCertificates(): array
     {
-        $request = new UnitRequest($this->socket, $this->address);
+        $this->loadCertificates();
 
-        return $request->send('/certificates');
+        return $this->_certificates;
+    }
+
+    private function loadCertificates()
+    {
+        $request = new UnitRequest($this->socket, $this->address);
+        $result = $request->send('/certificates');
+        foreach ($result as $key => $value) {
+            $this->_certificates[$key] = new Certificate($value, $key);
+        }
     }
 
     /**
-     * Return Unit socket
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getSocket(): string
     {
@@ -79,9 +83,7 @@ class Unit implements UnitInterface
     }
 
     /**
-     * Return Unit address
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getAddress(): string
     {
@@ -89,36 +91,44 @@ class Unit implements UnitInterface
     }
 
     /**
-     * Return Usage Statistics from Unit
-     *
-     * @return Interfaces\StatisticsInterface
-     * @throws UnitException
+     * @inheritDoc
      */
     public function getStatistics(): Interfaces\StatisticsInterface
     {
-        $result = (new UnitRequest($this->socket, $this->address))->send('/status');
+        $this->loadStatistics();
 
-        return new Statistic($result);
+        return $this->_statistics;
+    }
+
+    private function loadStatistics(): void
+    {
+        $result = (new UnitRequest($this->socket, $this->address))->send('/status');
+        $this->_statistics = new Statistics($result);
     }
 
     /**
-     * Setup access log file
-     *
-     * @return void
-     * @throws UnitException
+     * @inheritDoc
      */
-    public function setAccessLog($path, $format = null)
+    public function getCertificate($certificateName): ?Certificate
     {
-        $data['path'] = $path;
+        $this->loadCertificates();
 
-        if (!empty($format)) {
-            $data['format'] = $format;
+        return $this->_certificates[$certificateName] ?? null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function removeConfig(): bool
+    {
+        try {
+            $request = new UnitRequest($this->socket, $this->address);
+            $request->setMethod(HttpMethodsEnum::DELETE->value);
+            $request->send('/config');
+        } catch (UnitException $exception) {
+            return false;
         }
 
-        $request = new UnitRequest($this->socket, $this->address);
-        $request->setMethod(HttpMethodsEnum::PUT->value);
-        $request->setData(json_encode($data));
-
-        return $request->send('/config/access_log');
+        return true;
     }
 }

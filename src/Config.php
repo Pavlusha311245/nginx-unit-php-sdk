@@ -3,18 +3,22 @@
 namespace Pavlusha311245\UnitPhpSdk;
 
 use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
+use Pavlusha311245\UnitPhpSdk\Config\AccessLog;
 use Pavlusha311245\UnitPhpSdk\Config\Application;
 use Pavlusha311245\UnitPhpSdk\Config\Listener;
 use Pavlusha311245\UnitPhpSdk\Config\Route;
-use Pavlusha311245\UnitPhpSdk\Enums\ApplicationTypeEnum;
+use Pavlusha311245\UnitPhpSdk\Enums\HttpMethodsEnum;
+use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
 use Pavlusha311245\UnitPhpSdk\Interfaces\ConfigInterface;
-use PHPUnit\TextUI\Configuration\Php;
 
 /**
  * This class contains Nginx Unit config data
  */
 class Config implements ConfigInterface
 {
+    const SOCKET = '/usr/local/var/run/unit/control.sock';
+    const ADDRESS = 'http://localhost';
+
     /**
      * Listeners accept requests
      *
@@ -51,30 +55,41 @@ class Config implements ConfigInterface
      */
     public function __construct(array $data)
     {
-        foreach ($data['routes'] as $routeName => $routeData) {
-            $this->_routes[$routeName] = new Route($routeName, $routeData);
-        }
-        foreach ($data['applications'] as $appName => $appData) {
-            // TODO: implement go and nodejs detect
-            $this->_applications[$appName] = match ($appData['type']) {
-                'php' => new Application\PhpApplication($appData),
-                'external' => new Application\NodeJsApplication($appData),
-            };
+        if (array_key_exists('routes', $data)) {
+            foreach ($data['routes'] as $routeName => $routeData) {
+                $this->_routes[$routeName] = new Route($routeName, $routeData);
+            }
         }
 
-        foreach ($data['listeners'] as $listener => $listenerData) {
-            $listener = (new Listener(
-                _listener: $listener
-            ))->parseFromArray($listenerData);
-            $typePath = $listener->getPass()[0];
-            $typePathName = $listener->getPass()[1];
+        if (array_key_exists('applications', $data)) {
+            foreach ($data['applications'] as $appName => $appData) {
+                // TODO: implement go and nodejs detect
+                $this->_applications[$appName] = match ($appData['type']) {
+                    'php' => new Application\PhpApplication($appData),
+                    'external' => new Application\NodeJsApplication($appData),
+                };
 
-            ($this->{"_{$typePath}"}[$typePathName])->setListener($listener);
-
-            $this->_listeners[] = $listener;
+                $this->_applications[$appName]->setName($appName);
+            }
         }
 
-        $this->_upstreams = $data['upstreams'] ?? [];
+        if (array_key_exists('listeners', $data)) {
+            foreach ($data['listeners'] as $listener => $listenerData) {
+                $listener = (new Listener(
+                    _listener: $listener
+                ))->parseFromArray($listenerData);
+                $typePath = $listener->getPass()[0];
+                $typePathName = $listener->getPass()[1];
+
+                ($this->{"_{$typePath}"}[$typePathName])->setListener($listener);
+
+                $this->_listeners[] = $listener;
+            }
+        }
+
+        if (array_key_exists('upstreams', $data)) {
+            $this->_upstreams = $data['upstreams'] ?? [];
+        }
     }
 
     /**
@@ -95,9 +110,23 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Get listeners from config
+     * Remove listener
      *
-     * @return array
+     * @throws UnitException
+     */
+    public function removeListener(Listener $listener): bool
+    {
+        $request = new UnitRequest(self::SOCKET, self::ADDRESS);
+        $request->setMethod(HttpMethodsEnum::DELETE->value);
+
+        $listenerId = $listener->getListener();
+        $request->send("/config/listeners/{$listenerId}");
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
      */
     public function getListeners(): array
     {
@@ -126,6 +155,20 @@ class Config implements ConfigInterface
     }
 
     /**
+     * @throws UnitException
+     */
+    public function removeApplication(ApplicationAbstract $application): bool
+    {
+        $request = new UnitRequest(self::SOCKET, self::ADDRESS);
+        $request->setMethod(HttpMethodsEnum::DELETE->value);
+
+        $applicationName = $application->getName();
+        print_r($request->send("/config/applications/{$applicationName}"));
+
+        return true;
+    }
+
+    /**
      * Get routes from config
      *
      * @return array
@@ -138,12 +181,41 @@ class Config implements ConfigInterface
     /**
      * Get route from config by name
      *
-     * @param $routeName
-     * @return mixed
+     * @param string $routeName
+     * @return Route|null
      */
     public function getRoute(string $routeName): Route|null
     {
         return $this->_routes[$routeName] ?? null;
+    }
+
+    /**
+     * @throws UnitException
+     */
+    public function removeRoutes(): bool
+    {
+        foreach ($this->getRoutes() as $route) {
+            if ($route->hasListeners()) {
+                foreach ($route->getListeners() as $listener) {
+                    $this->removeListener($listener);
+                }
+            }
+        }
+
+        try {
+            $request = new UnitRequest(self::SOCKET, self::ADDRESS);
+            $request->setMethod(HttpMethodsEnum::DELETE->value);
+            $request->send('/config/routes');
+        } catch (UnitException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function removeRoute(Route|string $route): bool
+    {
+        // TODO: should be implemented
     }
 
     /**
@@ -154,6 +226,51 @@ class Config implements ConfigInterface
     public function getUpstreams(): mixed
     {
         return $this->_upstreams;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setAccessLog($path, $format = null): bool
+    {
+        $data['path'] = $path;
+
+        if (!empty($format)) {
+            $data['format'] = $format;
+        }
+
+        try {
+            $request = new UnitRequest(self::SOCKET, self::ADDRESS);
+            $request->setMethod(HttpMethodsEnum::PUT->value);
+            $request->setData(json_encode($data));
+            $request->send('/config/access_log');
+        } catch (UnitException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getAccessLog(): ?AccessLog
+    {
+        $request = new UnitRequest(self::SOCKET, self::ADDRESS);
+        $result = $request->send('/config/access_log');
+
+        // TODO: need null
+        return new AccessLog($result);
+    }
+
+    public function removeAccessLog(): bool
+    {
+        try {
+            $request = new UnitRequest(self::SOCKET, self::ADDRESS);
+            $request->setMethod(HttpMethodsEnum::DELETE->value);
+            $request->send('/config/access_log');
+        } catch (UnitException $exception) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
