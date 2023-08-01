@@ -4,7 +4,6 @@ namespace Pavlusha311245\UnitPhpSdk\Interfaces;
 
 interface RequestsStatisticsInterface
 {
-    // TODO: add toArray to all and status handling;
     /**
      * Return all requests statistics
      *

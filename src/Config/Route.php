@@ -19,8 +19,8 @@ class Route implements RouteInterface
 
     public function __construct(
         private readonly string $_name,
-                                $data)
-    {
+        $data
+    ) {
         foreach ($data as $routeBlock) {
             $this->_routeBlocks[] = new RouteBlock($routeBlock);
         }

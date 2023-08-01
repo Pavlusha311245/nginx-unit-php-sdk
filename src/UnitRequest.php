@@ -19,8 +19,7 @@ class UnitRequest
     public function __construct(
         private readonly string $socket,
         private readonly string $address
-    )
-    {
+    ) {
         //
     }
 

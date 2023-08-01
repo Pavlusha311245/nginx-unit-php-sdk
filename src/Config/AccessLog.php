@@ -9,8 +9,7 @@ class AccessLog
 
     public function __construct(
         array $data
-    )
-    {
+    ) {
         $this->_path = $data['path'] ?? null;
         $this->_format = $data['format'] ?? null;
     }

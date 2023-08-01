@@ -18,8 +18,7 @@ class Listener
         string         $pass = '',
         private array  $_tls = [],
         private array  $_forwarded = [],
-    )
-    {
+    ) {
         $this->parsePort();
         $this->generateLink();
 

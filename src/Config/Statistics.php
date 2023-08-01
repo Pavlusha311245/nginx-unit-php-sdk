@@ -24,7 +24,7 @@ class Statistics implements StatisticsInterface
     {
         $this->_connections = new ConnectionsStatistics($data['connections']);
         $this->_requests = new RequestsStatistics($data['requests']);
-        $this->_applications = array_map(fn($item) => new ApplicationsStatistics($item), $data['applications']);
+        $this->_applications = array_map(fn ($item) => new ApplicationsStatistics($item), $data['applications']);
     }
 
     /**

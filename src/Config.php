@@ -16,8 +16,8 @@ use Pavlusha311245\UnitPhpSdk\Interfaces\ConfigInterface;
  */
 class Config implements ConfigInterface
 {
-    const SOCKET = '/usr/local/var/run/unit/control.sock';
-    const ADDRESS = 'http://localhost';
+    public const SOCKET = '/usr/local/var/run/unit/control.sock';
+    public const ADDRESS = 'http://localhost';
 
     /**
      * Listeners accept requests

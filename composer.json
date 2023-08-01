@@ -42,6 +42,7 @@
     }
   },
   "scripts": {
-    "test": "./vendor/bin/pest"
+    "test": "./vendor/bin/pest",
+    "lint": "./vendor/bin/php-cs-fixer fix --rules=@PSR12 ."
   }
 }

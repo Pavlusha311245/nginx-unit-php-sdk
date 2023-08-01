@@ -7,13 +7,19 @@ use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolat
 use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\RequestLimit;
 use Pavlusha311245\UnitPhpSdk\Config\Listener;
 use Pavlusha311245\UnitPhpSdk\Enums\ApplicationTypeEnum;
+use Pavlusha311245\UnitPhpSdk\Enums\HttpMethodsEnum;
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+use Pavlusha311245\UnitPhpSdk\Interfaces\ApplicationControlInterface;
 use Pavlusha311245\UnitPhpSdk\Interfaces\ApplicationInterface;
 use Pavlusha311245\UnitPhpSdk\Traits\HasListeners;
+use Pavlusha311245\UnitPhpSdk\UnitRequest;
 
-abstract class ApplicationAbstract implements ApplicationInterface
+abstract class ApplicationAbstract implements ApplicationInterface, ApplicationControlInterface
 {
     use HasListeners;
+
+    public const SOCKET = '/usr/local/var/run/unit/control.sock';
+    public const ADDRESS = 'http://localhost';
 
     private string $_type;
 
@@ -248,10 +254,10 @@ abstract class ApplicationAbstract implements ApplicationInterface
             $this->setStdOut($data['stdout']);
         }
 
-//        TODO: implement isolation object
-//        if (array_key_exists('isolation', $data)) {
-//            $this->setIsolation($data['isolation']);
-//        }
+        //        TODO: implement isolation object
+        //        if (array_key_exists('isolation', $data)) {
+        //            $this->setIsolation($data['isolation']);
+        //        }
 
         if (array_key_exists('processes', $data)) {
             if (is_array($data['processes'])) {
@@ -264,5 +270,21 @@ abstract class ApplicationAbstract implements ApplicationInterface
         if (array_key_exists('limits', $data)) {
             $this->setLimits(new RequestLimit($data['limits']));
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function restartApplication(): bool
+    {
+        try {
+            $request = new UnitRequest(self::SOCKET, self::ADDRESS);
+            $request->setMethod(HttpMethodsEnum::DELETE->value);
+            $result = $request->send("/control/applications/{$this->getName()}/restart");
+        } catch (UnitException $exception) {
+            return false;
+        }
+
+        return true;
     }
 }

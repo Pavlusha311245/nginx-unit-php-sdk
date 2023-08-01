@@ -2,9 +2,8 @@
 
 namespace Pavlusha311245\UnitPhpSdk\Interfaces;
 
-interface ControlInterface
+interface ApplicationControlInterface
 {
-    // TODO: should be implemented
     /**
      * Restart an application
      *

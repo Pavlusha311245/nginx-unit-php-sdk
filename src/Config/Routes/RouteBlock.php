@@ -6,16 +6,12 @@ class RouteBlock
 {
     private RouteAction $_action;
 
-    private $_match;
+    private RouteMatch $_match;
 
     public function __construct(array $data)
     {
-//        $this->_action = $data['action'];
-//        $this->_match = $data['match'] ?? null;
-
         $this->_action = new RouteAction($data['action']);
-        if (isset($data['match']))
-        {
+        if (isset($data['match'])) {
             $this->_match = new RouteMatch($data['match']);
         }
     }
