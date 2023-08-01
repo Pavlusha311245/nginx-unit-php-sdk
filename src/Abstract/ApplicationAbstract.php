@@ -279,7 +279,6 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
     {
         try {
             $request = new UnitRequest(self::SOCKET, self::ADDRESS);
-            $request->setMethod(HttpMethodsEnum::DELETE->value);
             $result = $request->send("/control/applications/{$this->getName()}/restart");
         } catch (UnitException $exception) {
             return false;
