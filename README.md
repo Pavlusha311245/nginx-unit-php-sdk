@@ -9,27 +9,30 @@ _THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
 
 | Version | Supported          |
 |---------|--------------------|
-| 0.3.x   | :white_check_mark: |
-| < 0.3.1 | :x:                |
+| 0.4.x   | :white_check_mark: |
+| < 0.3.x | :x:                |
 
 ## Quick start
 
 ### Pre-requirements
 
-* PHP >= 8.2
-* PHP curl extension
-* Composer >= 2
+* [PHP](https://www.php.net/) >= 8.2
+* [PHP curl extension](https://www.php.net/manual/en/book.curl.php)
+* [Composer](https://getcomposer.org/) >= 2
+* [Nginx unit](https://unit.nginx.org/installation/) >= 1.30.0
 
 ### Installation
-* Create folder `mkdir example-php-project`
-* Open folder cd `example-php-project`
-* Init composer `composer init`
-* Add package `composer require pavlusha311245/unit-php-sdk`
+
+1. Create folder `mkdir example-php-project`
+2. Open folder cd `example-php-project`
+3. Init composer `composer init`
+4. Add package `composer require pavlusha311245/unit-php-sdk`
 
 Congratulations! You installed package. Now you can use the full power of this SDK.
 
 * Create `index.php` file
 * Paste code and change this line `socket: <your socket path to Nginx Unit>` for your configuration
+
 ```php
 <?php
 
@@ -44,6 +47,7 @@ $unit = new Unit(
 
 $unit->getConfig();
 ```
+
 * Run index.php
 
 #### Happy coding 😊
@@ -63,6 +67,7 @@ read [here](https://docs.github.com/en/get-started/quickstart/contributing-to-pr
 
 ## Security Policy
 
-If you find bugs and vulnerabilities, please contact [zavadskiy.pavel2002@outlook.com](mailto:zavadskiy.pavel2002@outlook.com).
+If you find bugs and vulnerabilities, please
+contact [zavadskiy.pavel2002@outlook.com](mailto:zavadskiy.pavel2002@outlook.com).
 
 More info [here](SECURITY.md)
