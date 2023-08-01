@@ -4,12 +4,15 @@ namespace Pavlusha311245\UnitPhpSdk\Config;
 
 use Pavlusha311245\UnitPhpSdk\Config\Routes\RouteBlock;
 use Pavlusha311245\UnitPhpSdk\Interfaces\RouteInterface;
+use Pavlusha311245\UnitPhpSdk\Traits\HasListeners;
 
 /**
  * This class presents "routes" section from config
  */
 class Route implements RouteInterface
 {
+    use HasListeners;
+
     private array $_routeBlocks;
 
     private array $_listeners = [];
@@ -21,30 +24,6 @@ class Route implements RouteInterface
         foreach ($data as $routeBlock) {
             $this->_routeBlocks[] = new RouteBlock($routeBlock);
         }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function hasListeners(): bool
-    {
-        return !empty($this->_listeners);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setListener(Listener $listener): void
-    {
-        $this->_listeners[$listener->getListener()] = $listener;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getListeners(): array
-    {
-        return $this->_listeners;
     }
 
     /**

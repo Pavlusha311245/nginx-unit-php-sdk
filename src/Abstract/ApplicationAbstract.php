@@ -9,10 +9,11 @@ use Pavlusha311245\UnitPhpSdk\Config\Listener;
 use Pavlusha311245\UnitPhpSdk\Enums\ApplicationTypeEnum;
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
 use Pavlusha311245\UnitPhpSdk\Interfaces\ApplicationInterface;
+use Pavlusha311245\UnitPhpSdk\Traits\HasListeners;
 
 abstract class ApplicationAbstract implements ApplicationInterface
 {
-    private ?Listener $_listener = null;
+    use HasListeners;
 
     private string $_type;
 
@@ -263,21 +264,5 @@ abstract class ApplicationAbstract implements ApplicationInterface
         if (array_key_exists('limits', $data)) {
             $this->setLimits(new RequestLimit($data['limits']));
         }
-    }
-
-    /**
-     * @param Listener $listener
-     */
-    public function setListener(Listener $listener): void
-    {
-        $this->_listener = $listener;
-    }
-
-    /**
-     * @return Listener
-     */
-    public function getListener(): ?Listener
-    {
-        return $this->_listener;
     }
 }

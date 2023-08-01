@@ -14,28 +14,6 @@ interface RouteInterface
     public function getName(): string;
 
     /**
-     * Get listeners linked to route;
-     *
-     * @return mixed
-     */
-    public function getListeners(): array;
-
-    /**
-     * Setup new listener
-     *
-     * @param Listener $listener
-     * @return void
-     */
-    public function setListener(Listener $listener): void;
-
-    /**
-     * Check if listeners are empty or not
-     *
-     * @return bool
-     */
-    public function hasListeners(): bool;
-
-    /**
      * Get route blocks
      *
      * @return mixed
