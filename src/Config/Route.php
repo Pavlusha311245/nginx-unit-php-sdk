@@ -3,11 +3,12 @@
 namespace Pavlusha311245\UnitPhpSdk\Config;
 
 use Pavlusha311245\UnitPhpSdk\Config\Routes\RouteBlock;
+use Pavlusha311245\UnitPhpSdk\Interfaces\RouteInterface;
 
 /**
  * This class presents "routes" section from config
  */
-class Route
+class Route implements RouteInterface
 {
     private array $_routeBlocks;
 
@@ -23,34 +24,39 @@ class Route
     }
 
     /**
-     * Return Listener
-     *
-     * @param mixed $listener
+     * @inheritDoc
+     */
+    public function hasListeners(): bool
+    {
+        return !empty($this->_listeners);
+    }
+
+    /**
+     * @inheritDoc
      */
     public function setListener(Listener $listener): void
     {
         $this->_listeners[$listener->getListener()] = $listener;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getListeners(): array
     {
         return $this->_listeners;
     }
 
     /**
-     * Get name
-     *
-     * @return mixed
+     * @inheritDoc
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->_name;
     }
 
     /**
-     * Return RouteBlock (action, match)
-     *
-     * @return array
+     * @inheritDoc
      */
     public function getRouteBlocks(): array
     {
