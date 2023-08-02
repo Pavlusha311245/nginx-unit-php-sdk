@@ -10,22 +10,19 @@ use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
 class Listener
 {
     private string $_link;
-    private array $_pass = [];
+    private ListenerPass $_pass;
     private int $_port;
 
     public function __construct(
-        private string $_listener,
-        string         $pass = '',
-        private array  $_tls = [],
-        private array  $_forwarded = [],
-    )
-    {
+        private readonly string $_listener,
+        string                  $pass,
+        private array           $_tls = [],
+        private array           $_forwarded = [],
+    ) {
         $this->parsePort();
         $this->generateLink();
 
-        if (!empty($pass)) {
-            $this->_pass = explode('/', $pass);
-        }
+        $this->_pass = new ListenerPass($pass);
     }
 
     /**
@@ -84,9 +81,9 @@ class Listener
     /**
      * Get pass
      *
-     * @return array
+     * @return ListenerPass
      */
-    public function getPass(): array
+    public function getPass(): ListenerPass
     {
         return $this->_pass;
     }
@@ -122,7 +119,6 @@ class Listener
             throw new UnitException("Missing required 'pass' array key");
         }
 
-        $this->_pass = explode('/', $data['pass']);
         $this->_forwarded = $data['forwarded'] ?? [];
         $this->_tls = $data['tls'] ?? [];
 

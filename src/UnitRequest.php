@@ -8,7 +8,7 @@ class UnitRequest
 {
     private string $_method = 'GET';
 
-    private $_data = null;
+    private mixed $_data;
 
     /**
      * Constructor
@@ -19,8 +19,7 @@ class UnitRequest
     public function __construct(
         private readonly string $socket,
         private readonly string $address
-    )
-    {
+    ) {
         //
     }
 
@@ -39,7 +38,7 @@ class UnitRequest
      *
      * @param null $data
      */
-    public function setData($data): void
+    public function setData(mixed $data): void
     {
         $this->_data = $data;
     }
@@ -51,30 +50,42 @@ class UnitRequest
      */
     public function send($uri)
     {
-        $ch = curl_init();
+        $curlHandler = curl_init();
 
-        curl_setopt($ch, CURLOPT_UNIX_SOCKET_PATH, $this->socket);
-        curl_setopt($ch, CURLOPT_URL, $this->address . $uri);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curlHandler, CURLOPT_UNIX_SOCKET_PATH, $this->socket);
+        curl_setopt($curlHandler, CURLOPT_URL, $this->address . $uri);
+        curl_setopt($curlHandler, CURLOPT_RETURNTRANSFER, 1);
 
         if ($this->_method) {
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, mb_strtoupper($this->_method));
+            curl_setopt($curlHandler, CURLOPT_CUSTOMREQUEST, mb_strtoupper($this->_method));
         }
 
         if (!empty($this->_data)) {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            curl_setopt($curlHandler, CURLOPT_HTTPHEADER, [
                 'Content-Type: application/x-www-form-urlencoded',
             ]);
 
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $this->_data);
+            curl_setopt($curlHandler, CURLOPT_POSTFIELDS, $this->_data);
         }
 
-        $result = curl_exec($ch);
-        if (curl_errno($ch)) {
-            throw new UnitException('Error:' . curl_error($ch));
+        $result = curl_exec($curlHandler);
+        if (curl_errno($curlHandler)) {
+            throw new UnitException('Error:' . curl_error($curlHandler));
         }
-        curl_close($ch);
+        curl_close($curlHandler);
+        $this->clean();
 
         return json_decode($result, true);
+    }
+
+    /**
+     * Clear data after request
+     *
+     * @return void
+     */
+    private function clean(): void
+    {
+        $this->_method = 'GET';
+        $this->_data = null;
     }
 }

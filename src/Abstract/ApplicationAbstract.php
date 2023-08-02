@@ -5,16 +5,19 @@ namespace Pavlusha311245\UnitPhpSdk\Abstract;
 use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ApplicationProcess;
 use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\RequestLimit;
-use Pavlusha311245\UnitPhpSdk\Config\Listener;
-use Pavlusha311245\UnitPhpSdk\Enums\ApplicationTypeEnum;
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+use Pavlusha311245\UnitPhpSdk\Interfaces\ApplicationControlInterface;
 use Pavlusha311245\UnitPhpSdk\Interfaces\ApplicationInterface;
+use Pavlusha311245\UnitPhpSdk\Traits\HasListeners;
+use Pavlusha311245\UnitPhpSdk\UnitRequest;
 
-abstract class ApplicationAbstract implements ApplicationInterface
+abstract class ApplicationAbstract implements ApplicationInterface, ApplicationControlInterface
 {
-    private ?Listener $_listener = null;
+    use HasListeners;
 
     private string $_type;
+
+    private UnitRequest $_unitRequest;
 
     /**
      * Environment variables to be passed to the app
@@ -81,6 +84,9 @@ abstract class ApplicationAbstract implements ApplicationInterface
      */
     private ?ProcessIsolation $_isolation = null;
 
+    /**
+     * @throws UnitException
+     */
     public function __construct(array $data = null)
     {
         if (!empty($data)) {
@@ -88,12 +94,20 @@ abstract class ApplicationAbstract implements ApplicationInterface
         }
     }
 
+    /**
+     * @param UnitRequest $unitRequest
+     */
+    public function setUnitRequest(UnitRequest $unitRequest): void
+    {
+        $this->_unitRequest = $unitRequest;
+    }
+
     public function getType(): string
     {
         return $this->_type;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $this->_type = $type;
     }
@@ -123,9 +137,12 @@ abstract class ApplicationAbstract implements ApplicationInterface
         return $this->_environment;
     }
 
+    /**
+     * @throws UnitException
+     */
     public function setEnvironment(array $environment): void
     {
-        foreach ($environment as $key => $value) {
+        foreach ($environment as $value) {
             if (!is_string($value)) {
                 throw new UnitException('Parse Exception');
             }
@@ -247,10 +264,10 @@ abstract class ApplicationAbstract implements ApplicationInterface
             $this->setStdOut($data['stdout']);
         }
 
-//        TODO: implement isolation object
-//        if (array_key_exists('isolation', $data)) {
-//            $this->setIsolation($data['isolation']);
-//        }
+        //        TODO: implement isolation object
+        //        if (array_key_exists('isolation', $data)) {
+        //            $this->setIsolation($data['isolation']);
+        //        }
 
         if (array_key_exists('processes', $data)) {
             if (is_array($data['processes'])) {
@@ -266,18 +283,16 @@ abstract class ApplicationAbstract implements ApplicationInterface
     }
 
     /**
-     * @param Listener $listener
+     * @inheritDoc
      */
-    public function setListener(Listener $listener): void
+    public function restartApplication(): bool
     {
-        $this->_listener = $listener;
-    }
+        try {
+            $this->_unitRequest->send("/control/applications/{$this->getName()}/restart");
+        } catch (UnitException $exception) {
+            return false;
+        }
 
-    /**
-     * @return Listener
-     */
-    public function getListener(): ?Listener
-    {
-        return $this->_listener;
+        return true;
     }
 }

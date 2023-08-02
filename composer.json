@@ -1,7 +1,8 @@
 {
   "name": "pavlusha311245/unit-php-sdk",
-  "type": "library",
-  "description": "This project allows developers to interact with the Nginx Unit web server through php classes",
+  "version": "0.4.0",
+  "type": "sdk",
+  "description": "This project allows developers to interact with the Nginx Unit web server through PHP classes",
   "license": "Apache-2.0",
   "homepage": "https://github.com/Pavlusha311245/nginx-unit-php-sdk",
   "keywords": [
@@ -41,6 +42,7 @@
     }
   },
   "scripts": {
-    "test": "./vendor/bin/pest"
+    "test": "./vendor/bin/pest",
+    "lint": "./vendor/bin/php-cs-fixer fix --rules=@PSR12 ."
   }
 }
