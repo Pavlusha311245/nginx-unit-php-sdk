@@ -11,3 +11,20 @@ test('Can create unit object', function () {
         address: ADDRESS
     ))->toBeObject();
 });
+
+$unit = new Unit(
+    socket: SOCKET,
+    address: ADDRESS
+);
+
+test('Can receive config', function () use ($unit) {
+    expect($unit->getConfig())->toBeObject('received object');
+});
+
+test('Can receive statistics', function () use ($unit) {
+    expect($unit->getStatistics())->toBeObject('received object');
+});
+
+test('Can receive certificates', function () use ($unit) {
+    expect($unit->getCertificates())->toBeArray('received array');
+});
