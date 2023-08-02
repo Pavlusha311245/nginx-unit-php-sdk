@@ -8,12 +8,13 @@ readonly class ApplicationsStatistics implements ApplicationsStatisticsInterface
 {
     public function __construct(private array $_data)
     {
+        //
     }
 
     /**
      * @inheritDoc
      */
-    public function getAll(): array
+    public function getData(): array
     {
         return $this->_data;
     }
@@ -21,9 +22,25 @@ readonly class ApplicationsStatistics implements ApplicationsStatisticsInterface
     /**
      * @inheritDoc
      */
-    public function getRequests(): int
+    public function getRequests(): array
+    {
+        return $this->_data['requests'];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getActiveRequests(): int
     {
         return $this->_data['requests']['active'];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getProcesses(): array
+    {
+        return $this->_data['processes'];
     }
 
     /**

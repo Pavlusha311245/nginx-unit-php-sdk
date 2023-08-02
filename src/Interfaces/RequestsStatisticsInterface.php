@@ -9,7 +9,7 @@ interface RequestsStatisticsInterface
      *
      * @return array
      */
-    public function getAll(): array;
+    public function getData(): array;
 
     /**
      * Return total requests statistics

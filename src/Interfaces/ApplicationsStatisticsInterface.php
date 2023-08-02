@@ -9,14 +9,28 @@ interface ApplicationsStatisticsInterface
      *
      * @return array
      */
-    public function getAll(): array;
+    public function getData(): array;
 
     /**
-     * Get count of all application requests
+     * Get array of all application requests
+     *
+     * @return array
+     */
+    public function getRequests(): array;
+
+    /**
+     * Get count of all application active requests
      *
      * @return int
      */
-    public function getRequests(): int;
+    public function getActiveRequests(): int;
+
+    /**
+     * Return all statistics by processes
+     *
+     * @return array
+     */
+    public function getProcesses(): array;
 
     /**
      * Get count of starting application processes

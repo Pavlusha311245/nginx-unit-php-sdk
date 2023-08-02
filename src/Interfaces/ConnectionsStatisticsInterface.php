@@ -9,7 +9,7 @@ interface ConnectionsStatisticsInterface
      *
      * @return array
      */
-    public function getAll(): array;
+    public function getData(): array;
 
     /**
      * Get count of idle connection

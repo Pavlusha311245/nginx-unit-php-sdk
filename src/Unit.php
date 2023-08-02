@@ -46,7 +46,7 @@ class Unit implements UnitInterface
      * @return void
      * @throws UnitException
      */
-    private function loadConfig()
+    private function loadConfig(): void
     {
         $request = new UnitRequest($this->socket, $this->address);
         $result = $request->send('/config');

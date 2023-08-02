@@ -14,7 +14,7 @@ readonly class ConnectionsStatistics implements ConnectionsStatisticsInterface
     /**
      * @inheritDoc
      */
-    public function getAll(): array
+    public function getData(): array
     {
         return $this->_data;
     }
