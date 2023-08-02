@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## v0.4.0 - [2023/08/02]
+
+- Added more Applications, Requests and Connection Statistics classes
+- Added ListenerPass class
+- Added AccessLog class
+- Updated Unit and Config classes
+- Added Pest tests
+- Added linter
+
 ## v0.3.2 - [2023/07/19]
 
 - Fixed issues with nullable objects and values
