@@ -17,6 +17,14 @@ $unit = new Unit(
     address: ADDRESS
 );
 
+test('Can receive socket', function () use ($unit) {
+    expect($unit->getSocket())->toBeString();
+});
+
+test('Can receive address', function () use ($unit) {
+    expect($unit->getAddress())->toBeString();
+});
+
 test('Can receive config', function () use ($unit) {
     expect($unit->getConfig())->toBeObject('received object');
 });
