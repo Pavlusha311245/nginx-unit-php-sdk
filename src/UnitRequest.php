@@ -73,7 +73,19 @@ class UnitRequest
             throw new UnitException('Error:' . curl_error($curlHandler));
         }
         curl_close($curlHandler);
+        $this->clean();
 
         return json_decode($result, true);
+    }
+
+    /**
+     * Clear data after request
+     *
+     * @return void
+     */
+    private function clean(): void
+    {
+        $this->_method = 'GET';
+        $this->_data = null;
     }
 }

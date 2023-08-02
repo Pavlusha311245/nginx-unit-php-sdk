@@ -50,7 +50,7 @@ class Unit implements UnitInterface
     {
         $request = new UnitRequest($this->socket, $this->address);
         $result = $request->send('/config');
-        $this->_config = new Config($result);
+        $this->_config = new Config($result, new UnitRequest($this->socket, $this->address));
     }
 
     /**

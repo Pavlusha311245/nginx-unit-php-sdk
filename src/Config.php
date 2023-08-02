@@ -16,9 +16,6 @@ use Pavlusha311245\UnitPhpSdk\Interfaces\ConfigInterface;
  */
 class Config implements ConfigInterface
 {
-    public const SOCKET = '/usr/local/var/run/unit/control.sock';
-    public const ADDRESS = 'http://localhost';
-
     /**
      * Listeners accept requests
      *
@@ -53,7 +50,7 @@ class Config implements ConfigInterface
      *
      * @throws UnitException
      */
-    public function __construct(array $data)
+    public function __construct(array $data, private UnitRequest $_unitRequest)
     {
         if (array_key_exists('routes', $data)) {
             foreach ($data['routes'] as $routeName => $routeData) {
@@ -68,8 +65,8 @@ class Config implements ConfigInterface
                     'php' => new Application\PhpApplication($appData),
                     'external' => new Application\NodeJsApplication($appData),
                 };
-
                 $this->_applications[$appName]->setName($appName);
+                $this->_applications[$appName]->setUnitRequest($_unitRequest);
             }
         }
 
@@ -126,11 +123,10 @@ class Config implements ConfigInterface
      */
     public function removeListener(Listener $listener): bool
     {
-        $request = new UnitRequest(self::SOCKET, self::ADDRESS);
-        $request->setMethod(HttpMethodsEnum::DELETE->value);
+        $this->_unitRequest->setMethod(HttpMethodsEnum::DELETE->value);
 
         $listenerId = $listener->getListener();
-        $request->send("/config/listeners/{$listenerId}");
+        $this->_unitRequest->send("/config/listeners/{$listenerId}");
 
         return true;
     }
@@ -169,11 +165,10 @@ class Config implements ConfigInterface
      */
     public function removeApplication(ApplicationAbstract $application): bool
     {
-        $request = new UnitRequest(self::SOCKET, self::ADDRESS);
-        $request->setMethod(HttpMethodsEnum::DELETE->value);
+        $this->_unitRequest->setMethod(HttpMethodsEnum::DELETE->value);
 
         $applicationName = $application->getName();
-        print_r($request->send("/config/applications/{$applicationName}"));
+        $this->_unitRequest->send("/config/applications/{$applicationName}");
 
         return true;
     }
@@ -213,9 +208,8 @@ class Config implements ConfigInterface
         }
 
         try {
-            $request = new UnitRequest(self::SOCKET, self::ADDRESS);
-            $request->setMethod(HttpMethodsEnum::DELETE->value);
-            $request->send('/config/routes');
+            $this->_unitRequest->setMethod(HttpMethodsEnum::DELETE->value);
+            $this->_unitRequest->send('/config/routes');
         } catch (UnitException $exception) {
             return false;
         }
@@ -250,10 +244,9 @@ class Config implements ConfigInterface
         }
 
         try {
-            $request = new UnitRequest(self::SOCKET, self::ADDRESS);
-            $request->setMethod(HttpMethodsEnum::PUT->value);
-            $request->setData(json_encode($data));
-            $request->send('/config/access_log');
+            $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
+            $this->_unitRequest->setData(json_encode($data));
+            $this->_unitRequest->send('/config/access_log');
         } catch (UnitException $exception) {
             return false;
         }
@@ -263,8 +256,7 @@ class Config implements ConfigInterface
 
     public function getAccessLog(): ?AccessLog
     {
-        $request = new UnitRequest(self::SOCKET, self::ADDRESS);
-        $result = $request->send('/config/access_log');
+        $result = $this->_unitRequest->send('/config/access_log');
 
         // TODO: need null
         return new AccessLog($result);
@@ -273,9 +265,8 @@ class Config implements ConfigInterface
     public function removeAccessLog(): bool
     {
         try {
-            $request = new UnitRequest(self::SOCKET, self::ADDRESS);
-            $request->setMethod(HttpMethodsEnum::DELETE->value);
-            $request->send('/config/access_log');
+            $this->_unitRequest->setMethod(HttpMethodsEnum::DELETE->value);
+            $this->_unitRequest->send('/config/access_log');
         } catch (UnitException $exception) {
             return false;
         }

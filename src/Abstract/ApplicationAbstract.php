@@ -5,9 +5,6 @@ namespace Pavlusha311245\UnitPhpSdk\Abstract;
 use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ApplicationProcess;
 use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\RequestLimit;
-use Pavlusha311245\UnitPhpSdk\Config\Listener;
-use Pavlusha311245\UnitPhpSdk\Enums\ApplicationTypeEnum;
-use Pavlusha311245\UnitPhpSdk\Enums\HttpMethodsEnum;
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
 use Pavlusha311245\UnitPhpSdk\Interfaces\ApplicationControlInterface;
 use Pavlusha311245\UnitPhpSdk\Interfaces\ApplicationInterface;
@@ -18,10 +15,9 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
 {
     use HasListeners;
 
-    public const SOCKET = '/usr/local/var/run/unit/control.sock';
-    public const ADDRESS = 'http://localhost';
-
     private string $_type;
+
+    private UnitRequest $_unitRequest;
 
     /**
      * Environment variables to be passed to the app
@@ -88,6 +84,9 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
      */
     private ?ProcessIsolation $_isolation = null;
 
+    /**
+     * @throws UnitException
+     */
     public function __construct(array $data = null)
     {
         if (!empty($data)) {
@@ -95,12 +94,20 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
         }
     }
 
+    /**
+     * @param UnitRequest $unitRequest
+     */
+    public function setUnitRequest(UnitRequest $unitRequest): void
+    {
+        $this->_unitRequest = $unitRequest;
+    }
+
     public function getType(): string
     {
         return $this->_type;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $this->_type = $type;
     }
@@ -130,9 +137,12 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
         return $this->_environment;
     }
 
+    /**
+     * @throws UnitException
+     */
     public function setEnvironment(array $environment): void
     {
-        foreach ($environment as $key => $value) {
+        foreach ($environment as $value) {
             if (!is_string($value)) {
                 throw new UnitException('Parse Exception');
             }
@@ -278,8 +288,7 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
     public function restartApplication(): bool
     {
         try {
-            $request = new UnitRequest(self::SOCKET, self::ADDRESS);
-            $result = $request->send("/control/applications/{$this->getName()}/restart");
+            $this->_unitRequest->send("/control/applications/{$this->getName()}/restart");
         } catch (UnitException $exception) {
             return false;
         }
