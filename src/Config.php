@@ -46,12 +46,12 @@ class Config implements ConfigInterface
      *
      * @var array|mixed
      */
-    private array $_upstreams;
+    private array $_upstreams = [];
 
     /**
      * Constructor
      *
-     * @throws \Exception
+     * @throws UnitException
      */
     public function __construct(array $data)
     {
@@ -76,10 +76,11 @@ class Config implements ConfigInterface
         if (array_key_exists('listeners', $data)) {
             foreach ($data['listeners'] as $listener => $listenerData) {
                 $listener = (new Listener(
-                    _listener: $listener
+                    _listener: $listener,
+                    pass: $listenerData['pass']
                 ))->parseFromArray($listenerData);
-                $typePath = $listener->getPass()[0];
-                $typePathName = $listener->getPass()[1];
+                $typePath = $listener->getPass()->getPassType();
+                $typePathName = $listener->getPass()->toArray()[1];
 
                 ($this->{"_{$typePath}"}[$typePathName])->setListener($listener);
 
@@ -90,6 +91,15 @@ class Config implements ConfigInterface
         if (array_key_exists('upstreams', $data)) {
             $this->_upstreams = $data['upstreams'] ?? [];
         }
+    }
+
+    /**
+     * @param string $listener
+     * @return Listener|null
+     */
+    public function getListener(string $listener): ?Listener
+    {
+        return $this->_listeners[$listener] ?? null;
     }
 
     /**
