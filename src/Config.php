@@ -153,11 +153,11 @@ class Config implements ConfigInterface
      * Get application from config by name
      *
      * @param $applicationName
-     * @return mixed
+     * @return ApplicationAbstract|null
      */
-    public function getApplication($applicationName): ApplicationAbstract
+    public function getApplication($applicationName): ?ApplicationAbstract
     {
-        return $this->_applications[$applicationName];
+        return $this->_applications[$applicationName] ?? null;
     }
 
     /**

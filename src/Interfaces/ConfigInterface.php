@@ -59,9 +59,9 @@ interface ConfigInterface
 
     /**
      * @param $applicationName
-     * @return ApplicationAbstract
+     * @return ApplicationAbstract|null
      */
-    public function getApplication($applicationName): ApplicationAbstract;
+    public function getApplication($applicationName): ?ApplicationAbstract;
 
     /**
      * @param ApplicationAbstract $application
