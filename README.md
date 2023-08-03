@@ -24,13 +24,35 @@ _THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
 ### Installation
 
 1. Create folder `mkdir example-php-project`
-2. Open folder cd `example-php-project`
-3. Init composer `composer init`
-4. Add package `composer require pavlusha311245/unit-php-sdk`
+2. Open folder `cd example-php-project`
+3. Crate composer.json file. Example below:
+```shell
+{
+    "name": "pavlusha311245/example-php-project",
+    "require": {
+        "pavlusha311245/unit-php-sdk": "0.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pavlusha\\ExamplePhpProject\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Paul Zavadski",
+            "email": "pavel.zavadski@cogniteq.com"
+        }
+    ]
+}
+```
+4. Install packages `composer install`
 
 Congratulations! You installed package. Now you can use the full power of this SDK.
 
-* Create `index.php` file
+* Create `src/index.php` file
+  1. `cd src` (`mkdir src` if doesn't exist)
+  2. `touch src/index.php`
+  3. `nano src/index.php`
 * Paste code and change this line `socket: <your socket path to Nginx Unit>` for your configuration
 
 ```php
