@@ -3,11 +3,12 @@
 namespace Pavlusha311245\UnitPhpSdk\Config;
 
 use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
-use Pavlusha311245\UnitPhpSdk\Interfaces\ApplicationsStatisticsInterface;
-use Pavlusha311245\UnitPhpSdk\Interfaces\ConnectionsStatisticsInterface;
-use Pavlusha311245\UnitPhpSdk\Interfaces\RequestsStatisticsInterface;
-use Pavlusha311245\UnitPhpSdk\Interfaces\StatisticsInterface;
-use phpDocumentor\Reflection\Types\This;
+use Pavlusha311245\UnitPhpSdk\Interfaces\{
+    ApplicationsStatisticsInterface,
+    ConnectionsStatisticsInterface,
+    RequestsStatisticsInterface,
+    StatisticsInterface
+};
 
 /**
  * This class returns statistics from Nginx Unit

@@ -60,6 +60,9 @@ More information about API references you can find [here](https://unit-sdk.pavlu
 
 More information about changes you can see [here](CHANGELOG.md)
 
+## Versioning
+We use SemVer for versioning. For the versions available, see the tags on this repository.
+
 ## Contribution
 
 More info about contribution you can
