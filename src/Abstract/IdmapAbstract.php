@@ -4,8 +4,19 @@ namespace Pavlusha311245\UnitPhpSdk\Abstract;
 
 class IdmapAbstract
 {
+    /**
+     * @var int
+     */
     private int $_container;
+
+    /**
+     * @var int
+     */
     private int $_host;
+
+    /**
+     * @var int
+     */
     private int $_size;
 
     /**

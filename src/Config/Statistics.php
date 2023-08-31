@@ -15,10 +15,19 @@ use Pavlusha311245\UnitPhpSdk\Interfaces\{
  */
 class Statistics implements StatisticsInterface
 {
+    /**
+     * @var ConnectionsStatisticsInterface
+     */
     private ConnectionsStatisticsInterface $_connections;
 
+    /**
+     * @var RequestsStatisticsInterface
+     */
     private RequestsStatisticsInterface $_requests;
 
+    /**
+     * @var array|ApplicationsStatistics[]
+     */
     private array $_applications;
 
     public function __construct(array $data)

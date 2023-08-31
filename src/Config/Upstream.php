@@ -13,8 +13,8 @@ class Upstream implements UpstreamInterface
 
     public function __construct(
         private readonly string $_name,
-        array                   $data)
-    {
+        array                   $data
+    ) {
         $this->_servers = $data;
     }
 
@@ -31,6 +31,6 @@ class Upstream implements UpstreamInterface
      */
     public function getServers(): array
     {
-        return $this->_servers;
+        return $this->_servers['servers'];
     }
 }

@@ -4,7 +4,14 @@ namespace Pavlusha311245\UnitPhpSdk\Config;
 
 class AccessLog
 {
+    /**
+     * @var string|mixed|null
+     */
     private ?string $_path;
+
+    /**
+     * @var string|mixed|null
+     */
     private ?string $_format;
 
     public function __construct(

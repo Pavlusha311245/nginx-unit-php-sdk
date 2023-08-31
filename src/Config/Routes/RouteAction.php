@@ -44,16 +44,34 @@ class RouteAction
 
     private string $_index = '';
 
-    private array $_fallback = [];
+    /**
+     * @var array
+     */
+    private $_fallback;
 
+    /**
+     * @var array
+     */
     private array $_types = [];
 
+    /**
+     * @var string
+     */
     private string $_chroot = '';
 
+    /**
+     * @var bool
+     */
     protected bool $_follow_symlinks;
 
+    /**
+     * @var bool
+     */
     protected bool $_traverse_mounts;
 
+    /**
+     * @var string
+     */
     private string $_rewrite = '';
 
     public function __construct($data = null)

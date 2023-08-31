@@ -9,8 +9,19 @@ use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
  */
 class Listener
 {
+    /**
+     * @var string
+     */
     private string $_link;
+
+    /**
+     * @var ListenerPass
+     */
     private ListenerPass $_pass;
+
+    /**
+     * @var int
+     */
     private int $_port;
 
     public function __construct(

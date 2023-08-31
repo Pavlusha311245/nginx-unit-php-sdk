@@ -4,7 +4,14 @@ namespace Pavlusha311245\UnitPhpSdk\Config;
 
 class Settings
 {
+    /**
+     * @var
+     */
     private $_http;
+
+    /**
+     * @var string|array
+     */
     private string|array $_jsmodules;
 
     /**

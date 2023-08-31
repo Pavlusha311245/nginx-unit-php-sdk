@@ -4,6 +4,9 @@ namespace Pavlusha311245\UnitPhpSdk\Config;
 
 readonly class ListenerPass
 {
+    /**
+     * @var string
+     */
     private string $_passType;
 
     public function __construct(private string $_data)
