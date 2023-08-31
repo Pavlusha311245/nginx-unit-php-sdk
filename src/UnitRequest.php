@@ -48,7 +48,7 @@ class UnitRequest
      *
      * @throws UnitException
      */
-    public function send($uri)
+    public function send($uri, $associative = true)
     {
         $curlHandler = curl_init();
 
@@ -75,7 +75,7 @@ class UnitRequest
         curl_close($curlHandler);
         $this->clean();
 
-        return json_decode($result, true);
+        return json_decode($result, $associative);
     }
 
     /**
