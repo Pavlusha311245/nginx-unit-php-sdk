@@ -3,10 +3,13 @@
 namespace Pavlusha311245\UnitPhpSdk;
 
 use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
-use Pavlusha311245\UnitPhpSdk\Config\AccessLog;
-use Pavlusha311245\UnitPhpSdk\Config\Application;
-use Pavlusha311245\UnitPhpSdk\Config\Listener;
-use Pavlusha311245\UnitPhpSdk\Config\Route;
+use Pavlusha311245\UnitPhpSdk\Config\{
+    Application,
+    Listener,
+    Route,
+    Upstream,
+    AccessLog
+};
 use Pavlusha311245\UnitPhpSdk\Enums\HttpMethodsEnum;
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
 use Pavlusha311245\UnitPhpSdk\Interfaces\ConfigInterface;
@@ -50,43 +53,105 @@ class Config implements ConfigInterface
      *
      * @throws UnitException
      */
-    public function __construct(array $data, private UnitRequest $_unitRequest)
+    public function __construct(object $data, private readonly UnitRequest $_unitRequest)
     {
-        if (array_key_exists('routes', $data)) {
-            foreach ($data['routes'] as $routeName => $routeData) {
-                $this->_routes[$routeName] = new Route($routeName, $routeData);
-            }
-        }
+        $rawData = $data;
+        $jsonData = json_decode(json_encode($data), true);
 
-        if (array_key_exists('applications', $data)) {
-            foreach ($data['applications'] as $appName => $appData) {
-                // TODO: implement go and nodejs detect
-                $this->_applications[$appName] = match ($appData['type']) {
-                    'php' => new Application\PhpApplication($appData),
-                    'external' => new Application\NodeJsApplication($appData),
-                };
-                $this->_applications[$appName]->setName($appName);
-                $this->_applications[$appName]->setUnitRequest($_unitRequest);
-            }
-        }
+        $this->loadRoutes($rawData);
+        $this->loadApplications($jsonData);
+        $this->loadUpstreams($jsonData);
+        $this->loadListeners($jsonData);
+    }
 
+    /**
+     * @param array $data
+     * @return void
+     * @throws UnitException
+     */
+    public function loadListeners(array $data): void
+    {
         if (array_key_exists('listeners', $data)) {
             foreach ($data['listeners'] as $listener => $listenerData) {
                 $listener = (new Listener(
                     _listener: $listener,
                     pass: $listenerData['pass']
                 ))->parseFromArray($listenerData);
-                $typePath = $listener->getPass()->getPassType();
-                $typePathName = $listener->getPass()->toArray()[1];
 
-                ($this->{"_{$typePath}"}[$typePathName])->setListener($listener);
+                $typePath = $listener->getPass()->getPassType();
+                $typePathName = $listener->getPass()->toArray()[1] ?? null;
+
+                ($this->{"_{$typePath}"}[$typePathName ?? 'default'])?->setListener($listener);
 
                 $this->_listeners[] = $listener;
             }
         }
+    }
 
+
+    /**
+     * @param array $data
+     * @return void
+     * @throws UnitException
+     */
+    public function loadApplications(array $data): void
+    {
+        if (array_key_exists('applications', $data)) {
+            foreach ($data['applications'] as $appName => $appData) {
+                // TODO: implement Perl, Python and Ruby applications
+                $this->_applications[$appName] = match ($appData['type']) {
+                    'php' => new Application\PhpApplication($appData),
+                    'java' => new Application\JavaApplication($appData),
+                    'external' => $this->isNodeJsApplication($appData) ? new Application\NodeJsApplication($appData) : new Application\GoApplication($appData),
+                };
+                $this->_applications[$appName]->setName($appName);
+                $this->_applications[$appName]->setUnitRequest($this->_unitRequest);
+            }
+        }
+    }
+
+    /**
+     * @param $appData
+     * @return bool
+     */
+    public function isNodeJsApplication($appData): bool
+    {
+        foreach ($appData['arguments'] as $argument) {
+            if (str_contains($argument, '.js')) {
+                return true;
+            }
+        }
+
+        if (str_contains($appData['executable'], '.js')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function loadRoutes(object $rawData): void
+    {
+        if (!empty($rawData->routes)) {
+            if (!is_array($rawData->routes)) {
+                foreach ((array)$rawData->routes as $routeName => $routeData) {
+                    $this->_routes[$routeName] = new Route($routeName, $routeData);
+                }
+            } else {
+                $this->_routes['default'] = new Route('default', (array)$rawData->routes[0], true);
+            }
+        }
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    public function loadUpstreams(array $data): void
+    {
         if (array_key_exists('upstreams', $data)) {
-            $this->_upstreams = $data['upstreams'] ?? [];
+            foreach ($data['upstreams'] as $upstreamName => $upstreamData) {
+                $this->_upstreams[$upstreamName] = new Upstream($upstreamName, $upstreamData);
+            }
         }
     }
 
@@ -114,6 +179,22 @@ class Config implements ConfigInterface
         }
 
         return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addListener(Listener $listener): bool
+    {
+        try {
+            $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
+            $this->_unitRequest->setData($listener->toJson());
+            $this->_unitRequest->send("/config/listeners/{$listener->getListener()}");
+        } catch (UnitException $exception) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -220,6 +301,8 @@ class Config implements ConfigInterface
     public function removeRoute(Route|string $route): bool
     {
         // TODO: should be implemented
+
+        return false;
     }
 
     /**
@@ -258,7 +341,6 @@ class Config implements ConfigInterface
     {
         $result = $this->_unitRequest->send('/config/access_log');
 
-        // TODO: need null
         return new AccessLog($result);
     }
 

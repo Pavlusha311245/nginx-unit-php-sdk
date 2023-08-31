@@ -56,7 +56,7 @@ class Listener
         $separatedListener = explode(':', $this->_listener);
 
         $this->_link = $separatedListener[0] == '*' ?
-            "0.0.0.0:{$separatedListener[1]}" : $separatedListener;
+            "0.0.0.0:{$separatedListener[1]}" : $this->_listener;
     }
 
     /**
@@ -134,5 +134,37 @@ class Listener
         $this->_tls = $data['tls'] ?? [];
 
         return $this;
+    }
+
+    /**
+     * Return listener as array
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $listenerArray = [
+            'pass' => $this->_pass->toString(),
+        ];
+
+        if (!empty($this->_tls)) {
+            $listenerArray['tls'] = $this->_tls;
+        }
+
+        if (!empty($this->_forwarded)) {
+            $listenerArray['forwarded'] = $this->_forwarded;
+        }
+
+        return $listenerArray;
+    }
+
+    /**
+     * Return Listener as JSON
+     *
+     * @return string
+     */
+    public function toJson(): string
+    {
+        return json_encode($this->toArray());
     }
 }
