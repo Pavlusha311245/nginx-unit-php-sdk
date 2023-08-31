@@ -43,6 +43,11 @@ class ProcessIsolation
      */
     private Uidmap $_uidmap;
 
+    public function __construct(array $data)
+    {
+        $this->parseFromArray($data);
+    }
+
     /**
      * @param Automount $automount
      */

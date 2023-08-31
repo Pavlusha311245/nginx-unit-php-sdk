@@ -132,12 +132,13 @@ class Config implements ConfigInterface
     public function loadRoutes(object $rawData): void
     {
         if (!empty($rawData->routes)) {
+            $jsonRoutes = json_decode(json_encode($rawData), true)['routes'];
             if (!is_array($rawData->routes)) {
-                foreach ((array)$rawData->routes as $routeName => $routeData) {
+                foreach ($jsonRoutes as $routeName => $routeData) {
                     $this->_routes[$routeName] = new Route($routeName, $routeData);
                 }
             } else {
-                $this->_routes['default'] = new Route('default', (array)$rawData->routes[0], true);
+                $this->_routes['default'] = new Route('default', $jsonRoutes[0], true);
             }
         }
     }
