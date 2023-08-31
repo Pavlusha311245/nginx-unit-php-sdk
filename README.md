@@ -3,7 +3,9 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/Pavlusha311245/unit-php-sdk?labelColor=%231e293b&color=%23702963&link=https%3A%2F%2Fpackagist.org%2Fpackages%2Fpavlusha311245%2Funit-php-sdk)](https://packagist.org/packages/pavlusha311245/unit-php-sdk)
 [![Documentation](https://img.shields.io/website?url=https%3A%2F%2Funit-sdk.pavlusha.me%2F&label=documentation&link=https%3A%2F%2Funit-sdk.pavlusha.me%2F)](https://unit-sdk.pavlusha.me/)
 
-_THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
+## About 
+
+SDK allows developers to interact with the Nginx Unit web server through php classes
 
 ## Supported Versions
 
@@ -11,6 +13,8 @@ _THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
 |---------|--------------------|
 | 0.4.x   | :white_check_mark: |
 | < 0.3.x | :x:                |
+
+_THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
 
 ## Quick start
 
