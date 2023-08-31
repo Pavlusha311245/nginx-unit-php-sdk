@@ -2,7 +2,7 @@
 
 namespace Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 
-class Cgroup
+readonly class Cgroup
 {
     public function __construct(private string $_path)
     {
