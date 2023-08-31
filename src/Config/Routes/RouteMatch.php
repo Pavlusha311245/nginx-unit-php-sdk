@@ -298,4 +298,23 @@ class RouteMatch
             $this->setUri($data['uri']);
         }
     }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'arguments' => $this->getArguments(),
+            'cookies' => $this->getCookies(),
+            'destination' => $this->getDestination(),
+            'headers' => $this->getHeaders(),
+            'host' => $this->getHost(),
+            'method' => $this->getMethod(),
+            'query' => $this->getQuery(),
+            'scheme' => $this->getScheme(),
+            'source' => $this->getSource(),
+            'uri' => $this->getUri()
+        ];
+    }
 }

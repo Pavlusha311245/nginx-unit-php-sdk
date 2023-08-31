@@ -319,4 +319,41 @@ class RouteAction
             $this->setTraverseMounts($data['traverse_mounts']);
         }
     }
+
+    /**
+     * @return bool
+     */
+    public function isFollowSymlinks(): bool
+    {
+        return $this->_follow_symlinks;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTraverseMounts(): bool
+    {
+        return $this->_traverse_mounts;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'pass' => $this->getPass(),
+            'proxy' => $this->getProxy(),
+            'return' => $this->getReturn(),
+            'location' => $this->getLocation(),
+            'rewrite' => $this->getRewrite(),
+            'share' => $this->getShare(),
+            'index' => $this->getIndex(),
+            'chroot' => $this->getChroot(),
+            'types' => $this->getTypes(),
+            'fallback' => $this->getFallback(),
+            'follow_symlinks' => $this->isFollowSymlinks(),
+            'traverse_mounts' => $this->isTraverseMounts()
+        ];
+    }
 }
