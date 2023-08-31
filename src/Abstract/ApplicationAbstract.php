@@ -239,10 +239,8 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
      *
      * @throws UnitException
      */
-    public function parseFromArray($data): void
+    public function parseFromArray(array $data): void
     {
-        $data = (array)$data;
-
         if (!array_key_exists('type', $data)) {
             throw new UnitException('Parse Exception');
         }
