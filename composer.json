@@ -34,7 +34,8 @@
     "ext-curl": "*"
   },
   "require-dev": {
-    "pestphp/pest": "^2.8"
+    "pestphp/pest": "^2.8",
+    "phpstan/phpstan": "^1.10"
   },
   "config": {
     "allow-plugins": {
@@ -42,7 +43,10 @@
     }
   },
   "scripts": {
-    "test": "./vendor/bin/pest",
+    "test": [
+      "./vendor/bin/pest",
+      "./vendor/bin/phpstan analyse -c phpstan.neon"
+    ],
     "lint": "./vendor/bin/php-cs-fixer fix --rules=@PSR12 ."
   }
 }
