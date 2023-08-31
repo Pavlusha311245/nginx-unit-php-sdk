@@ -2,10 +2,27 @@
 
 namespace Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 
+use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+
 readonly class Cgroup
 {
-    public function __construct(private string $_path)
+    private string $_path;
+
+    public function __construct(array $data)
     {
+        if (!array_key_exists('path', $data)) {
+            throw new UnitException('Cgroup path not found');
+        }
+
+        $this->setPath($data['path']);
+    }
+
+    /**
+     * @param string $path
+     */
+    public function setPath(string $path): void
+    {
+        $this->_path = $path;
     }
 
     /**

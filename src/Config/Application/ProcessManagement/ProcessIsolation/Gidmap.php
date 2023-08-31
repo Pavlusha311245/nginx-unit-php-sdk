@@ -6,4 +6,5 @@ use Pavlusha311245\UnitPhpSdk\Abstract\IdmapAbstract;
 
 class Gidmap extends IdmapAbstract
 {
+    //
 }

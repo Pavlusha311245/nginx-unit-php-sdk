@@ -273,10 +273,9 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
             $this->setStdOut($data['stdout']);
         }
 
-        //        TODO: implement isolation object
-        //        if (array_key_exists('isolation', $data)) {
-        //            $this->setIsolation($data['isolation']);
-        //        }
+        if (array_key_exists('isolation', $data)) {
+            $this->setIsolation(new ProcessIsolation($data['isolation']));
+        }
 
         if (array_key_exists('processes', $data)) {
             if (is_array($data['processes'])) {
