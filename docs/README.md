@@ -32,10 +32,6 @@ This project allows developers to interact with the Nginx Unit web server throug
 
 You can easy start work with SDK with Quick start guide below:
 
-{% content-ref url="quick-start.md" %}
-[quick-start.md](quick-start.md)
-{% endcontent-ref %}
-
 {% content-ref url="installation.md" %}
 [installation.md](installation.md)
 {% endcontent-ref %}

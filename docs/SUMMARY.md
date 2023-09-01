@@ -1,7 +1,6 @@
 # Table of contents
 
 * [Welcome!](README.md)
-* [Prerequisites](quick-start.md)
 * [Installation](installation.md)
 * [Questions and Issues](questions-and-issues.md)
 * [Changelog](changelog.md)
