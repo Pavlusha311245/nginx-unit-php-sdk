@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## v0.5.0 - [2023/09/01]
+
+- Added ProccessIsolation implementation
+- Added Upstream class
+- Added phpstan
+- Updated RouteAction and RouteMatch. Added toArray methods
+- Updated Config class
+- Updated Unit class
+
 ## v0.4.0 - [2023/08/02]
 
 - Added more Applications, Requests and Connection Statistics classes

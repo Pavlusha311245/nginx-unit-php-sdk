@@ -1,18 +1,27 @@
-# PHP SDK for Nginx Unit
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/Pavlusha311245/unit-php-sdk?labelColor=%231e293b&color=%23702963&link=https%3A%2F%2Fpackagist.org%2Fpackages%2Fpavlusha311245%2Funit-php-sdk)](https://packagist.org/packages/pavlusha311245/unit-php-sdk)
-[![Documentation](https://img.shields.io/website?url=https%3A%2F%2Funit-sdk.pavlusha.me%2F&label=documentation&link=https%3A%2F%2Funit-sdk.pavlusha.me%2F)](https://unit-sdk.pavlusha.me/)
+<p align="center">
+<img style="text-aligh: center" src="https://15804523-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F77F3kdmGsRkZFelMUJq1%2Ficon%2FnsTZCyEjC1z8LJWkzLro%2F%D1%8B.svg?alt=media&token=ce321f03-8fdf-4c4d-aaef-888183f713f6" width="200" alt="Company logo">
+</p>
+
+<p align="center">
+<b style="font-size: 2rem">PHP SDK for Nginx Unit</b>
+</p>
+
+<p align="center">
+<a href="https://packagist.org/packages/pavlusha311245/unit-php-sdk"><img src="https://img.shields.io/packagist/v/Pavlusha311245/unit-php-sdk?labelColor=%231e293b&color=%23702963&link=https%3A%2F%2Fpackagist.org%2Fpackages%2Fpavlusha311245%2Funit-php-sdk"></a>
+<a href="https://unit-sdk.pavlusha.me/"><img src="https://img.shields.io/website?url=https%3A%2F%2Funit-sdk.pavlusha.me%2F&label=documentation&link=https%3A%2F%2Funit-sdk.pavlusha.me%2F"></a>
+</p>
 
 ## About 
 
-SDK allows developers to interact with the Nginx Unit web server through php classes
+SDK allows developers to interact with the Nginx Unit web server through php classes. This project will help embed web server management into your projects
 
 ## Supported Versions
 
-| Version | Supported          |
-|---------|--------------------|
-| 0.4.x   | :white_check_mark: |
-| < 0.3.x | :x:                |
+| Version | Nginx Unit Capability | Supported          |
+|---------|:----------------------|--------------------|
+| 0.5.x   | 1.30.0                | :white_check_mark: |
+| < 0.4.x | 1.30.0                | :x:                |
 
 _THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
 
@@ -34,7 +43,7 @@ _THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
 {
     "name": "pavlusha311245/example-php-project",
     "require": {
-        "pavlusha311245/unit-php-sdk": "0.4.0"
+        "pavlusha311245/unit-php-sdk": "0.5.0"
     },
     "autoload": {
         "psr-4": {
@@ -85,9 +94,6 @@ More information about API references you can find [here](https://unit-sdk.pavlu
 ## Changelog
 
 More information about changes you can see [here](CHANGELOG.md)
-
-## Versioning
-We use SemVer for versioning. For the versions available, see the tags on this repository.
 
 ## Contribution
 
