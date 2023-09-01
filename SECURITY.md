@@ -1,11 +1,14 @@
 ## Security Policy
 
+## Versioning
+We use SemVer for versioning. For the versions available, see the tags on this repository.
+
 ## Supported Versions
 
 | Version | Nginx Unit Capability | Supported          |
 |---------|:----------------------|--------------------|
-| 0.4.x   | 1.30.0                | :white_check_mark: |
-| < 0.3.x | 1.30.0                | :x:                |
+| 0.5.x   | 1.30.0                | :white_check_mark: |
+| < 0.4.x | 1.30.0                | :x:                |
 
 ## Vulnerability Report
 

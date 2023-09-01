@@ -1,6 +1,6 @@
 {
   "name": "pavlusha311245/unit-php-sdk",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "type": "sdk",
   "description": "This project allows developers to interact with the Nginx Unit web server through PHP classes",
   "license": "Apache-2.0",
@@ -34,7 +34,8 @@
     "ext-curl": "*"
   },
   "require-dev": {
-    "pestphp/pest": "^2.8"
+    "pestphp/pest": "^2.8",
+    "phpstan/phpstan": "^1.10"
   },
   "config": {
     "allow-plugins": {
@@ -42,7 +43,10 @@
     }
   },
   "scripts": {
-    "test": "./vendor/bin/pest",
+    "test": [
+      "./vendor/bin/pest",
+      "./vendor/bin/phpstan analyse -c phpstan.neon"
+    ],
     "lint": "./vendor/bin/php-cs-fixer fix --rules=@PSR12 ."
   }
 }

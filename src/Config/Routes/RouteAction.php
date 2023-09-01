@@ -44,16 +44,34 @@ class RouteAction
 
     private string $_index = '';
 
-    private array $_fallback = [];
+    /**
+     * @var array
+     */
+    private $_fallback;
 
+    /**
+     * @var array
+     */
     private array $_types = [];
 
+    /**
+     * @var string
+     */
     private string $_chroot = '';
 
+    /**
+     * @var bool
+     */
     protected bool $_follow_symlinks;
 
+    /**
+     * @var bool
+     */
     protected bool $_traverse_mounts;
 
+    /**
+     * @var string
+     */
     private string $_rewrite = '';
 
     public function __construct($data = null)
@@ -300,5 +318,42 @@ class RouteAction
         if (array_key_exists('traverse_mounts', $data)) {
             $this->setTraverseMounts($data['traverse_mounts']);
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFollowSymlinks(): bool
+    {
+        return $this->_follow_symlinks;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTraverseMounts(): bool
+    {
+        return $this->_traverse_mounts;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'pass' => $this->getPass(),
+            'proxy' => $this->getProxy(),
+            'return' => $this->getReturn(),
+            'location' => $this->getLocation(),
+            'rewrite' => $this->getRewrite(),
+            'share' => $this->getShare(),
+            'index' => $this->getIndex(),
+            'chroot' => $this->getChroot(),
+            'types' => $this->getTypes(),
+            'fallback' => $this->getFallback(),
+            'follow_symlinks' => $this->isFollowSymlinks(),
+            'traverse_mounts' => $this->isTraverseMounts()
+        ];
     }
 }

@@ -23,6 +23,14 @@ interface ConfigInterface
     public function getListenerByPort(int $port): Listener|null;
 
     /**
+     * Add listener
+     *
+     * @param Listener $listener
+     * @return bool
+     */
+    public function addListener(Listener $listener): bool;
+
+    /**
      * @param Listener $listener
      * @return bool
      */

@@ -4,8 +4,14 @@ namespace Pavlusha311245\UnitPhpSdk\Config\Routes;
 
 class RouteBlock
 {
+    /**
+     * @var RouteAction
+     */
     private RouteAction $_action;
 
+    /**
+     * @var RouteMatch
+     */
     private RouteMatch $_match;
 
     public function __construct(array $data)

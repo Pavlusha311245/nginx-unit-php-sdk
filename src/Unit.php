@@ -49,7 +49,7 @@ class Unit implements UnitInterface
     private function loadConfig(): void
     {
         $request = new UnitRequest($this->socket, $this->address);
-        $result = $request->send('/config');
+        $result = $request->send('/config', false);
         $this->_config = new Config($result, new UnitRequest($this->socket, $this->address));
     }
 

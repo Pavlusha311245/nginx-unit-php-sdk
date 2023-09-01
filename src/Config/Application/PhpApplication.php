@@ -7,14 +7,29 @@ use Pavlusha311245\UnitPhpSdk\Config\Application\Targets\PhpTarget;
 
 class PhpApplication extends ApplicationAbstract
 {
+    /**
+     * @var string
+     */
     private string $_root = '';
 
+    /**
+     * @var string
+     */
     private string $_index = '';
 
+    /**
+     * @var string
+     */
     private string $_script = '';
 
+    /**
+     * @var
+     */
     private $_options;
 
+    /**
+     * @var array
+     */
     private array $_targets;
 
     /**

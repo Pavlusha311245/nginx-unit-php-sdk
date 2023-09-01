@@ -2,12 +2,13 @@
 
 namespace Pavlusha311245\UnitPhpSdk\Abstract;
 
-use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ApplicationProcess;
-use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
-use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\RequestLimit;
+use Pavlusha311245\UnitPhpSdk\Config\Application\{
+    ProcessManagement\ApplicationProcess,
+    ProcessManagement\ProcessIsolation,
+    ProcessManagement\RequestLimit
+};
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
-use Pavlusha311245\UnitPhpSdk\Interfaces\ApplicationControlInterface;
-use Pavlusha311245\UnitPhpSdk\Interfaces\ApplicationInterface;
+use Pavlusha311245\UnitPhpSdk\Interfaces\{ApplicationControlInterface, ApplicationInterface};
 use Pavlusha311245\UnitPhpSdk\Traits\HasListeners;
 use Pavlusha311245\UnitPhpSdk\UnitRequest;
 
@@ -15,8 +16,14 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
 {
     use HasListeners;
 
+    /**
+     * @var string
+     */
     private string $_type;
 
+    /**
+     * @var UnitRequest
+     */
     private UnitRequest $_unitRequest;
 
     /**
@@ -87,7 +94,7 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
     /**
      * @throws UnitException
      */
-    public function __construct(array $data = null)
+    public function __construct($data = null)
     {
         if (!empty($data)) {
             $this->parseFromArray($data);
@@ -264,10 +271,9 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
             $this->setStdOut($data['stdout']);
         }
 
-        //        TODO: implement isolation object
-        //        if (array_key_exists('isolation', $data)) {
-        //            $this->setIsolation($data['isolation']);
-        //        }
+        if (array_key_exists('isolation', $data)) {
+            $this->setIsolation(new ProcessIsolation($data['isolation']));
+        }
 
         if (array_key_exists('processes', $data)) {
             if (is_array($data['processes'])) {
