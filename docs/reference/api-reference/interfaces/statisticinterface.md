@@ -1,11 +1,35 @@
 # StatisticInterface
 
-
-
 ```php
-public function getConnections();
+interface StatisticsInterface
+{
+    /**
+     * Get connections
+     *
+     * @return ConnectionsStatisticsInterface
+     */
+    public function getConnections(): ConnectionsStatisticsInterface;
 
-public function getRequests();
+    /**
+     * Get requests
+     *
+     * @return RequestsStatisticsInterface
+     */
+    public function getRequests(): RequestsStatisticsInterface;
 
-public function getApplications();
+    /**
+     * Get an applications
+     *
+     * @return array
+     */
+    public function getApplications(): array;
+
+    /**
+     * Get application statistics
+     *
+     * @param ApplicationAbstract|string $application
+     * @return ApplicationsStatisticsInterface
+     */
+    public function getApplicationStatistics(ApplicationAbstract|string $application): ApplicationsStatisticsInterface;
+}
 ```

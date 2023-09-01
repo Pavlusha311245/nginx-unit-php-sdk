@@ -32,6 +32,10 @@ _Return type: Void_
 
 _Return type: Array_
 
+### `getListenerByPort(int $port)`
+
+_Return type: null or_ [_Listener_](listener.md)
+
 ### `getApplications()`
 
 _Return type: Array_
@@ -42,7 +46,7 @@ Params:
 
 * $applicationName - Existing application name from Nginx Unit config
 
-_Return type:_ [_Application_](application-in-development.md)
+_Return type:_ [_Application_](application-in-development/)
 
 ### `getRoutes()`
 
