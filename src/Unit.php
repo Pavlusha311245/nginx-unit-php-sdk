@@ -69,7 +69,7 @@ class Unit implements UnitInterface
      */
     public function uploadCertificate(string $path, string $certificateName): bool
     {
-        // TODO: review
+        // TODO: need to review
         $fileContent = file_get_contents($path);
 
         if (!$fileContent) {
@@ -80,6 +80,23 @@ class Unit implements UnitInterface
             $request = new UnitRequest($this->socket, $this->address);
             $request->setMethod('PUT');
             $request->setData($fileContent);
+            $result = $request->send("/certificates/{$certificateName}");
+        } catch (UnitException) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function removeCertificate(string $certificateName): bool
+    {
+        // TODO: need to review
+        try {
+            $request = new UnitRequest($this->socket, $this->address);
+            $request->setMethod('DELETE');
             $result = $request->send("/certificates/{$certificateName}");
         } catch (UnitException) {
             return false;

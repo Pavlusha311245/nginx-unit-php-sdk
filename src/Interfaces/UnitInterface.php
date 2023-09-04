@@ -62,6 +62,15 @@ interface UnitInterface
     public function uploadCertificate(string $path, string $certificateName): bool;
 
     /**
+     * Remove certificate on Unit server
+     *
+     * @param string $certificateName
+     * @return bool
+     * @throws UnitException
+     */
+    public function removeCertificate(string $certificateName): bool;
+
+    /**
      * Remove all data from config
      *
      * @return bool
