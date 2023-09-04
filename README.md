@@ -20,7 +20,7 @@ SDK allows developers to interact with the Nginx Unit web server through php cla
 
 | Version | Nginx Unit Capability | Supported          |
 |---------|:----------------------|--------------------|
-| 0.5.x   | 1.30.0                | :white_check_mark: |
+| 0.5.x   | 1.30.0 & 1.31.0       | :white_check_mark: |
 | < 0.4.x | 1.30.0                | :x:                |
 
 _THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
@@ -39,24 +39,19 @@ _THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
 1. Create folder `mkdir example-php-project`
 2. Open folder `cd example-php-project`
 3. Crate composer.json file. Example below:
-```shell
+```json
 {
-    "name": "pavlusha311245/example-php-project",
-    "require": {
-        "pavlusha311245/unit-php-sdk": "0.5.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Pavlusha\\ExamplePhpProject\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Paul Zavadski",
-            "email": "pavel.zavadski@cogniteq.com"
-        }
-    ]
+  "name": "user/example-php-project",
+  "require": {
+    "pavlusha311245/unit-php-sdk": "^0.5.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "User\\ExamplePhpProject\\": "src/"
+    }
+  }
 }
+
 ```
 4. Install packages `composer install`
 
@@ -103,6 +98,6 @@ read [here](https://docs.github.com/en/get-started/quickstart/contributing-to-pr
 ## Security Policy
 
 If you find bugs and vulnerabilities, please
-contact [zavadskiy.pavel2002@outlook.com](mailto:zavadskiy.pavel2002@outlook.com).
+contact [unit@pavlusha.me](mailto:unit@pavlusha.me).
 
 More info [here](SECURITY.md)
