@@ -64,7 +64,31 @@ class Unit implements UnitInterface
         return $this->_certificates;
     }
 
-    private function loadCertificates()
+    /**
+     * @inheritDoc
+     */
+    public function uploadCertificate(string $path, string $certificateName): bool
+    {
+        // TODO: review
+        $fileContent = file_get_contents($path);
+
+        if (!$fileContent) {
+            throw new UnitException('Fail to read certificate');
+        }
+
+        try {
+            $request = new UnitRequest($this->socket, $this->address);
+            $request->setMethod('PUT');
+            $request->setData($fileContent);
+            $result = $request->send("/certificates/{$certificateName}");
+        } catch (UnitException) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function loadCertificates(): void
     {
         $request = new UnitRequest($this->socket, $this->address);
         $result = $request->send('/certificates');

@@ -31,8 +31,7 @@ class Listener
         string                  $pass,
         private ?Tls            $_tls = null,
         private ?Forwarded      $_forwarded = null,
-    )
-    {
+    ) {
         $this->parsePort();
         $this->generateLink();
 
