@@ -2,6 +2,7 @@
 
 namespace Pavlusha311245\UnitPhpSdk\Config;
 
+use Pavlusha311245\UnitPhpSdk\Config\Listener\Forwarded;
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
 
 /**
@@ -28,7 +29,7 @@ class Listener
         private readonly string $_listener,
         string                  $pass,
         private array           $_tls = [],
-        private array           $_forwarded = [],
+        private ?Forwarded      $_forwarded = null,
     ) {
         $this->parsePort();
         $this->generateLink();
@@ -130,7 +131,10 @@ class Listener
             throw new UnitException("Missing required 'pass' array key");
         }
 
-        $this->_forwarded = $data['forwarded'] ?? [];
+        if (array_key_exists('forwarded', $data)) {
+            $this->_forwarded = new Forwarded($data['forwarded']);
+        }
+
         $this->_tls = $data['tls'] ?? [];
 
         return $this;
