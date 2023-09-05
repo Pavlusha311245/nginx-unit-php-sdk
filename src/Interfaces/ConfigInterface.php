@@ -81,6 +81,15 @@ interface ConfigInterface
     public function getApplication($applicationName): ?ApplicationAbstract;
 
     /**
+     * Upload application to Nginx Unit
+     *
+     * @param string $path
+     * @param string $name
+     * @return mixed
+     */
+    public function uploadApplicationFromFile(string $path, string $name);
+
+    /**
      * @param ApplicationAbstract $application
      * @return bool
      */

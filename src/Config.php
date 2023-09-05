@@ -209,8 +209,7 @@ class Config implements ConfigInterface
             throw new UnitException('Fail to read certificate');
         }
 
-        if (empty(json_decode($fileContent, true)))
-        {
+        if (empty(json_decode($fileContent, true))) {
             throw new UnitException('It\'s not a JSON file');
         }
 
