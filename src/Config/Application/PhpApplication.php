@@ -7,6 +7,8 @@ use Pavlusha311245\UnitPhpSdk\Config\Application\Targets\PhpTarget;
 
 class PhpApplication extends ApplicationAbstract
 {
+    protected string $_type = 'php';
+
     /**
      * @var string
      */
@@ -75,7 +77,7 @@ class PhpApplication extends ApplicationAbstract
     /**
      * @param string $script
      */
-    public function setScript(string $script): void
+    public function setScript(string $script = 'index.php'): void
     {
         $this->_script = $script;
     }

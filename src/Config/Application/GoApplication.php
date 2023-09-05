@@ -6,6 +6,8 @@ use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
 
 class GoApplication extends ApplicationAbstract
 {
+    protected string $_type = 'external';
+
     /**
      * Pathname of the application, absolute or relative to working_directory
      *

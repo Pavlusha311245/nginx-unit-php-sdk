@@ -6,6 +6,8 @@ use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
 
 class NodeJsApplication extends ApplicationAbstract
 {
+    protected string $_type = 'external';
+
     /**
      * Pathname of the app, absolute or relative to working_directory
      *

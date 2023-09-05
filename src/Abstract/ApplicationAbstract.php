@@ -17,9 +17,11 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
     use HasListeners;
 
     /**
+     * Application type
+     *
      * @var string
      */
-    private string $_type;
+    protected string $_type;
 
     /**
      * @var UnitRequest
@@ -112,11 +114,6 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
     public function getType(): string
     {
         return $this->_type;
-    }
-
-    public function setType(string $type): void
-    {
-        $this->_type = $type;
     }
 
     public function getGroup(): string
@@ -245,7 +242,7 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
             throw new UnitException('Parse Exception');
         }
 
-        $this->setType($data['type']);
+        $this->_type = $data['type'];
 
         if (array_key_exists('working_directory', $data)) {
             $this->setWorkingDirectory($data['working_directory']);

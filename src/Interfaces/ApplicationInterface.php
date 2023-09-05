@@ -15,12 +15,6 @@ interface ApplicationInterface
     public function getType(): string;
 
     /**
-     * @param string $type
-     * @return mixed
-     */
-    public function setType(string $type);
-
-    /**
      * @return array
      */
     public function getEnvironment(): array;

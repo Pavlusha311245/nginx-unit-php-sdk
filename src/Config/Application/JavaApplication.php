@@ -6,6 +6,8 @@ use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
 
 class JavaApplication extends ApplicationAbstract
 {
+    protected string $_type = 'java';
+
     /**
      * Pathname of the application’s .war file (packaged or unpackaged)
      *
