@@ -155,14 +155,30 @@ class Listener
         ];
 
         if (!empty($this->_tls)) {
-            $listenerArray['tls'] = $this->_tls;
+            $listenerArray['tls'] = $this->_tls->toArray();
         }
 
         if (!empty($this->_forwarded)) {
-            $listenerArray['forwarded'] = $this->_forwarded;
+            $listenerArray['forwarded'] = $this->_forwarded->toArray();
         }
 
         return $listenerArray;
+    }
+
+    /**
+     * @param Tls|null $tls
+     */
+    public function setTls(?Tls $tls): void
+    {
+        $this->_tls = $tls;
+    }
+
+    /**
+     * @param Forwarded|null $forwarded
+     */
+    public function setForwarded(?Forwarded $forwarded): void
+    {
+        $this->_forwarded = $forwarded;
     }
 
     /**

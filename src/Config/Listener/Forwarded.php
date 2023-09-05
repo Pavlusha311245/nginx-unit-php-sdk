@@ -8,9 +8,9 @@ class Forwarded
 {
     private string|array $_source;
 
-    private string $_client_ip;
+    private ?string $_client_ip;
 
-    private string $_protocol;
+    private ?string $_protocol;
 
     private bool $_recursive = false;
 
@@ -108,5 +108,28 @@ class Forwarded
     public function isRecursive(): bool
     {
         return $this->_recursive;
+    }
+
+    public function toArray(): array
+    {
+        $data = [
+            'source' => $this->_source,
+        ];
+
+        if (empty($this->_client_ip)) {
+            $data['client_id'] = $this->getClientIp();
+            $data['recursive'] = $this->isRecursive();
+        }
+
+        if (empty($this->_protocol)) {
+            $data['protocol'] = $this->getProtocol();
+        }
+
+        return $data;
+    }
+
+    public function toJson(): false|string
+    {
+        return json_encode($this->toArray());
     }
 }
