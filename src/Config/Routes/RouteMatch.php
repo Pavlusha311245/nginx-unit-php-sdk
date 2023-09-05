@@ -15,7 +15,7 @@ class RouteMatch
     private string $_host;
 
     /**
-     * Method from the request line, uppercased.
+     * Method from the request line, uppercase.
      *
      * @var HttpMethodsEnum
      */

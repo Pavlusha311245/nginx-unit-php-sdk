@@ -58,7 +58,7 @@ _THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
 Congratulations! You installed package. Now you can use the full power of this SDK.
 
 * Create `src/index.php` file
-  1. `cd src` (`mkdir src` if doesn't exist)
+  1. `cd src` (`mkdir src` if folder doesn't exist)
   2. `touch src/index.php`
   3. `nano src/index.php`
 * Paste code and change this line `socket: <your socket path to Nginx Unit>` for your configuration
