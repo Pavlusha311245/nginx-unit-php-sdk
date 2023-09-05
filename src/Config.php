@@ -185,13 +185,40 @@ class Config implements ConfigInterface
     /**
      * @inheritDoc
      */
-    public function addListener(Listener $listener): bool
+    public function uploadListener(Listener $listener): bool
     {
         try {
             $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
             $this->_unitRequest->setData($listener->toJson());
             $this->_unitRequest->send("/config/listeners/{$listener->getListener()}");
         } catch (UnitException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws UnitException
+     */
+    public function uploadListenerFromFile(string $path, string $listener): bool
+    {
+        $fileContent = file_get_contents($path);
+
+        if (!$fileContent) {
+            throw new UnitException('Fail to read certificate');
+        }
+
+        if (empty(json_decode($fileContent, true)))
+        {
+            throw new UnitException('It\'s not a JSON file');
+        }
+
+        try {
+            $this->_unitRequest->setMethod('PUT');
+            $this->_unitRequest->setData($fileContent);
+            $result = $this->_unitRequest->send("/config/listeners/{$listener}");
+        } catch (UnitException) {
             return false;
         }
 

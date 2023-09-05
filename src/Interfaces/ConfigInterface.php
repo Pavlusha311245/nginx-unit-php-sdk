@@ -23,12 +23,21 @@ interface ConfigInterface
     public function getListenerByPort(int $port): Listener|null;
 
     /**
-     * Add listener
+     * Upload configuration from file
+     *
+     * @param string $path
+     * @param string $listener
+     * @return bool
+     */
+    public function uploadListenerFromFile(string $path, string $listener): bool;
+
+    /**
+     * Upload Listener object to Nginx Unit server
      *
      * @param Listener $listener
      * @return bool
      */
-    public function addListener(Listener $listener): bool;
+    public function uploadListener(Listener $listener): bool;
 
     /**
      * @param Listener $listener
@@ -105,5 +114,8 @@ interface ConfigInterface
      */
     public function removeAccessLog(): bool;
 
+    /**
+     * @return array
+     */
     public function toArray(): array;
 }
