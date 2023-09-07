@@ -1,6 +1,6 @@
 ---
 description: Nginx Unit PHP SDK
-cover: .gitbook/assets/Nginx Unit PHP SDK, копия (1).png
+cover: .gitbook/assets/Nginx Unit PHP SDK (3).png
 coverY: 0
 layout:
   cover:
@@ -40,7 +40,6 @@ You can easily start work with SDK with Quick start guide below:
 
 Dive a deeper and start exploring our SDK API reference:
 
-{% content-ref url="reference/api-reference/" %}
-[api-reference](reference/api-reference/)
+{% content-ref url="broken-reference" %}
+[Broken link](broken-reference)
 {% endcontent-ref %}
-
