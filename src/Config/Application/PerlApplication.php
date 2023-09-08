@@ -41,6 +41,8 @@ class PerlApplication extends ApplicationAbstract
 
     public function parseFromArray(array $data): void
     {
+        parent::parseFromArray($data);
+
         if (!array_key_exists('script', $data)) {
             throw new UnitException('Script key is required');
         }

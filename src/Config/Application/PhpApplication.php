@@ -4,9 +4,12 @@ namespace Pavlusha311245\UnitPhpSdk\Config\Application;
 
 use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
 use Pavlusha311245\UnitPhpSdk\Config\Application\Targets\PhpTarget;
+use Pavlusha311245\UnitPhpSdk\Traits\HasTargets;
 
 class PhpApplication extends ApplicationAbstract
 {
+    use HasTargets;
+
     protected string $_type = 'php';
 
     /**
@@ -28,11 +31,6 @@ class PhpApplication extends ApplicationAbstract
      * @var
      */
     private $_options;
-
-    /**
-     * @var array
-     */
-    private array $_targets;
 
     /**
      * @return mixed
@@ -80,22 +78,6 @@ class PhpApplication extends ApplicationAbstract
     public function setScript(string $script = 'index.php'): void
     {
         $this->_script = $script;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTargets(): array
-    {
-        return $this->_targets;
-    }
-
-    /**
-     * @param array $targets
-     */
-    public function setTargets(array $targets): void
-    {
-        $this->_targets = $targets;
     }
 
     /**
