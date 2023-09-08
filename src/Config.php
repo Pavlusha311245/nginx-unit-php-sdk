@@ -103,6 +103,7 @@ class Config implements ConfigInterface
                     'php' => new Application\PhpApplication($appData),
                     'java' => new Application\JavaApplication($appData),
                     'perl' => new Application\PerlApplication($appData),
+                    'python' => new Application\PythonApplication($appData),
                     'external' => $this->isNodeJsApplication($appData) ? new Application\NodeJsApplication($appData) : new Application\GoApplication($appData),
                 };
                 $this->_applications[$appName]->setName($appName);
