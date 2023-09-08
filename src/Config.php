@@ -20,7 +20,7 @@ use Pavlusha311245\UnitPhpSdk\Interfaces\ConfigInterface;
 class Config implements ConfigInterface
 {
     /**
-     * Listeners accept requests
+     * Listeners that accept requests
      *
      * @var array
      */
@@ -98,10 +98,11 @@ class Config implements ConfigInterface
     {
         if (array_key_exists('applications', $data)) {
             foreach ($data['applications'] as $appName => $appData) {
-                // TODO: implement Perl, Python and Ruby applications
+                // TODO: implement Python and Ruby applications
                 $this->_applications[$appName] = match ($appData['type']) {
                     'php' => new Application\PhpApplication($appData),
                     'java' => new Application\JavaApplication($appData),
+                    'perl' => new Application\PerlApplication($appData),
                     'external' => $this->isNodeJsApplication($appData) ? new Application\NodeJsApplication($appData) : new Application\GoApplication($appData),
                 };
                 $this->_applications[$appName]->setName($appName);
