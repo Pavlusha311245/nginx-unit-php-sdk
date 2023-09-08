@@ -99,7 +99,7 @@ class PhpApplication extends ApplicationAbstract
     /**
      * @inheritDoc
      */
-    public function parseFromArray(array $data): void
+    public final function parseFromArray(array $data): void
     {
         parent::parseFromArray($data);
 

@@ -136,7 +136,10 @@ class PythonApplication extends ApplicationAbstract
         return $this->_protocol;
     }
 
-    public function parseFromArray(array $data): void
+    /**
+     * @inheritDoc
+     */
+    public final function parseFromArray(array $data): void
     {
         parent::parseFromArray($data);
 

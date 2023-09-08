@@ -39,7 +39,10 @@ class PerlApplication extends ApplicationAbstract
         $this->_script = $script;
     }
 
-    public function parseFromArray(array $data): void
+    /**
+     * @inheritDoc
+     */
+    public final function parseFromArray(array $data): void
     {
         parent::parseFromArray($data);
 
