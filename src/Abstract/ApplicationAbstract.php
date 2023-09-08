@@ -234,6 +234,8 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
     /**
      * Parse data from array
      *
+     * @param array $data
+     * @return void
      * @throws UnitException
      */
     public function parseFromArray(array $data): void

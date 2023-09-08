@@ -65,6 +65,8 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Fill data if listeners key exists
+     *
      * @param array $data
      * @return void
      * @throws UnitException
@@ -78,7 +80,7 @@ class Config implements ConfigInterface
                     pass: $listenerData['pass']
                 ))->parseFromArray($listenerData);
 
-                $typePath = $listener->getPass()->getPassType();
+                $typePath = $listener->getPass()->getType();
                 $typePathName = $listener->getPass()->toArray()[1] ?? null;
 
                 ($this->{"_{$typePath}"}[$typePathName ?? 'default'])?->setListener($listener);
@@ -90,6 +92,8 @@ class Config implements ConfigInterface
 
 
     /**
+     * Fill data if applications key exists
+     *
      * @param array $data
      * @return void
      * @throws UnitException
@@ -104,6 +108,7 @@ class Config implements ConfigInterface
                     'java' => new Application\JavaApplication($appData),
                     'perl' => new Application\PerlApplication($appData),
                     'python' => new Application\PythonApplication($appData),
+                    'wasm' => new Application\WebAssemblyApplication($appData),
                     'external' => $this->isNodeJsApplication($appData) ? new Application\NodeJsApplication($appData) : new Application\GoApplication($appData),
                 };
                 $this->_applications[$appName]->setName($appName);
@@ -113,14 +118,18 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Detect if NodeJsApplication
+     *
      * @param $appData
      * @return bool
      */
-    public function isNodeJsApplication($appData): bool
+    private function isNodeJsApplication($appData): bool
     {
-        foreach ($appData['arguments'] as $argument) {
-            if (str_contains($argument, '.js')) {
-                return true;
+        if (array_key_exists('arguments', $appData)) {
+            foreach ($appData['arguments'] as $argument) {
+                if (str_contains($argument, '.js')) {
+                    return true;
+                }
             }
         }
 
@@ -131,6 +140,12 @@ class Config implements ConfigInterface
         return false;
     }
 
+    /**
+     * Fill data if routes key exists
+     *
+     * @param object $rawData
+     * @return void
+     */
     public function loadRoutes(object $rawData): void
     {
         if (!empty($rawData->routes)) {
@@ -146,6 +161,8 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Fill data if upstreams key exists
+     *
      * @param array $data
      * @return void
      */
@@ -302,6 +319,11 @@ class Config implements ConfigInterface
     public function getRoute(string $routeName): Route|null
     {
         return $this->_routes[$routeName] ?? null;
+    }
+
+    public function uploadRoutesFromFile(string $path)
+    {
+        // TODO: Implement uploadRoutesFromFile() method.
     }
 
     /**

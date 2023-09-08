@@ -6,6 +6,7 @@ use Pavlusha311245\UnitPhpSdk\Config\AccessLog;
 use Pavlusha311245\UnitPhpSdk\Config\Statistics;
 use Pavlusha311245\UnitPhpSdk\Enums\HttpMethodsEnum;
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+use Pavlusha311245\UnitPhpSdk\Interfaces\CertificateInterface;
 use Pavlusha311245\UnitPhpSdk\Interfaces\UnitInterface;
 
 /**
@@ -13,10 +14,25 @@ use Pavlusha311245\UnitPhpSdk\Interfaces\UnitInterface;
  */
 class Unit implements UnitInterface
 {
+    /**
+     * Contains Config object
+     *
+     * @var Config
+     */
     private Config $_config;
 
+    /**
+     * Contains array of Certificate objects
+     *
+     * @var array
+     */
     private array $_certificates;
 
+    /**
+     * Contains Statistics object
+     *
+     * @var Statistics
+     */
     private Statistics $_statistics;
 
     /**
@@ -81,7 +97,7 @@ class Unit implements UnitInterface
             $request->setMethod('PUT');
             $request->setData($fileContent);
             $result = $request->send("/certificates/{$certificateName}");
-        } catch (UnitException) {
+        } catch (UnitException $exception) {
             return false;
         }
 
@@ -98,7 +114,7 @@ class Unit implements UnitInterface
             $request = new UnitRequest($this->socket, $this->address);
             $request->setMethod('DELETE');
             $result = $request->send("/certificates/{$certificateName}");
-        } catch (UnitException) {
+        } catch (UnitException $exception) {
             return false;
         }
 
@@ -149,7 +165,7 @@ class Unit implements UnitInterface
     /**
      * @inheritDoc
      */
-    public function getCertificate($certificateName): ?Certificate
+    public function getCertificate(string $certificateName): ?CertificateInterface
     {
         $this->loadCertificates();
 

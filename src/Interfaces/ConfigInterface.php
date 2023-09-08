@@ -83,11 +83,20 @@ interface ConfigInterface
     /**
      * Upload application to Nginx Unit
      *
+     * @param ApplicationAbstract $application
+     * @param string $name
+     * @return bool
+     */
+    public function uploadApplication(ApplicationAbstract $application, string $name = ''): bool;
+
+    /**
+     * Upload application to Nginx Unit from file
+     *
      * @param string $path
      * @param string $name
      * @return mixed
      */
-    public function uploadApplicationFromFile(string $path, string $name);
+    public function uploadApplicationFromFile(string $path, string $name): bool;
 
     /**
      * @param ApplicationAbstract $application

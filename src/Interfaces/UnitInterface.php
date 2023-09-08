@@ -46,10 +46,10 @@ interface UnitInterface
     /**
      * Return Certificate object
      *
-     * @param $certificateName
-     * @return Certificate|null
+     * @param string $certificateName
+     * @return CertificateInterface|null
      */
-    public function getCertificate($certificateName): ?Certificate;
+    public function getCertificate(string $certificateName): ?CertificateInterface;
 
     /**
      * Upload certificate to Unit server
