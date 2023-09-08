@@ -3,6 +3,7 @@
 namespace Pavlusha311245\UnitPhpSdk\Abstract;
 
 use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
+use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
 
 class ExternalApplicationAbstract extends ApplicationAbstract
 {
@@ -20,7 +21,7 @@ class ExternalApplicationAbstract extends ApplicationAbstract
      *
      * @var array|string
      */
-    private array|string $_arguments;
+    private array|string $_arguments = [];
 
     /**
      * @return string
@@ -54,16 +55,18 @@ class ExternalApplicationAbstract extends ApplicationAbstract
         $this->_arguments = $arguments;
     }
 
-    public function parseFromArray(array $data): void
+    public final function parseFromArray(array $data): void
     {
         parent::parseFromArray($data);
 
-        if (array_key_exists('arguments', $data)) {
-            $this->setArguments($data['arguments']);
+        if (!array_key_exists('executable', $data)) {
+            throw new UnitException('Executable key is required');
         }
 
-        if (array_key_exists('executable', $data)) {
-            $this->setExecutable($data['executable']);
+        $this->setExecutable($data['executable']);
+
+        if (array_key_exists('arguments', $data)) {
+            $this->setArguments($data['arguments']);
         }
     }
 }
