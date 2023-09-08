@@ -1,27 +1,28 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config;
+namespace Pavlusha311245\UnitPhpSdk\Config\Listener;
 
 readonly class ListenerPass
 {
     /**
      * @var string
      */
-    private string $_passType;
+    private string $_type;
 
     public function __construct(private string $_data)
     {
-        $this->_passType = explode('/', $_data)[0];
+        $this->_type = explode('/', $_data)[0];
     }
+
 
     /**
      * Return pass type (application, routes, route, upstreams)
      *
      * @return string
      */
-    public function getPassType(): string
+    public function getType(): string
     {
-        return $this->_passType;
+        return $this->_type;
     }
 
     /**
