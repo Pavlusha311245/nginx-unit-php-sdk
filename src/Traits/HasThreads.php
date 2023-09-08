@@ -4,7 +4,13 @@ namespace Pavlusha311245\UnitPhpSdk\Traits;
 
 trait HasThreads
 {
-    private int $_threads;
+    /**
+     * Number of worker threads per app process.
+     * When started, each app process creates this number of threads to handle requests
+     *
+     * @var int
+     */
+    private int $_threads = 1;
 
     /**
      * @return int

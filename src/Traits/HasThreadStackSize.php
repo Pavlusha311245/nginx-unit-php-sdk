@@ -4,6 +4,11 @@ namespace Pavlusha311245\UnitPhpSdk\Traits;
 
 trait HasThreadStackSize
 {
+    /**
+     * Stack size of a worker thread
+     *
+     * @var int
+     */
     private int $_thread_stack_size;
 
     /**
