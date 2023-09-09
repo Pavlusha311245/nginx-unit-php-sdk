@@ -1,6 +1,6 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Listener;
+namespace UnitPhpSdk\Config\Listener;
 
 readonly class ListenerPass
 {

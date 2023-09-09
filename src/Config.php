@@ -1,13 +1,13 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk;
+namespace UnitPhpSdk;
 
-use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
-use Pavlusha311245\UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Upstream};
-use Pavlusha311245\UnitPhpSdk\Enums\HttpMethodsEnum;
-use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
-use Pavlusha311245\UnitPhpSdk\Http\UnitRequest;
-use Pavlusha311245\UnitPhpSdk\Interfaces\ConfigInterface;
+use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Upstream};
+use UnitPhpSdk\Enums\HttpMethodsEnum;
+use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Http\UnitRequest;
+use UnitPhpSdk\Interfaces\ConfigInterface;
 
 /**
  * This class contains Nginx Unit config data

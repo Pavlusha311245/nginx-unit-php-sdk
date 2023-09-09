@@ -1,6 +1,6 @@
 <?php
 
-use Pavlusha311245\UnitPhpSdk\Unit;
+use UnitPhpSdk\Unit;
 
 const SOCKET = '/usr/local/var/run/unit/control.sock';
 const ADDRESS = 'http://localhost';

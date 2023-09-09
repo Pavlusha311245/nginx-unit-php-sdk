@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use Pavlusha311245\UnitPhpSdk\Unit;
+use UnitPhpSdk\Unit;
 
 $unit = new Unit(
     socket: '/usr/local/var/run/unit/control.sock',

@@ -1,10 +1,10 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Interfaces;
+namespace UnitPhpSdk\Interfaces;
 
-use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
-use Pavlusha311245\UnitPhpSdk\Config\ConnectionsStatistics;
-use Pavlusha311245\UnitPhpSdk\Config\RequestsStatistics;
+use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Config\ConnectionsStatistics;
+use UnitPhpSdk\Config\RequestsStatistics;
 
 interface StatisticsInterface
 {

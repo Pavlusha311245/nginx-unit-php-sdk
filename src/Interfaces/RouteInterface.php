@@ -1,8 +1,8 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Interfaces;
+namespace UnitPhpSdk\Interfaces;
 
-use Pavlusha311245\UnitPhpSdk\Config\Listener;
+use UnitPhpSdk\Config\Listener;
 
 interface RouteInterface
 {

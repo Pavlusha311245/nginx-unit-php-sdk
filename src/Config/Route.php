@@ -1,10 +1,10 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config;
+namespace UnitPhpSdk\Config;
 
-use Pavlusha311245\UnitPhpSdk\Config\Routes\RouteBlock;
-use Pavlusha311245\UnitPhpSdk\Interfaces\RouteInterface;
-use Pavlusha311245\UnitPhpSdk\Traits\HasListeners;
+use UnitPhpSdk\Config\Routes\RouteBlock;
+use UnitPhpSdk\Interfaces\RouteInterface;
+use UnitPhpSdk\Traits\HasListeners;
 
 /**
  * This class presents "routes" section from config

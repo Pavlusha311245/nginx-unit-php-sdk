@@ -1,13 +1,13 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk;
+namespace UnitPhpSdk;
 
-use Pavlusha311245\UnitPhpSdk\Config\Statistics;
-use Pavlusha311245\UnitPhpSdk\Enums\HttpMethodsEnum;
-use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
-use Pavlusha311245\UnitPhpSdk\Http\UnitRequest;
-use Pavlusha311245\UnitPhpSdk\Interfaces\CertificateInterface;
-use Pavlusha311245\UnitPhpSdk\Interfaces\UnitInterface;
+use UnitPhpSdk\Config\Statistics;
+use UnitPhpSdk\Enums\HttpMethodsEnum;
+use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Http\UnitRequest;
+use UnitPhpSdk\Interfaces\CertificateInterface;
+use UnitPhpSdk\Interfaces\UnitInterface;
 
 /**
  * This is main class of Nginx Unit manipulation

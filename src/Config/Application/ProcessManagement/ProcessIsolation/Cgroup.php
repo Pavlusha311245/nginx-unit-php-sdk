@@ -1,8 +1,8 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
+namespace UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 
-use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Exceptions\UnitException;
 
 readonly class Cgroup
 {

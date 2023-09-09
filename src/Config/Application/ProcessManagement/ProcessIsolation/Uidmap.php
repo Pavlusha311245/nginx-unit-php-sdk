@@ -1,8 +1,8 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
+namespace UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 
-use Pavlusha311245\UnitPhpSdk\Abstract\IdmapAbstract;
+use UnitPhpSdk\Abstract\IdmapAbstract;
 
 class Uidmap extends IdmapAbstract
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config;
+namespace UnitPhpSdk\Config;
 
-use Pavlusha311245\UnitPhpSdk\Interfaces\UpstreamInterface;
-use Pavlusha311245\UnitPhpSdk\Traits\HasListeners;
+use UnitPhpSdk\Interfaces\UpstreamInterface;
+use UnitPhpSdk\Traits\HasListeners;
 
 class Upstream implements UpstreamInterface
 {

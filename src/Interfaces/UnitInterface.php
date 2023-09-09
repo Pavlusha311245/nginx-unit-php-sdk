@@ -1,9 +1,9 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Interfaces;
+namespace UnitPhpSdk\Interfaces;
 
-use Pavlusha311245\UnitPhpSdk\Certificate;
-use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Certificate;
+use UnitPhpSdk\Exceptions\UnitException;
 
 interface UnitInterface
 {

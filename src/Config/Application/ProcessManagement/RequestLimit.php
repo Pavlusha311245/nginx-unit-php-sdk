@@ -1,8 +1,8 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement;
+namespace UnitPhpSdk\Config\Application\ProcessManagement;
 
-use Pavlusha311245\UnitPhpSdk\Interfaces\Arrayable;
+use UnitPhpSdk\Interfaces\Arrayable;
 
 class RequestLimit implements Arrayable
 {

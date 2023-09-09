@@ -1,10 +1,10 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Application;
+namespace UnitPhpSdk\Config\Application;
 
-use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
-use Pavlusha311245\UnitPhpSdk\Config\Application\Targets\PhpTarget;
-use Pavlusha311245\UnitPhpSdk\Traits\HasTargets;
+use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Config\Application\Targets\PhpTarget;
+use UnitPhpSdk\Traits\HasTargets;
 
 class PhpApplication extends ApplicationAbstract
 {

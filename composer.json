@@ -35,7 +35,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Pavlusha311245\\UnitPhpSdk\\": "src/"
+      "UnitPhpSdk\\": "src/"
     }
   },
   "autoload-dev": {

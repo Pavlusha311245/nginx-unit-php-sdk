@@ -1,9 +1,9 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Abstract;
+namespace UnitPhpSdk\Abstract;
 
-use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
-use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Exceptions\UnitException;
 
 class ExternalApplicationAbstract extends ApplicationAbstract
 {

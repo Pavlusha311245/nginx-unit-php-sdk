@@ -1,6 +1,6 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
+namespace UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 
 readonly class Automount
 {

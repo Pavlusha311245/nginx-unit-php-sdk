@@ -1,8 +1,8 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk;
+namespace UnitPhpSdk;
 
-use Pavlusha311245\UnitPhpSdk\Interfaces\CertificateInterface;
+use UnitPhpSdk\Interfaces\CertificateInterface;
 
 /**
  * Certificate class

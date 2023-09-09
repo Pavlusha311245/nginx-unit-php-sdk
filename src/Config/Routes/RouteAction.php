@@ -1,8 +1,8 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Routes;
+namespace UnitPhpSdk\Config\Routes;
 
-use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Exceptions\UnitException;
 
 class RouteAction
 {

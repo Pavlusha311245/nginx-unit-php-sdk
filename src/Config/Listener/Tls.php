@@ -1,9 +1,9 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Listener;
+namespace UnitPhpSdk\Config\Listener;
 
-use Pavlusha311245\UnitPhpSdk\Certificate;
-use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Certificate;
+use UnitPhpSdk\Exceptions\UnitException;
 
 class Tls
 {

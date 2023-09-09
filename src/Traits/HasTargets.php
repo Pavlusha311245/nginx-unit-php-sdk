@@ -1,6 +1,6 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Traits;
+namespace UnitPhpSdk\Traits;
 
 trait HasTargets
 {

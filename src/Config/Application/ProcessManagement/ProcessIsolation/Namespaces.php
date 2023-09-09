@@ -1,8 +1,8 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
+namespace UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 
-use Pavlusha311245\UnitPhpSdk\Interfaces\Arrayable;
+use UnitPhpSdk\Interfaces\Arrayable;
 
 readonly class Namespaces implements Arrayable
 {

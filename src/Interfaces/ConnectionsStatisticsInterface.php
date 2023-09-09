@@ -1,6 +1,6 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Interfaces;
+namespace UnitPhpSdk\Interfaces;
 
 interface ConnectionsStatisticsInterface
 {

@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 0.6.0 - [In development]
+- Updated package namespace from Pavlusha311245\UnitPhpSdk to UnitPhpSdk
 - Move ListenerPass to Listener\ListenerPass
 - Rename method in ListenerPass getPassType() to getType()
 - Added PythonApplication, PerlApplication, WebAssemblyApplication

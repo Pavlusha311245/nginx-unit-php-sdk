@@ -1,11 +1,11 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Interfaces;
+namespace UnitPhpSdk\Interfaces;
 
-use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ApplicationProcess;
-use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
-use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\RequestLimit;
-use Pavlusha311245\UnitPhpSdk\Enums\ApplicationTypeEnum;
+use UnitPhpSdk\Config\Application\ProcessManagement\ApplicationProcess;
+use UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
+use UnitPhpSdk\Config\Application\ProcessManagement\RequestLimit;
+use UnitPhpSdk\Enums\ApplicationTypeEnum;
 
 interface ApplicationInterface
 {

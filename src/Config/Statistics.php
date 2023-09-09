@@ -1,9 +1,9 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config;
+namespace UnitPhpSdk\Config;
 
-use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
-use Pavlusha311245\UnitPhpSdk\Interfaces\{
+use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Interfaces\{
     ApplicationsStatisticsInterface,
     ConnectionsStatisticsInterface,
     RequestsStatisticsInterface,

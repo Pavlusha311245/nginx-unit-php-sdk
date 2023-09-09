@@ -66,7 +66,7 @@ Congratulations! You installed package. Now you can use the full power of this S
 ```php
 <?php
 
-use Pavlusha311245\UnitPhpSdk\Unit;
+use UnitPhpSdk\Unit;
 
 require '../vendor/autoload.php';
 

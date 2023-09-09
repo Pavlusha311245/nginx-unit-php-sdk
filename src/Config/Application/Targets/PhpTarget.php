@@ -1,6 +1,6 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Application\Targets;
+namespace UnitPhpSdk\Config\Application\Targets;
 
 class PhpTarget
 {

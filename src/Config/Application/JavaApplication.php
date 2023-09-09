@@ -1,11 +1,11 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Application;
+namespace UnitPhpSdk\Config\Application;
 
-use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
-use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
-use Pavlusha311245\UnitPhpSdk\Traits\HasThreads;
-use Pavlusha311245\UnitPhpSdk\Traits\HasThreadStackSize;
+use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Traits\HasThreads;
+use UnitPhpSdk\Traits\HasThreadStackSize;
 
 class JavaApplication extends ApplicationAbstract
 {

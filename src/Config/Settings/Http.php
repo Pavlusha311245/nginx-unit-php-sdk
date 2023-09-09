@@ -1,6 +1,6 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Settings;
+namespace UnitPhpSdk\Config\Settings;
 
 class Http
 {

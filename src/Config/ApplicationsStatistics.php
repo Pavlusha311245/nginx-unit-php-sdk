@@ -1,8 +1,8 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config;
+namespace UnitPhpSdk\Config;
 
-use Pavlusha311245\UnitPhpSdk\Interfaces\ApplicationsStatisticsInterface;
+use UnitPhpSdk\Interfaces\ApplicationsStatisticsInterface;
 
 readonly class ApplicationsStatistics implements ApplicationsStatisticsInterface
 {

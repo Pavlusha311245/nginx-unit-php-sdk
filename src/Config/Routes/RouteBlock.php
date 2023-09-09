@@ -1,6 +1,6 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Routes;
+namespace UnitPhpSdk\Config\Routes;
 
 class RouteBlock
 {

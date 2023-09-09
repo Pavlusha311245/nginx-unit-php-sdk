@@ -1,6 +1,6 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config;
+namespace UnitPhpSdk\Config;
 
 class AccessLog
 {

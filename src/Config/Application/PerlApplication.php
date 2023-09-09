@@ -1,10 +1,10 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Application;
+namespace UnitPhpSdk\Config\Application;
 
-use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
-use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
-use Pavlusha311245\UnitPhpSdk\Traits\{
+use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Traits\{
     HasThreads,
     HasThreadStackSize
 };

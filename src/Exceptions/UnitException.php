@@ -1,6 +1,6 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Exceptions;
+namespace UnitPhpSdk\Exceptions;
 
 use Exception;
 

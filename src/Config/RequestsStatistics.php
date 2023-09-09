@@ -1,8 +1,8 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config;
+namespace UnitPhpSdk\Config;
 
-use Pavlusha311245\UnitPhpSdk\Interfaces\RequestsStatisticsInterface;
+use UnitPhpSdk\Interfaces\RequestsStatisticsInterface;
 
 readonly class RequestsStatistics implements RequestsStatisticsInterface
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Interfaces;
+namespace UnitPhpSdk\Interfaces;
 
-use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
-use Pavlusha311245\UnitPhpSdk\Config\AccessLog;
-use Pavlusha311245\UnitPhpSdk\Config\Listener;
-use Pavlusha311245\UnitPhpSdk\Config\Route;
+use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Config\AccessLog;
+use UnitPhpSdk\Config\Listener;
+use UnitPhpSdk\Config\Route;
 
 interface ConfigInterface
 {

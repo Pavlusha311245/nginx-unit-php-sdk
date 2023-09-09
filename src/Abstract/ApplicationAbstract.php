@@ -1,14 +1,14 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Abstract;
+namespace UnitPhpSdk\Abstract;
 
-use Pavlusha311245\UnitPhpSdk\Config\Application\{ProcessManagement\ApplicationProcess,
+use UnitPhpSdk\Config\Application\{ProcessManagement\ApplicationProcess,
     ProcessManagement\ProcessIsolation,
     ProcessManagement\RequestLimit};
-use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
-use Pavlusha311245\UnitPhpSdk\Http\UnitRequest;
-use Pavlusha311245\UnitPhpSdk\Interfaces\{ApplicationControlInterface, ApplicationInterface, Arrayable};
-use Pavlusha311245\UnitPhpSdk\Traits\HasListeners;
+use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Http\UnitRequest;
+use UnitPhpSdk\Interfaces\{ApplicationControlInterface, ApplicationInterface, Arrayable};
+use UnitPhpSdk\Traits\HasListeners;
 
 abstract class ApplicationAbstract implements ApplicationInterface, ApplicationControlInterface, Arrayable
 {

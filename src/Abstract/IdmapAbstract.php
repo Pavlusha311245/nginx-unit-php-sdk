@@ -1,6 +1,6 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Abstract;
+namespace UnitPhpSdk\Abstract;
 
 class IdmapAbstract
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config;
+namespace UnitPhpSdk\Config;
 
-use Pavlusha311245\UnitPhpSdk\Config\Listener\Forwarded;
-use Pavlusha311245\UnitPhpSdk\Config\Listener\ListenerPass;
-use Pavlusha311245\UnitPhpSdk\Config\Listener\Tls;
-use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Config\Listener\Forwarded;
+use UnitPhpSdk\Config\Listener\ListenerPass;
+use UnitPhpSdk\Config\Listener\Tls;
+use UnitPhpSdk\Exceptions\UnitException;
 
 /**
  * This class presents "listeners" section from config
