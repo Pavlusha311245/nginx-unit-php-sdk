@@ -3,13 +3,7 @@
 namespace Pavlusha311245\UnitPhpSdk;
 
 use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
-use Pavlusha311245\UnitPhpSdk\Config\{
-    Application,
-    Listener,
-    Route,
-    Upstream,
-    AccessLog
-};
+use Pavlusha311245\UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Upstream};
 use Pavlusha311245\UnitPhpSdk\Enums\HttpMethodsEnum;
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
 use Pavlusha311245\UnitPhpSdk\Http\UnitRequest;

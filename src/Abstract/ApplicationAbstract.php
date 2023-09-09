@@ -2,16 +2,13 @@
 
 namespace Pavlusha311245\UnitPhpSdk\Abstract;
 
-use Pavlusha311245\UnitPhpSdk\Config\Application\{
-    ProcessManagement\ApplicationProcess,
+use Pavlusha311245\UnitPhpSdk\Config\Application\{ProcessManagement\ApplicationProcess,
     ProcessManagement\ProcessIsolation,
-    ProcessManagement\RequestLimit
-};
+    ProcessManagement\RequestLimit};
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
 use Pavlusha311245\UnitPhpSdk\Http\UnitRequest;
 use Pavlusha311245\UnitPhpSdk\Interfaces\{ApplicationControlInterface, ApplicationInterface, Arrayable};
 use Pavlusha311245\UnitPhpSdk\Traits\HasListeners;
-use Pavlusha311245\UnitPhpSdk\UnitRequest;
 
 abstract class ApplicationAbstract implements ApplicationInterface, ApplicationControlInterface, Arrayable
 {
@@ -319,6 +316,6 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
 
     public function toJson(): string|false
     {
-        return json_encode(array_filter(static::toArray(), fn($item) => !empty($item)));
+        return json_encode(array_filter(static::toArray(), fn ($item) => !empty($item)));
     }
 }

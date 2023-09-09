@@ -2,7 +2,6 @@
 
 namespace Pavlusha311245\UnitPhpSdk;
 
-use Pavlusha311245\UnitPhpSdk\Config\AccessLog;
 use Pavlusha311245\UnitPhpSdk\Config\Statistics;
 use Pavlusha311245\UnitPhpSdk\Enums\HttpMethodsEnum;
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
