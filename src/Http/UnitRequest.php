@@ -75,7 +75,15 @@ class UnitRequest
         curl_close($curlHandler);
         $this->clean();
 
-        return json_decode($result, $associative);
+        $rawData = json_decode($result, $associative);
+
+        if ($associative) {
+            if (array_key_exists('error', $rawData)) {
+                throw new UnitException($rawData['error']);
+            }
+        }
+
+        return $rawData;
     }
 
     /**
