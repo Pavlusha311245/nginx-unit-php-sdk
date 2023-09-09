@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.6.0 - [In development]
+- Move ListenerPass to Listener\ListenerPass
+- Rename method in ListenerPass getPassType() to getType()
+- Added PythonApplication, PerlApplication, WebAssemblyApplication
+- Updated NodeJsApplication, JavaApplication, GoApplication
+- Mark some class as Arrayble
+
 ## v0.5.0 - [2023/09/01]
 
 - Added ProccessIsolation implementation

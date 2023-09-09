@@ -1,6 +1,6 @@
 {
   "name": "pavlusha311245/unit-php-sdk",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "type": "sdk",
   "description": "This project allows developers to interact with the Nginx Unit web server through PHP classes",
   "license": "Apache-2.0",

@@ -43,7 +43,7 @@ _THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
 {
   "name": "user/example-php-project",
   "require": {
-    "pavlusha311245/unit-php-sdk": "^0.5.0"
+    "pavlusha311245/unit-php-sdk": "^0.6.0"
   },
   "autoload": {
     "psr-4": {
