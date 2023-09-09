@@ -8,6 +8,7 @@ use Pavlusha311245\UnitPhpSdk\Config\Application\{
     ProcessManagement\RequestLimit
 };
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+use Pavlusha311245\UnitPhpSdk\Http\UnitRequest;
 use Pavlusha311245\UnitPhpSdk\Interfaces\{ApplicationControlInterface, ApplicationInterface, Arrayable};
 use Pavlusha311245\UnitPhpSdk\Traits\HasListeners;
 use Pavlusha311245\UnitPhpSdk\UnitRequest;

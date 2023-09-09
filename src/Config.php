@@ -12,6 +12,7 @@ use Pavlusha311245\UnitPhpSdk\Config\{
 };
 use Pavlusha311245\UnitPhpSdk\Enums\HttpMethodsEnum;
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+use Pavlusha311245\UnitPhpSdk\Http\UnitRequest;
 use Pavlusha311245\UnitPhpSdk\Interfaces\ConfigInterface;
 
 /**

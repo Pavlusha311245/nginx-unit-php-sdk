@@ -6,6 +6,7 @@ use Pavlusha311245\UnitPhpSdk\Config\AccessLog;
 use Pavlusha311245\UnitPhpSdk\Config\Statistics;
 use Pavlusha311245\UnitPhpSdk\Enums\HttpMethodsEnum;
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+use Pavlusha311245\UnitPhpSdk\Http\UnitRequest;
 use Pavlusha311245\UnitPhpSdk\Interfaces\CertificateInterface;
 use Pavlusha311245\UnitPhpSdk\Interfaces\UnitInterface;
 

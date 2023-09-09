@@ -1,6 +1,6 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk;
+namespace Pavlusha311245\UnitPhpSdk\Http;
 
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
 
