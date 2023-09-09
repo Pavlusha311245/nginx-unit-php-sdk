@@ -282,14 +282,64 @@ class Config implements ConfigInterface
         return $this->_applications[$applicationName] ?? null;
     }
 
+    public function uploadApplication(ApplicationAbstract $application, string $name = ''): bool
+    {
+        if (empty($application->getName()) && empty($name)) {
+            throw new UnitException('Application name not specified');
+        }
+
+        $appName = empty($application->getName()) ? $name : $application->getName();
+
+        try {
+            $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
+            $this->_unitRequest->setData($application->toJson());
+            $response = $this->_unitRequest->send("/config/applications/{$appName}");
+        } catch (UnitException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
+     * @inheritdoc
      * @throws UnitException
      */
-    public function removeApplication(ApplicationAbstract $application): bool
+    public function uploadApplicationFromFile(string $path, string $name): bool
+    {
+        // TODO: add validation if json contains application name
+        $fileContent = file_get_contents($path);
+
+        if (!$fileContent) {
+            throw new UnitException('Fail to read certificate');
+        }
+
+        if (empty(json_decode($fileContent, true))) {
+            throw new UnitException('It\'s not a JSON file');
+        }
+
+        try {
+            $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
+            $this->_unitRequest->setData($fileContent);
+            $this->_unitRequest->send("/config/applications/{$name}");
+        } catch (UnitException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove application from Nginx Unit.
+     * Cain receive application name or application object
+     *
+     * @throws UnitException
+     */
+    public function removeApplication(ApplicationAbstract|string $application): bool
     {
         $this->_unitRequest->setMethod(HttpMethodsEnum::DELETE->value);
 
-        $applicationName = $application->getName();
+        $applicationName = is_string($application) ? $application : $application->getName();
         $this->_unitRequest->send("/config/applications/{$applicationName}");
 
         return true;

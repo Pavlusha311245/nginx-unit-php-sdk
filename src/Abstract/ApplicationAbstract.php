@@ -309,7 +309,7 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
             'stderr' => $this->getStdErr(),
             'stdout' => $this->getStdOut(),
             'isolation' => $this->getIsolation()?->toArray(),
-            'processes' => is_string($this->getProcesses()) ? $this->getProcesses() : $this->getProcesses()?->toArray() ?? null,
+            'processes' => is_int($this->getProcesses()) ? $this->getProcesses() : $this->getProcesses()?->toArray() ?? null,
             'limits' => $this->getLimits()?->toArray(),
         ];
     }

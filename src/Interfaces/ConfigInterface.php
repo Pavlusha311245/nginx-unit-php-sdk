@@ -99,10 +99,10 @@ interface ConfigInterface
     public function uploadApplicationFromFile(string $path, string $name): bool;
 
     /**
-     * @param ApplicationAbstract $application
+     * @param ApplicationAbstract|string $application
      * @return bool
      */
-    public function removeApplication(ApplicationAbstract $application): bool;
+    public function removeApplication(ApplicationAbstract|string $application): bool;
 
     /**
      * @return mixed
