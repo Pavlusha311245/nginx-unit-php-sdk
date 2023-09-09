@@ -112,4 +112,18 @@ class JavaApplication extends ApplicationAbstract
             $this->setThreads($data['threads']);
         }
     }
+
+    public function toArray(): array
+    {
+        return array_merge(
+            parent::toArray(),
+            [
+                'webapp' => $this->getWebApp(),
+                'options' => $this->getOptions(),
+                'classpath' => $this->getClassPath(),
+                'thread_stack_size' => $this->getThreadStackSize(),
+                'threads' => $this->getThreads(),
+            ]
+        );
+    }
 }

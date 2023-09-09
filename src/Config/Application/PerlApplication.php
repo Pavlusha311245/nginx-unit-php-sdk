@@ -60,4 +60,16 @@ class PerlApplication extends ApplicationAbstract
             $this->setThreads($data['threads']);
         }
     }
+
+    public function toArray(): array
+    {
+        return array_merge(
+            parent::toArray(),
+            [
+                'script' => $this->getScript(),
+                'thread_stack_size' => $this->getThreadStackSize(),
+                'threads' => $this->getThreads(),
+            ]
+        );
+    }
 }

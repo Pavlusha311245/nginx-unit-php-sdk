@@ -69,4 +69,18 @@ class ExternalApplicationAbstract extends ApplicationAbstract
             $this->setArguments($data['arguments']);
         }
     }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return array_merge(
+            parent::toArray(),
+            [
+                'executable' => $this->getExecutable(),
+                'arguments' => $this->getArguments()
+            ]
+        );
+    }
 }

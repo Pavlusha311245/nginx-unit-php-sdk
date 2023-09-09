@@ -32,4 +32,11 @@ readonly class Cgroup
     {
         return $this->_path;
     }
+
+    public function toArray()
+    {
+        return [
+            'path' => $this->getPath()
+        ];
+    }
 }

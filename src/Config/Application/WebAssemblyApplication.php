@@ -14,68 +14,68 @@ class WebAssemblyApplication extends ApplicationAbstract
      *
      * @var string
      */
-    private string $_module;
+    private string $_module = '';
 
     /**
      * The runtime calls this handler, providing the address of the shared memory block used to pass data in and out the app
      *
      * @var string
      */
-    private string $_request_handler;
+    private string $_request_handler = '';
 
     /**
      * The runtime calls this handler at language module startup to allocate the shared memory block used to pass data in and out the app
      *
      * @var string
      */
-    private string $_malloc_handler;
+    private string $_malloc_handler = '';
 
     /**
      * The runtime calls this handler at language module shutdown to free the shared memory block used to pass data in and out the app
      *
      * @var string
      */
-    private string $_free_handler;
+    private string $_free_handler = '';
 
     /**
-     * @var object
+     * @var object|null
      */
-    private object $_access;
+    private ?object $_access = null;
 
     /**
      * It is invoked by the WebAssembly language module at language module startup, after the WebAssembly module was initialised
      *
      * @var string
      */
-    private string $_module_init_handler;
+    private string $_module_init_handler = '';
 
     /**
      * It is invoked by the WebAssembly language module at language module shutdown
      *
      * @var string
      */
-    private string $_module_end_handler;
+    private string $_module_end_handler = '';
 
     /**
      * It is invoked by the WebAssembly language module at the start of each request
      *
      * @var string
      */
-    private string $_request_init_handler;
+    private string $_request_init_handler = '';
 
     /**
      * It is invoked by the WebAssembly language module at the end of each request, when the headers and the request body were received
      *
      * @var string
      */
-    private string $_request_end_handler;
+    private string $_request_end_handler = '';
 
     /**
      * It is invoked by the WebAssembly language module at the end of each response, when the headers and the response body were sent
      *
      * @var string
      */
-    private string $_response_end_handler;
+    private string $_response_end_handler = '';
 
     /**
      * @param string $module
@@ -289,5 +289,23 @@ class WebAssemblyApplication extends ApplicationAbstract
         if (array_key_exists('response_end_handler', $data)) {
             $this->setRequestEndHandler($data['response_end_handler']);
         }
+    }
+
+    public function toArray(): array
+    {
+        return array_merge(
+            parent::toArray(),
+            [
+                'module' => $this->getModule(),
+                'request_handler' => $this->getRequestHandler(),
+                'malloc_handler' => $this->getMallocHandler(),
+                'free_handler' => $this->getFreeHandler(),
+                'module_init_handler' => $this->getModuleInitHandler(),
+                'module_end_handler' => $this->getModuleEndHandler(),
+                'request_init_handler' => $this->getRequestInitHandler(),
+                'request_end_handler' => $this->getRequestEndHandler(),
+                'response_end_handler' => $this->getResponseEndHandler(),
+            ]
+        );
     }
 }

@@ -92,4 +92,13 @@ class IdmapAbstract
             $this->setSize($data['size']);
         }
     }
+
+    public function toArray()
+    {
+        return [
+            'container' => $this->getContainer(),
+            'host' => $this->getHost(),
+            'size' => $this->getSize()
+        ];
+    }
 }

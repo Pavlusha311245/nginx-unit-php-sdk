@@ -7,16 +7,16 @@ trait HasThreadStackSize
     /**
      * Stack size of a worker thread
      *
-     * @var int
+     * @var int|null
      */
-    private int $_thread_stack_size;
+    private int|null $_thread_stack_size;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getThreadStackSize(): int
+    public function getThreadStackSize(): int|null
     {
-        return $this->_thread_stack_size;
+        return $this->_thread_stack_size ?? null;
     }
 
     /**

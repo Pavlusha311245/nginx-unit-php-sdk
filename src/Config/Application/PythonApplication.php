@@ -29,16 +29,16 @@ class PythonApplication extends ApplicationAbstract
      * @var string
      */
     private string $_callable = 'application';
-    private string $_home;
+    private string $_home = '';
 
     /**
      * Additional Python module lookup paths
      *
      * @var string|array
      */
-    private string|array $_path;
-    private string $_prefix;
-    private string $_protocol;
+    private string|array $_path = '';
+    private string $_prefix = '';
+    private string $_protocol = '';
 
     /**
      * @param string $module
@@ -180,5 +180,22 @@ class PythonApplication extends ApplicationAbstract
         if (array_key_exists('threads', $data)) {
             $this->setThreads($data['threads']);
         }
+    }
+
+    public function toArray(): array
+    {
+        return array_merge(
+            parent::toArray(),
+            [
+                'callable' => $this->getCallable(),
+                'home' => $this->getHome(),
+                'path' => $this->getPath(),
+                'prefix' => $this->getPrefix(),
+                'protocol' => $this->getProtocol(),
+                'targets' => $this->getTargets(),
+                'thread_stack_size' => $this->getThreadStackSize(),
+                'threads' => $this->getThreads(),
+            ]
+        );
     }
 }

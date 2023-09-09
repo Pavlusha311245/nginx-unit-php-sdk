@@ -10,8 +10,9 @@ use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolat
     Uidmap
 };
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+use Pavlusha311245\UnitPhpSdk\Interfaces\Arrayable;
 
-class ProcessIsolation
+class ProcessIsolation implements Arrayable
 {
     /**
      * @var Automount
@@ -154,7 +155,7 @@ class ProcessIsolation
             $this->setAutomount(new Automount($data['automount']));
         }
 
-        if (array_key_exists('automount', $data)) {
+        if (array_key_exists('cgroup', $data)) {
             $this->setCgroup(new Cgroup($data['cgroup']));
         }
 
@@ -173,5 +174,20 @@ class ProcessIsolation
         if (array_key_exists('namespaces', $data)) {
             $this->setNamespaces(new Namespaces($data['namespaces']));
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'automount' => $this->getAutomount(),
+            'cgroup' => $this->getCgroup()->toArray(),
+            'gidmap' => $this->getGidmap()->toArray(),
+            'uidmap' => $this->getUidmap()->toArray(),
+            'rootfs' => $this->getRootfs(),
+            'namespaces' => $this->getNamespaces()->toArray()
+        ];
     }
 }

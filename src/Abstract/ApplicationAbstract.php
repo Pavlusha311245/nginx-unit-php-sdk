@@ -8,11 +8,11 @@ use Pavlusha311245\UnitPhpSdk\Config\Application\{
     ProcessManagement\RequestLimit
 };
 use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
-use Pavlusha311245\UnitPhpSdk\Interfaces\{ApplicationControlInterface, ApplicationInterface};
+use Pavlusha311245\UnitPhpSdk\Interfaces\{ApplicationControlInterface, ApplicationInterface, Arrayable};
 use Pavlusha311245\UnitPhpSdk\Traits\HasListeners;
 use Pavlusha311245\UnitPhpSdk\UnitRequest;
 
-abstract class ApplicationAbstract implements ApplicationInterface, ApplicationControlInterface
+abstract class ApplicationAbstract implements ApplicationInterface, ApplicationControlInterface, Arrayable
 {
     use HasListeners;
 
@@ -299,5 +299,25 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
         }
 
         return true;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'type' => $this->getType(),
+            'user' => $this->getUser(),
+            'group' => $this->getGroup(),
+            'environment' => $this->getEnvironment(),
+            'stderr' => $this->getStdErr(),
+            'stdout' => $this->getStdOut(),
+            'isolation' => $this->getIsolation()?->toArray(),
+            'processes' => is_string($this->getProcesses()) ? $this->getProcesses() : $this->getProcesses()?->toArray() ?? null,
+            'limits' => $this->getLimits()?->toArray(),
+        ];
+    }
+
+    public function toJson(): string|false
+    {
+        return json_encode(array_filter(static::toArray(), fn($item) => !empty($item)));
     }
 }
