@@ -174,6 +174,35 @@ class Unit implements UnitInterface
 
     /**
      * @inheritDoc
+     * @throws UnitException
+     */
+    public function uploadConfig(string $path): bool
+    {
+        $fileContent = file_get_contents($path);
+
+        if (!$fileContent) {
+            throw new UnitException('Fail to read certificate');
+        }
+
+        if (!json_decode($fileContent, true)) {
+            throw new UnitException('File is not JSON format');
+        }
+
+        try {
+            $request = new UnitRequest($this->socket, $this->address);
+            $request->setMethod('PUT');
+            $request->setData($fileContent);
+            $result = $request->send("/config");
+        } catch (UnitException $exception) {
+            print_r($exception->getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
      */
     public function removeConfig(): bool
     {

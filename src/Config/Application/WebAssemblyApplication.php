@@ -241,7 +241,7 @@ class WebAssemblyApplication extends ApplicationAbstract
     /**
      * @inheritDoc
      */
-    public final function parseFromArray(array $data): void
+    final public function parseFromArray(array $data): void
     {
         parent::parseFromArray($data);
 

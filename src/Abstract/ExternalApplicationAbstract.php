@@ -55,7 +55,7 @@ class ExternalApplicationAbstract extends ApplicationAbstract
         $this->_arguments = $arguments;
     }
 
-    public final function parseFromArray(array $data): void
+    final public function parseFromArray(array $data): void
     {
         parent::parseFromArray($data);
 

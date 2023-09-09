@@ -4,7 +4,7 @@ namespace Pavlusha311245\UnitPhpSdk\Traits;
 
 trait HasTargets
 {
-    private array $_targets;
+    private array $_targets = [];
 
     /**
      * @return array

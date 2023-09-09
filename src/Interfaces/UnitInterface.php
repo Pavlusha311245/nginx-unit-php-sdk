@@ -62,6 +62,14 @@ interface UnitInterface
     public function uploadCertificate(string $path, string $certificateName): bool;
 
     /**
+     * Upload full file config
+     *
+     * @param string $path
+     * @return bool
+     */
+    public function uploadConfig(string $path): bool;
+
+    /**
      * Remove certificate on Unit server
      *
      * @param string $certificateName

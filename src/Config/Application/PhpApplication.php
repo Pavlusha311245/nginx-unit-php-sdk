@@ -99,7 +99,7 @@ class PhpApplication extends ApplicationAbstract
     /**
      * @inheritDoc
      */
-    public final function parseFromArray(array $data): void
+    final public function parseFromArray(array $data): void
     {
         parent::parseFromArray($data);
 
@@ -127,5 +127,19 @@ class PhpApplication extends ApplicationAbstract
 
             $this->setTargets($targets);
         }
+    }
+
+    public function toArray(): array
+    {
+        return array_merge(
+            parent::toArray(),
+            [
+                'root' => $this->getRoot(),
+                'index' => $this->getIndex(),
+                'script' => $this->getScript(),
+                'options' => $this->getOptions(),
+                'targets' => $this->getTargets()
+            ]
+        );
     }
 }
