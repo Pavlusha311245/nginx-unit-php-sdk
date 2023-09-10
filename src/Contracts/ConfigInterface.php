@@ -6,6 +6,7 @@ use UnitPhpSdk\Abstract\ApplicationAbstract;
 use UnitPhpSdk\Config\AccessLog;
 use UnitPhpSdk\Config\Listener;
 use UnitPhpSdk\Config\Route;
+use UnitPhpSdk\Config\Upstream;
 
 interface ConfigInterface
 {
@@ -17,10 +18,20 @@ interface ConfigInterface
     public function getListeners(): array;
 
     /**
+     * TODO: rename to getListenerByPort() and add validation (should be parse)
+     *
      * @param int $port
      * @return Listener|null
      */
     public function getListenerByPort(int $port): Listener|null;
+
+    /**
+     * Upload Listener object to Nginx Unit server
+     *
+     * @param Listener $listener
+     * @return bool
+     */
+    public function uploadListener(Listener $listener): bool;
 
     /**
      * Upload configuration from file
@@ -30,14 +41,6 @@ interface ConfigInterface
      * @return bool
      */
     public function uploadListenerFromFile(string $path, string $listener): bool;
-
-    /**
-     * Upload Listener object to Nginx Unit server
-     *
-     * @param Listener $listener
-     * @return bool
-     */
-    public function uploadListener(Listener $listener): bool;
 
     /**
      * @param Listener $listener
@@ -105,9 +108,11 @@ interface ConfigInterface
     public function removeApplication(ApplicationAbstract|string $application): bool;
 
     /**
+     * Get all upstreams
+     *
      * @return mixed
      */
-    public function getUpstreams();
+    public function getUpstreams(): array;
 
     /**
      * Setup access log file
@@ -116,7 +121,7 @@ interface ConfigInterface
      * @param $format
      * @return mixed
      */
-    public function setAccessLog($path, $format = null);
+    public function setAccessLog($path, $format = null): bool;
 
     /**
      * Return access log if exists

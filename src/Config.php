@@ -367,11 +367,6 @@ class Config implements ConfigInterface
         return $this->_routes[$routeName] ?? null;
     }
 
-    public function uploadRoutesFromFile(string $path)
-    {
-        // TODO: Implement uploadRoutesFromFile() method.
-    }
-
     /**
      * @throws UnitException
      */
@@ -405,9 +400,9 @@ class Config implements ConfigInterface
     /**
      * Get upstreams
      *
-     * @return mixed|null
+     * @return array
      */
-    public function getUpstreams(): mixed
+    public function getUpstreams(): array
     {
         return $this->_upstreams;
     }

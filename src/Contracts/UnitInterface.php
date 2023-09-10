@@ -22,13 +22,6 @@ interface UnitInterface
     public function getAddress(): string;
 
     /**
-     * Return full config uploaded on Nginx Unit
-     *
-     * @return ConfigInterface
-     */
-    public function getConfig(): ConfigInterface;
-
-    /**
      * Return Usage Statistics from Unit
      *
      * @return StatisticsInterface
@@ -62,12 +55,19 @@ interface UnitInterface
     public function uploadCertificate(string $path, string $certificateName): bool;
 
     /**
+     * Return full config uploaded on Nginx Unit
+     *
+     * @return ConfigInterface
+     */
+    public function getConfig(): ConfigInterface;
+
+    /**
      * Upload full file config
      *
      * @param string $path
      * @return bool
      */
-    public function uploadConfig(string $path): bool;
+    public function uploadConfigFromFile(string $path): bool;
 
     /**
      * Remove certificate on Unit server

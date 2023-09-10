@@ -49,7 +49,7 @@ class Unit implements UnitInterface
      * @inheritDoc
      * @throws UnitException
      */
-    public function getConfig(): Interfaces\ConfigInterface
+    public function getConfig(): Contracts\ConfigInterface
     {
         $this->loadConfig();
 
@@ -149,7 +149,7 @@ class Unit implements UnitInterface
     /**
      * @inheritDoc
      */
-    public function getStatistics(): Interfaces\StatisticsInterface
+    public function getStatistics(): Contracts\StatisticsInterface
     {
         $this->loadStatistics();
 
@@ -176,7 +176,7 @@ class Unit implements UnitInterface
      * @inheritDoc
      * @throws UnitException
      */
-    public function uploadConfig(string $path): bool
+    public function uploadConfigFromFile(string $path): bool
     {
         $fileContent = file_get_contents($path);
 
