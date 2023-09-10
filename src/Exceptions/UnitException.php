@@ -9,5 +9,5 @@ use Exception;
  */
 class UnitException extends Exception
 {
-    // TODO: Implement
+    //
 }
