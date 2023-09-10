@@ -3,6 +3,7 @@
 namespace UnitPhpSdk\Config\Application;
 
 use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\{
     HasThreads,
@@ -47,7 +48,7 @@ class PerlApplication extends ApplicationAbstract
         parent::parseFromArray($data);
 
         if (!array_key_exists('script', $data)) {
-            throw new UnitException('Script key is required');
+            throw new RequiredKeyException('script');
         }
 
         $this->setScript($data['script']);

@@ -3,6 +3,7 @@
 namespace UnitPhpSdk\Config\Application;
 
 use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\HasTargets;
 use UnitPhpSdk\Traits\HasThreads;
@@ -144,7 +145,7 @@ class PythonApplication extends ApplicationAbstract
         parent::parseFromArray($data);
 
         if (!array_key_exists('module', $data)) {
-            throw new UnitException('Module key is required');
+            throw new RequiredKeyException('module');
         }
 
         $this->setModule($data['module']);

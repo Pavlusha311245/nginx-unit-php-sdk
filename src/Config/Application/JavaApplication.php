@@ -3,6 +3,7 @@
 namespace UnitPhpSdk\Config\Application;
 
 use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\HasThreads;
 use UnitPhpSdk\Traits\HasThreadStackSize;
@@ -91,7 +92,7 @@ class JavaApplication extends ApplicationAbstract
         parent::parseFromArray($data);
 
         if (!array_key_exists('webapp', $data)) {
-            throw new UnitException('Webapp key is required');
+            throw new RequiredKeyException('webapp');
         }
 
         $this->setWebApp($data['webapp']);

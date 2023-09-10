@@ -3,6 +3,7 @@
 namespace UnitPhpSdk\Config\Application;
 
 use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 
 class WebAssemblyApplication extends ApplicationAbstract
@@ -245,20 +246,12 @@ class WebAssemblyApplication extends ApplicationAbstract
     {
         parent::parseFromArray($data);
 
-        if (!array_key_exists('module', $data)) {
-            throw new UnitException('Module key is required');
-        }
+        $requiredKeys = ['module', 'request_handler', 'malloc_handler', 'free_handler'];
 
-        if (!array_key_exists('request_handler', $data)) {
-            throw new UnitException('Request handler key is required');
-        }
-
-        if (!array_key_exists('malloc_handler', $data)) {
-            throw new UnitException('Malloc handler key is required');
-        }
-
-        if (!array_key_exists('free_handler', $data)) {
-            throw new UnitException('Free handler key is required');
+        foreach ($requiredKeys as $key) {
+            if (!array_key_exists($key, $data)) {
+                throw new RequiredKeyException($key);
+            }
         }
 
         $this->setModule($data['module']);

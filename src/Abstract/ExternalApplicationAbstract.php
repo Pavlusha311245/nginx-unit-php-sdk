@@ -3,6 +3,7 @@
 namespace UnitPhpSdk\Abstract;
 
 use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 
 class ExternalApplicationAbstract extends ApplicationAbstract
@@ -60,7 +61,7 @@ class ExternalApplicationAbstract extends ApplicationAbstract
         parent::parseFromArray($data);
 
         if (!array_key_exists('executable', $data)) {
-            throw new UnitException('Executable key is required');
+            throw new RequiredKeyException('executable');
         }
 
         $this->setExecutable($data['executable']);
