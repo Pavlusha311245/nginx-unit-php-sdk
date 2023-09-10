@@ -10,7 +10,7 @@ use UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation\{
     Uidmap
 };
 use UnitPhpSdk\Exceptions\UnitException;
-use UnitPhpSdk\Interfaces\Arrayable;
+use UnitPhpSdk\Contracts\Arrayable;
 
 class ProcessIsolation implements Arrayable
 {

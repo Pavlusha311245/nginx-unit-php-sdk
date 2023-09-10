@@ -7,7 +7,8 @@ use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Upstream};
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Http\UnitRequest;
-use UnitPhpSdk\Interfaces\ConfigInterface;
+use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Contracts\ConfigInterface;
 
 /**
  * This class contains Nginx Unit config data

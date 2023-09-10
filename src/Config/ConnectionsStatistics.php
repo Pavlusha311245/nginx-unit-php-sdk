@@ -2,7 +2,7 @@
 
 namespace UnitPhpSdk\Config;
 
-use UnitPhpSdk\Interfaces\ConnectionsStatisticsInterface;
+use UnitPhpSdk\Contracts\ConnectionsStatisticsInterface;
 
 readonly class ConnectionsStatistics implements ConnectionsStatisticsInterface
 {

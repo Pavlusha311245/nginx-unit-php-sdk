@@ -2,7 +2,8 @@
 
 namespace UnitPhpSdk\Config;
 
-use UnitPhpSdk\Interfaces\UpstreamInterface;
+use OutOfRangeException;
+use UnitPhpSdk\Contracts\UpstreamInterface;
 use UnitPhpSdk\Traits\HasListeners;
 
 class Upstream implements UpstreamInterface

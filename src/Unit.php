@@ -6,8 +6,8 @@ use UnitPhpSdk\Config\Statistics;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Http\UnitRequest;
-use UnitPhpSdk\Interfaces\CertificateInterface;
-use UnitPhpSdk\Interfaces\UnitInterface;
+use UnitPhpSdk\Contracts\CertificateInterface;
+use UnitPhpSdk\Contracts\UnitInterface;
 
 /**
  * This is main class of Nginx Unit manipulation

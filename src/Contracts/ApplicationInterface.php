@@ -1,6 +1,6 @@
 <?php
 
-namespace UnitPhpSdk\Interfaces;
+namespace UnitPhpSdk\Contracts;
 
 use UnitPhpSdk\Config\Application\ProcessManagement\ApplicationProcess;
 use UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;

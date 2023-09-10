@@ -1,6 +1,6 @@
 <?php
 
-namespace UnitPhpSdk\Interfaces;
+namespace UnitPhpSdk\Contracts;
 
 use UnitPhpSdk\Abstract\ApplicationAbstract;
 use UnitPhpSdk\Config\ConnectionsStatistics;

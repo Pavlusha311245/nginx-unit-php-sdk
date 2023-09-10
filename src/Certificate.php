@@ -2,7 +2,7 @@
 
 namespace UnitPhpSdk;
 
-use UnitPhpSdk\Interfaces\CertificateInterface;
+use UnitPhpSdk\Contracts\CertificateInterface;
 
 /**
  * Certificate class

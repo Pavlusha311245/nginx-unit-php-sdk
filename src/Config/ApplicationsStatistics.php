@@ -2,7 +2,7 @@
 
 namespace UnitPhpSdk\Config;
 
-use UnitPhpSdk\Interfaces\ApplicationsStatisticsInterface;
+use UnitPhpSdk\Contracts\ApplicationsStatisticsInterface;
 
 readonly class ApplicationsStatistics implements ApplicationsStatisticsInterface
 {

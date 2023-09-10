@@ -2,7 +2,7 @@
 
 namespace UnitPhpSdk\Config;
 
-use UnitPhpSdk\Interfaces\RequestsStatisticsInterface;
+use UnitPhpSdk\Contracts\RequestsStatisticsInterface;
 
 readonly class RequestsStatistics implements RequestsStatisticsInterface
 {

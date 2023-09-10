@@ -2,7 +2,7 @@
 
 namespace UnitPhpSdk\Config\Application\ProcessManagement;
 
-use UnitPhpSdk\Interfaces\Arrayable;
+use UnitPhpSdk\Contracts\Arrayable;
 
 class RequestLimit implements Arrayable
 {

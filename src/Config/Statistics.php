@@ -3,7 +3,7 @@
 namespace UnitPhpSdk\Config;
 
 use UnitPhpSdk\Abstract\ApplicationAbstract;
-use UnitPhpSdk\Interfaces\{
+use UnitPhpSdk\Contracts\{
     ApplicationsStatisticsInterface,
     ConnectionsStatisticsInterface,
     RequestsStatisticsInterface,

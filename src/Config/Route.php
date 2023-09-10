@@ -3,7 +3,7 @@
 namespace UnitPhpSdk\Config;
 
 use UnitPhpSdk\Config\Routes\RouteBlock;
-use UnitPhpSdk\Interfaces\RouteInterface;
+use UnitPhpSdk\Contracts\RouteInterface;
 use UnitPhpSdk\Traits\HasListeners;
 
 /**

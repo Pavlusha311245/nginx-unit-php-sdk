@@ -2,7 +2,7 @@
 
 namespace UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 
-use UnitPhpSdk\Interfaces\Arrayable;
+use UnitPhpSdk\Contracts\Arrayable;
 
 readonly class Namespaces implements Arrayable
 {
