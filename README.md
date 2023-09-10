@@ -16,7 +16,7 @@
 
 SDK allows developers to interact with the Nginx Unit web server through php classes. This project will help embed web server management into your projects
 
-## Supported Versions
+### Supported Versions
 
 | Version | Nginx Unit Capability | Supported          |
 |---------|:----------------------|--------------------|
@@ -78,13 +78,13 @@ $unit = new Unit(
 $unit->getConfig();
 ```
 
-* Run index.php
+* Run `php index.php`
 
-#### Happy coding 😊
+### Documentation
 
-## Documentation
+More examples and detailed information can be found [in the documentation](https://unit-sdk.pavlusha.me/)
 
-More information about API references you can find [here](https://unit-sdk.pavlusha.me/)
+Happy coding 😊
 
 ## Changelog
 

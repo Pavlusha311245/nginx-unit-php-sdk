@@ -1,11 +1,13 @@
 # CHANGELOG
 
 ## 0.6.0 - [In development]
-- Updated package namespace from Pavlusha311245\UnitPhpSdk to UnitPhpSdk
-- Move ListenerPass to Listener\ListenerPass
+
 - Rename method in ListenerPass getPassType() to getType()
 - Added PythonApplication, PerlApplication, WebAssemblyApplication
+- Added traits
 - Updated NodeJsApplication, JavaApplication, GoApplication
+- Updated package namespace from Pavlusha311245\UnitPhpSdk to UnitPhpSdk
+- Moved ListenerPass to Listener\ListenerPass
 - Mark some class as Arrayble
 
 ## v0.5.0 - [2023/09/01]
@@ -47,8 +49,8 @@
 
 - Added new method `getListenerByPort`
 - Added methods for implementation
-  - `setApplicationLogPath($path)`
-  - `setApplicationLogFormat($format)`
+    - `setApplicationLogPath($path)`
+    - `setApplicationLogFormat($format)`
 - Replaced arrays to object in Route
 - Updated doc
 
