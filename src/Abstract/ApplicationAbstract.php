@@ -1,25 +1,29 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Abstract;
+namespace UnitPhpSdk\Abstract;
 
-use Pavlusha311245\UnitPhpSdk\Config\Application\{
-    ProcessManagement\ApplicationProcess,
+use UnitPhpSdk\Config\Application\{ProcessManagement\ApplicationProcess,
     ProcessManagement\ProcessIsolation,
     ProcessManagement\RequestLimit
 };
-use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
-use Pavlusha311245\UnitPhpSdk\Interfaces\{ApplicationControlInterface, ApplicationInterface};
-use Pavlusha311245\UnitPhpSdk\Traits\HasListeners;
-use Pavlusha311245\UnitPhpSdk\UnitRequest;
+use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Http\UnitRequest;
+use UnitPhpSdk\Contracts\{ApplicationControlInterface, ApplicationInterface, Arrayable};
+use UnitPhpSdk\Traits\HasListeners;
 
-abstract class ApplicationAbstract implements ApplicationInterface, ApplicationControlInterface
+/**
+ * @implements ApplicationInterface, ApplicationControlInterface, Arrayable
+ */
+abstract class ApplicationAbstract implements ApplicationInterface, ApplicationControlInterface, Arrayable
 {
     use HasListeners;
 
     /**
+     * Application type
+     *
      * @var string
      */
-    private string $_type;
+    protected string $_type;
 
     /**
      * @var UnitRequest
@@ -112,11 +116,6 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
     public function getType(): string
     {
         return $this->_type;
-    }
-
-    public function setType(string $type): void
-    {
-        $this->_type = $type;
     }
 
     public function getGroup(): string
@@ -237,6 +236,8 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
     /**
      * Parse data from array
      *
+     * @param array $data
+     * @return void
      * @throws UnitException
      */
     public function parseFromArray(array $data): void
@@ -245,7 +246,7 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
             throw new UnitException('Parse Exception');
         }
 
-        $this->setType($data['type']);
+        $this->_type = $data['type'];
 
         if (array_key_exists('working_directory', $data)) {
             $this->setWorkingDirectory($data['working_directory']);
@@ -300,5 +301,25 @@ abstract class ApplicationAbstract implements ApplicationInterface, ApplicationC
         }
 
         return true;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'type' => $this->getType(),
+            'user' => $this->getUser(),
+            'group' => $this->getGroup(),
+            'environment' => $this->getEnvironment(),
+            'stderr' => $this->getStdErr(),
+            'stdout' => $this->getStdOut(),
+            'isolation' => $this->getIsolation()?->toArray(),
+            'processes' => is_int($this->getProcesses()) ? $this->getProcesses() : $this->getProcesses()?->toArray() ?? null,
+            'limits' => $this->getLimits()?->toArray(),
+        ];
+    }
+
+    public function toJson(): string|false
+    {
+        return json_encode(array_filter(static::toArray(), fn ($item) => !empty($item)));
     }
 }

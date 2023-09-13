@@ -1,8 +1,8 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Traits;
+namespace UnitPhpSdk\Traits;
 
-use Pavlusha311245\UnitPhpSdk\Config\Listener;
+use UnitPhpSdk\Config\Listener;
 
 trait HasListeners
 {

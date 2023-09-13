@@ -1,8 +1,13 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement;
+namespace UnitPhpSdk\Config\Application\ProcessManagement;
 
-class RequestLimit
+use UnitPhpSdk\Contracts\Arrayable;
+
+/**
+ * @implements Arrayable
+ */
+class RequestLimit implements Arrayable
 {
     /**
      * Maximum number of requests an app process can serve.
@@ -18,15 +23,23 @@ class RequestLimit
      */
     private int $_timeout;
 
-    public function __construct(array $data)
+    public function __construct(array $data = [])
     {
         if (array_key_exists('timeout', $data)) {
-            $this->setRequests($data['timeout']);
+            $this->setTimeout($data['timeout']);
         }
 
         if (array_key_exists('requests', $data)) {
-            $this->setTimeout($data['requests']);
+            $this->setRequests($data['requests']);
         }
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'timeout' => $this->getTimeout(),
+            'requests' => $this->getRequests()
+        ];
     }
 
     /**

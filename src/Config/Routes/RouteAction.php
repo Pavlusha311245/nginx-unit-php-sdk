@@ -1,8 +1,8 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Routes;
+namespace UnitPhpSdk\Config\Routes;
 
-use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Exceptions\UnitException;
 
 class RouteAction
 {
@@ -47,7 +47,7 @@ class RouteAction
     /**
      * @var array
      */
-    private $_fallback;
+    private array $_fallback = [];
 
     /**
      * @var array
@@ -62,12 +62,12 @@ class RouteAction
     /**
      * @var bool
      */
-    protected bool $_follow_symlinks;
+    protected bool $_follow_symlinks = true;
 
     /**
      * @var bool
      */
-    protected bool $_traverse_mounts;
+    protected bool $_traverse_mounts = true;
 
     /**
      * @var string

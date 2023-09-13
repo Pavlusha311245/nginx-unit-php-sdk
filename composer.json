@@ -1,6 +1,6 @@
 {
   "name": "pavlusha311245/unit-php-sdk",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "type": "sdk",
   "description": "This project allows developers to interact with the Nginx Unit web server through PHP classes",
   "license": "Apache-2.0",
@@ -10,16 +10,6 @@
     "nginx unit",
     "sdk"
   ],
-  "autoload": {
-    "psr-4": {
-      "Pavlusha311245\\UnitPhpSdk\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\": "tests/"
-    }
-  },
   "authors": [
     {
       "name": "Pavel Zavadski",
@@ -27,26 +17,40 @@
       "homepage": "https://pavlusha.me/"
     }
   ],
-  "minimum-stability": "stable",
+  "scripts": {
+    "test": [
+      "./vendor/bin/pest",
+      "./vendor/bin/phpstan analyse -c phpstan.neon"
+    ],
+    "test:unit": "./vendor/bin/pest",
+    "test:phpstan": "./vendor/bin/phpstan analyse -c phpstan.neon",
+    "lint": "./vendor/bin/php-cs-fixer fix --rules=@PSR12 ."
+  },
   "require": {
     "php": ">=8.2",
     "friendsofphp/php-cs-fixer": "^3.21",
-    "ext-curl": "*"
+    "ext-curl": "*",
+    "guzzlehttp/guzzle": "^7.0"
   },
   "require-dev": {
     "pestphp/pest": "^2.8",
     "phpstan/phpstan": "^1.10"
+  },
+  "autoload": {
+    "psr-4": {
+      "UnitPhpSdk\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
   },
   "config": {
     "allow-plugins": {
       "pestphp/pest-plugin": true
     }
   },
-  "scripts": {
-    "test": [
-      "./vendor/bin/pest",
-      "./vendor/bin/phpstan analyse -c phpstan.neon"
-    ],
-    "lint": "./vendor/bin/php-cs-fixer fix --rules=@PSR12 ."
-  }
+  "minimum-stability": "stable",
+  "prefer-stable": true
 }

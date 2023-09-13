@@ -1,8 +1,13 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement;
+namespace UnitPhpSdk\Config\Application\ProcessManagement;
 
-class ApplicationProcess
+use UnitPhpSdk\Contracts\Arrayable;
+
+/**
+ * @implements Arrayable
+ */
+class ApplicationProcess implements Arrayable
 {
     /**
      * Maximum number of application processes that Unit maintains (busy and idle).
@@ -16,16 +21,16 @@ class ApplicationProcess
      *
      * @var int|mixed
      */
-    private int $_spare;
+    private int|null $_spare = null;
 
     /**
      * Number of seconds Unit waits for before terminating an idle process that exceeds spare.
      *
      * @var int|mixed
      */
-    private int $_idle_timeout;
+    private int|null $_idle_timeout = null;
 
-    public function __construct(array $data)
+    public function __construct(array $data = [])
     {
         if (array_key_exists('max', $data)) {
             $this->setMax($data['max']);
@@ -38,6 +43,28 @@ class ApplicationProcess
         if (array_key_exists('idle_timeout', $data)) {
             $this->setIdleTimeout($data['idle_timeout']);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $result = [];
+
+        if (!empty($this->getMax())) {
+            $result['max'] = $this->getMax();
+        }
+
+        if (!empty($this->getSpare())) {
+            $result['spare'] = $this->getSpare();
+        }
+
+        if (!empty($this->getIdleTimeout())) {
+            $result['idle_timeout'] = $this->getIdleTimeout();
+        }
+
+        return $result;
     }
 
     /**
@@ -57,9 +84,9 @@ class ApplicationProcess
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getSpare(): int
+    public function getSpare(): int|null
     {
         return $this->_spare;
     }
@@ -73,9 +100,9 @@ class ApplicationProcess
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getIdleTimeout(): int
+    public function getIdleTimeout(): int|null
     {
         return $this->_idle_timeout;
     }

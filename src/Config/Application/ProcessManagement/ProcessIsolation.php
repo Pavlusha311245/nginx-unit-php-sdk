@@ -1,17 +1,21 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement;
+namespace UnitPhpSdk\Config\Application\ProcessManagement;
 
-use Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation\{
+use UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation\{
     Automount,
     Cgroup,
     Gidmap,
     Namespaces,
     Uidmap
 };
-use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Contracts\Arrayable;
 
-class ProcessIsolation
+/**
+ * @implements Arrayable
+ */
+class ProcessIsolation implements Arrayable
 {
     /**
      * @var Automount
@@ -154,7 +158,7 @@ class ProcessIsolation
             $this->setAutomount(new Automount($data['automount']));
         }
 
-        if (array_key_exists('automount', $data)) {
+        if (array_key_exists('cgroup', $data)) {
             $this->setCgroup(new Cgroup($data['cgroup']));
         }
 
@@ -173,5 +177,20 @@ class ProcessIsolation
         if (array_key_exists('namespaces', $data)) {
             $this->setNamespaces(new Namespaces($data['namespaces']));
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'automount' => $this->getAutomount(),
+            'cgroup' => $this->getCgroup()->toArray(),
+            'gidmap' => $this->getGidmap()->toArray(),
+            'uidmap' => $this->getUidmap()->toArray(),
+            'rootfs' => $this->getRootfs(),
+            'namespaces' => $this->getNamespaces()->toArray()
+        ];
     }
 }

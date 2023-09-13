@@ -1,12 +1,21 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Application;
+namespace UnitPhpSdk\Config\Application;
 
-use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
-use Pavlusha311245\UnitPhpSdk\Config\Application\Targets\PhpTarget;
+use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Config\Application\Targets\PhpTarget;
+use UnitPhpSdk\Exceptions\RequiredKeyException;
+use UnitPhpSdk\Traits\HasTargets;
 
+/**
+ * @extends ApplicationAbstract
+ */
 class PhpApplication extends ApplicationAbstract
 {
+    use HasTargets;
+
+    protected string $_type = 'php';
+
     /**
      * @var string
      */
@@ -26,11 +35,6 @@ class PhpApplication extends ApplicationAbstract
      * @var
      */
     private $_options;
-
-    /**
-     * @var array
-     */
-    private array $_targets;
 
     /**
      * @return mixed
@@ -75,25 +79,9 @@ class PhpApplication extends ApplicationAbstract
     /**
      * @param string $script
      */
-    public function setScript(string $script): void
+    public function setScript(string $script = 'index.php'): void
     {
         $this->_script = $script;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTargets(): array
-    {
-        return $this->_targets;
-    }
-
-    /**
-     * @param array $targets
-     */
-    public function setTargets(array $targets): void
-    {
-        $this->_targets = $targets;
     }
 
     /**
@@ -115,12 +103,25 @@ class PhpApplication extends ApplicationAbstract
     /**
      * @inheritDoc
      */
-    public function parseFromArray(array $data): void
+    final public function parseFromArray(array $data): void
     {
         parent::parseFromArray($data);
 
+        if (!array_key_exists('root', $data) && !array_key_exists('targets', $data)) {
+            throw new RequiredKeyException('root', 'targets');
+        }
+
         if (array_key_exists('root', $data)) {
             $this->setRoot($data['root']);
+        }
+
+        if (array_key_exists('targets', $data)) {
+            $targets = [];
+            foreach ($data['targets'] as $targetName => $targetData) {
+                $targets[$targetName] = new PhpTarget($targetData);
+            }
+
+            $this->setTargets($targets);
         }
 
         if (array_key_exists('index', $data)) {
@@ -134,14 +135,19 @@ class PhpApplication extends ApplicationAbstract
         if (array_key_exists('options', $data)) {
             $this->setOptions($data['options']);
         }
+    }
 
-        if (array_key_exists('targets', $data)) {
-            $targets = [];
-            foreach ($data['targets'] as $targetName => $targetData) {
-                $targets[$targetName] = new PhpTarget($targetData);
-            }
-
-            $this->setTargets($targets);
-        }
+    public function toArray(): array
+    {
+        return array_merge(
+            parent::toArray(),
+            [
+                'root' => $this->getRoot(),
+                'index' => $this->getIndex(),
+                'script' => $this->getScript(),
+                'options' => $this->getOptions(),
+                'targets' => $this->getTargets()
+            ]
+        );
     }
 }

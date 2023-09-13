@@ -1,9 +1,9 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Routes;
+namespace UnitPhpSdk\Config\Routes;
 
-use Pavlusha311245\UnitPhpSdk\Enums\HttpMethodsEnum;
-use Pavlusha311245\UnitPhpSdk\Enums\HttpSchemeEnum;
+use UnitPhpSdk\Enums\HttpMethodsEnum;
+use UnitPhpSdk\Enums\HttpSchemeEnum;
 
 class RouteMatch
 {
@@ -15,7 +15,7 @@ class RouteMatch
     private string $_host;
 
     /**
-     * Method from the request line, uppercased.
+     * Method from the request line, uppercase.
      *
      * @var HttpMethodsEnum
      */

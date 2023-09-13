@@ -1,6 +1,6 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Enums;
+namespace UnitPhpSdk\Enums;
 
 enum ApplicationTypeEnum
 {

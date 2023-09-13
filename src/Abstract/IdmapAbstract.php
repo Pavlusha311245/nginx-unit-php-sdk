@@ -1,6 +1,6 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Abstract;
+namespace UnitPhpSdk\Abstract;
 
 class IdmapAbstract
 {
@@ -91,5 +91,14 @@ class IdmapAbstract
         if (array_key_exists('size', $data)) {
             $this->setSize($data['size']);
         }
+    }
+
+    public function toArray()
+    {
+        return [
+            'container' => $this->getContainer(),
+            'host' => $this->getHost(),
+            'size' => $this->getSize()
+        ];
     }
 }

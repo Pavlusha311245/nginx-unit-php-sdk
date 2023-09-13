@@ -1,11 +1,13 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk;
+namespace UnitPhpSdk;
 
-use Pavlusha311245\UnitPhpSdk\Interfaces\CertificateInterface;
+use UnitPhpSdk\Contracts\CertificateInterface;
 
 /**
  * Certificate class
+ *
+ * @implements CertificateInterface
  */
 readonly class Certificate implements CertificateInterface
 {

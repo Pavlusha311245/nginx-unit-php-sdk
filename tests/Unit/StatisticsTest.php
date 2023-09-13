@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use Pavlusha311245\UnitPhpSdk\Unit;
+use UnitPhpSdk\Unit;
 
 $unit = new Unit(
     socket: '/usr/local/var/run/unit/control.sock',
@@ -20,7 +20,7 @@ test('Can receive connections statistics', function () use ($statistics) {
 });
 
 test('Can receive connections statistics data', function () use ($statistics) {
-    expect($statistics->getConnections()->getData())->toBeArray();
+    expect($statistics->getConnections()->toArray())->toBeArray();
 });
 
 test('Can receive accepted connections statistics', function () use ($statistics) {

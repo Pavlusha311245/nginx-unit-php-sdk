@@ -1,8 +1,13 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config;
+namespace UnitPhpSdk\Config;
 
-use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Config\Listener\{
+    Forwarded,
+    ListenerPass,
+    Tls
+};
+use UnitPhpSdk\Exceptions\UnitException;
 
 /**
  * This class presents "listeners" section from config
@@ -27,8 +32,8 @@ class Listener
     public function __construct(
         private readonly string $_listener,
         string                  $pass,
-        private array           $_tls = [],
-        private array           $_forwarded = [],
+        private ?Tls            $_tls = null,
+        private ?Forwarded      $_forwarded = null,
     ) {
         $this->parsePort();
         $this->generateLink();
@@ -130,8 +135,13 @@ class Listener
             throw new UnitException("Missing required 'pass' array key");
         }
 
-        $this->_forwarded = $data['forwarded'] ?? [];
-        $this->_tls = $data['tls'] ?? [];
+        if (array_key_exists('forwarded', $data)) {
+            $this->_forwarded = new Forwarded($data['forwarded']);
+        }
+
+        if (array_key_exists('tls', $data)) {
+            $this->_tls = new Tls($data['tls']);
+        }
 
         return $this;
     }
@@ -148,22 +158,38 @@ class Listener
         ];
 
         if (!empty($this->_tls)) {
-            $listenerArray['tls'] = $this->_tls;
+            $listenerArray['tls'] = $this->_tls->toArray();
         }
 
         if (!empty($this->_forwarded)) {
-            $listenerArray['forwarded'] = $this->_forwarded;
+            $listenerArray['forwarded'] = $this->_forwarded->toArray();
         }
 
         return $listenerArray;
     }
 
     /**
+     * @param Tls|null $tls
+     */
+    public function setTls(?Tls $tls): void
+    {
+        $this->_tls = $tls;
+    }
+
+    /**
+     * @param Forwarded|null $forwarded
+     */
+    public function setForwarded(?Forwarded $forwarded): void
+    {
+        $this->_forwarded = $forwarded;
+    }
+
+    /**
      * Return Listener as JSON
      *
-     * @return string
+     * @return string|false
      */
-    public function toJson(): string
+    public function toJson(): string|false
     {
         return json_encode($this->toArray());
     }

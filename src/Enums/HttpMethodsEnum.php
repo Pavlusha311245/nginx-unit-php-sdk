@@ -1,6 +1,6 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Enums;
+namespace UnitPhpSdk\Enums;
 
 /**
  * https://datatracker.ietf.org/doc/html/rfc7231#section-4

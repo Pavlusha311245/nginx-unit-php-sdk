@@ -1,26 +1,25 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk;
+namespace UnitPhpSdk;
 
-use Pavlusha311245\UnitPhpSdk\Abstract\ApplicationAbstract;
-use Pavlusha311245\UnitPhpSdk\Config\{
-    Application,
-    Listener,
-    Route,
-    Upstream,
-    AccessLog
-};
-use Pavlusha311245\UnitPhpSdk\Enums\HttpMethodsEnum;
-use Pavlusha311245\UnitPhpSdk\Exceptions\UnitException;
-use Pavlusha311245\UnitPhpSdk\Interfaces\ConfigInterface;
+use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Upstream};
+use UnitPhpSdk\Enums\HttpMethodsEnum;
+use UnitPhpSdk\Exceptions\FileNotFoundException;
+use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Http\UnitRequest;
+use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Contracts\ConfigInterface;
 
 /**
  * This class contains Nginx Unit config data
+ *
+ * @implements ConfigInterface
  */
-class Config implements ConfigInterface
+class Config implements ConfigInterface, Arrayable
 {
     /**
-     * Listeners accept requests
+     * Listeners that accept requests
      *
      * @var array
      */
@@ -65,6 +64,8 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Fill data if listeners key exists
+     *
      * @param array $data
      * @return void
      * @throws UnitException
@@ -78,7 +79,7 @@ class Config implements ConfigInterface
                     pass: $listenerData['pass']
                 ))->parseFromArray($listenerData);
 
-                $typePath = $listener->getPass()->getPassType();
+                $typePath = $listener->getPass()->getType();
                 $typePathName = $listener->getPass()->toArray()[1] ?? null;
 
                 ($this->{"_{$typePath}"}[$typePathName ?? 'default'])?->setListener($listener);
@@ -90,6 +91,8 @@ class Config implements ConfigInterface
 
 
     /**
+     * Fill data if applications key exists
+     *
      * @param array $data
      * @return void
      * @throws UnitException
@@ -98,10 +101,13 @@ class Config implements ConfigInterface
     {
         if (array_key_exists('applications', $data)) {
             foreach ($data['applications'] as $appName => $appData) {
-                // TODO: implement Perl, Python and Ruby applications
                 $this->_applications[$appName] = match ($appData['type']) {
                     'php' => new Application\PhpApplication($appData),
                     'java' => new Application\JavaApplication($appData),
+                    'perl' => new Application\PerlApplication($appData),
+                    'python' => new Application\PythonApplication($appData),
+                    'wasm' => new Application\WebAssemblyApplication($appData),
+                    'ruby' => new Application\RubyApplication($appData),
                     'external' => $this->isNodeJsApplication($appData) ? new Application\NodeJsApplication($appData) : new Application\GoApplication($appData),
                 };
                 $this->_applications[$appName]->setName($appName);
@@ -111,14 +117,18 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Detect if NodeJsApplication
+     *
      * @param $appData
      * @return bool
      */
-    public function isNodeJsApplication($appData): bool
+    private function isNodeJsApplication($appData): bool
     {
-        foreach ($appData['arguments'] as $argument) {
-            if (str_contains($argument, '.js')) {
-                return true;
+        if (array_key_exists('arguments', $appData)) {
+            foreach ($appData['arguments'] as $argument) {
+                if (str_contains($argument, '.js')) {
+                    return true;
+                }
             }
         }
 
@@ -129,6 +139,12 @@ class Config implements ConfigInterface
         return false;
     }
 
+    /**
+     * Fill data if routes key exists
+     *
+     * @param object $rawData
+     * @return void
+     */
     public function loadRoutes(object $rawData): void
     {
         if (!empty($rawData->routes)) {
@@ -144,6 +160,8 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Fill data if upstreams key exists
+     *
      * @param array $data
      * @return void
      */
@@ -185,13 +203,39 @@ class Config implements ConfigInterface
     /**
      * @inheritDoc
      */
-    public function addListener(Listener $listener): bool
+    public function uploadListener(Listener $listener): bool
     {
         try {
             $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
             $this->_unitRequest->setData($listener->toJson());
             $this->_unitRequest->send("/config/listeners/{$listener->getListener()}");
         } catch (UnitException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws UnitException
+     */
+    public function uploadListenerFromFile(string $path, string $listener): bool
+    {
+        $fileContent = file_get_contents($path);
+
+        if (!$fileContent) {
+            throw new FileNotFoundException();
+        }
+
+        if (empty(json_decode($fileContent, true))) {
+            throw new UnitException('It\'s not a JSON file');
+        }
+
+        try {
+            $this->_unitRequest->setMethod('PUT');
+            $this->_unitRequest->setData($fileContent);
+            $result = $this->_unitRequest->send("/config/listeners/{$listener}");
+        } catch (UnitException) {
             return false;
         }
 
@@ -242,14 +286,64 @@ class Config implements ConfigInterface
         return $this->_applications[$applicationName] ?? null;
     }
 
+    public function uploadApplication(ApplicationAbstract $application, string $name = ''): bool
+    {
+        if (empty($application->getName()) && empty($name)) {
+            throw new UnitException('Application name not specified');
+        }
+
+        $appName = empty($application->getName()) ? $name : $application->getName();
+
+        try {
+            $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
+            $this->_unitRequest->setData($application->toJson());
+            $response = $this->_unitRequest->send("/config/applications/{$appName}");
+        } catch (UnitException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
+     * @inheritdoc
      * @throws UnitException
      */
-    public function removeApplication(ApplicationAbstract $application): bool
+    public function uploadApplicationFromFile(string $path, string $name): bool
+    {
+        // TODO: add validation if json contains application name
+        $fileContent = file_get_contents($path);
+
+        if (!$fileContent) {
+            throw new FileNotFoundException();
+        }
+
+        if (empty(json_decode($fileContent, true))) {
+            throw new UnitException('It\'s not a JSON file');
+        }
+
+        try {
+            $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
+            $this->_unitRequest->setData($fileContent);
+            $this->_unitRequest->send("/config/applications/{$name}");
+        } catch (UnitException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove application from Nginx Unit.
+     * Cain receive application name or application object
+     *
+     * @throws UnitException
+     */
+    public function removeApplication(ApplicationAbstract|string $application): bool
     {
         $this->_unitRequest->setMethod(HttpMethodsEnum::DELETE->value);
 
-        $applicationName = $application->getName();
+        $applicationName = is_string($application) ? $application : $application->getName();
         $this->_unitRequest->send("/config/applications/{$applicationName}");
 
         return true;
@@ -309,11 +403,59 @@ class Config implements ConfigInterface
     /**
      * Get upstreams
      *
-     * @return mixed|null
+     * @return array
      */
-    public function getUpstreams(): mixed
+    public function getUpstreams(): array
     {
         return $this->_upstreams;
+    }
+
+    /**
+     * @inheritDoc
+     * @throws UnitException
+     */
+    public function uploadUpstream(Upstream $upstream, string $name = ''): bool
+    {
+        if (empty($upstream->getName()) && empty($name)) {
+            throw new UnitException('Name isn\'t be empty');
+        }
+
+        $upstreamName = empty($upstream->getName()) ? $name : $upstream->getName();
+
+        try {
+            $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
+            $this->_unitRequest->setData(json_encode($upstream->toJson()));
+            $this->_unitRequest->send("/config/upstreams/{$upstreamName}");
+        } catch (UnitException $exception) {
+            print_r($exception->getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    public function uploadUpstreamsFromFile(string $path): bool
+    {
+        $fileContent = file_get_contents($path);
+
+        if (!$fileContent) {
+            throw new FileNotFoundException();
+        }
+
+        if (empty(json_decode($fileContent, true))) {
+            throw new UnitException('It\'s not a JSON file');
+        }
+
+        try {
+            $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
+            $this->_unitRequest->setData(json_encode($fileContent));
+            $this->_unitRequest->send('/config/upstreams');
+        } catch (UnitException $exception) {
+            print_r($exception->getMessage());
+            return false;
+        }
+
+        return true;
     }
 
     /**

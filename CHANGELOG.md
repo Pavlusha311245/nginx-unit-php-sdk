@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## v0.6.0 - [2023/09/13] _Release on Programmer's Day. Happy holiday everyone :)_
+
+- Rename method in ListenerPass getPassType() to getType()
+- Added PythonApplication, PerlApplication, WebAssemblyApplication
+- Added traits
+- Updated NodeJsApplication, JavaApplication, GoApplication
+- Updated package namespace from Pavlusha311245\UnitPhpSdk to UnitPhpSdk
+- Update UnitRequest. Replaced curl with guzzle package
+- Moved ListenerPass to Listener\ListenerPass
+- Mark some class as Arrayble
+
 ## v0.5.0 - [2023/09/01]
 
 - Added ProccessIsolation implementation
@@ -39,8 +50,8 @@
 
 - Added new method `getListenerByPort`
 - Added methods for implementation
-  - `setApplicationLogPath($path)`
-  - `setApplicationLogFormat($format)`
+    - `setApplicationLogPath($path)`
+    - `setApplicationLogFormat($format)`
 - Replaced arrays to object in Route
 - Updated doc
 

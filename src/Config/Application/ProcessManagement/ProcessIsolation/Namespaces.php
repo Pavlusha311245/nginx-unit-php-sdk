@@ -1,8 +1,14 @@
 <?php
 
-namespace Pavlusha311245\UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
+namespace UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 
-readonly class Namespaces
+use UnitPhpSdk\Contracts\Arrayable;
+
+/**
+ * @readonly Namespaces
+ * @implements Arrayable
+ */
+readonly class Namespaces implements Arrayable
 {
     private bool $_cgroup;
     private bool $_credential;
@@ -37,6 +43,19 @@ readonly class Namespaces
             $this->setUname($data['uname']);
         }
     }
+
+    public function toArray(): array
+    {
+        return [
+            'cgroup' => $this->isCgroup(),
+            'credential' => $this->isCredential(),
+            'mount' => $this->isMount(),
+            'pid' => $this->isPid(),
+            'network' => $this->isNetwork(),
+            'uname' => $this->isUname(),
+        ];
+    }
+
 
     /**
      * @param bool $uname
@@ -133,5 +152,4 @@ readonly class Namespaces
     {
         return $this->_uname;
     }
-
 }
