@@ -7,6 +7,7 @@ use UnitPhpSdk\Contracts\ConnectionsStatisticsInterface;
 /**
  * @readonly ConnectionsStatistics
  * @implements ConnectionsStatisticsInterface
+ * @final
  */
 final readonly class ConnectionsStatistics implements ConnectionsStatisticsInterface
 {

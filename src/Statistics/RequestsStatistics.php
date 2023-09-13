@@ -7,6 +7,7 @@ use UnitPhpSdk\Contracts\RequestsStatisticsInterface;
 /**
  * @readonly RequestsStatistics
  * @implements RequestsStatisticsInterface
+ * @final
  */
 final readonly class RequestsStatistics implements RequestsStatisticsInterface
 {

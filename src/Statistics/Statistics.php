@@ -12,6 +12,7 @@ use UnitPhpSdk\Contracts\{ApplicationsStatisticsInterface,
  * This class returns statistics from Nginx Unit
  *
  * @implements StatisticsInterface
+ * @final
  */
 final class Statistics implements StatisticsInterface
 {

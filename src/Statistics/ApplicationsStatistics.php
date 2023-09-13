@@ -7,6 +7,7 @@ use UnitPhpSdk\Contracts\ApplicationsStatisticsInterface;
 /**
  * @readonly ApplicationsStatistics
  * @implements ApplicationsStatisticsInterface
+ * @final
  */
 final readonly class ApplicationsStatistics implements ApplicationsStatisticsInterface
 {
