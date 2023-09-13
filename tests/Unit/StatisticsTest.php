@@ -20,7 +20,7 @@ test('Can receive connections statistics', function () use ($statistics) {
 });
 
 test('Can receive connections statistics data', function () use ($statistics) {
-    expect($statistics->getConnections()->getData())->toBeArray();
+    expect($statistics->getConnections()->toArray())->toBeArray();
 });
 
 test('Can receive accepted connections statistics', function () use ($statistics) {
