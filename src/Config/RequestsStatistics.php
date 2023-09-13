@@ -8,7 +8,7 @@ use UnitPhpSdk\Contracts\RequestsStatisticsInterface;
  * @readonly RequestsStatistics
  * @implements RequestsStatisticsInterface
  */
-readonly class RequestsStatistics implements RequestsStatisticsInterface
+final readonly class RequestsStatistics implements RequestsStatisticsInterface
 {
     public function __construct(private array $_data)
     {

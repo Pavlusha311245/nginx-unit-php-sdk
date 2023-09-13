@@ -15,7 +15,7 @@ use UnitPhpSdk\Contracts\{
  *
  * @implements StatisticsInterface
  */
-class Statistics implements StatisticsInterface
+final class Statistics implements StatisticsInterface
 {
     /**
      * @var ConnectionsStatisticsInterface
