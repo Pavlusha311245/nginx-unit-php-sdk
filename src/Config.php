@@ -5,6 +5,7 @@ namespace UnitPhpSdk;
 use UnitPhpSdk\Abstract\ApplicationAbstract;
 use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Upstream};
 use UnitPhpSdk\Enums\HttpMethodsEnum;
+use UnitPhpSdk\Exceptions\FileNotFoundException;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Http\UnitRequest;
 use UnitPhpSdk\Contracts\Arrayable;
@@ -223,7 +224,7 @@ class Config implements ConfigInterface
         $fileContent = file_get_contents($path);
 
         if (!$fileContent) {
-            throw new UnitException('Fail to read certificate');
+            throw new FileNotFoundException();
         }
 
         if (empty(json_decode($fileContent, true))) {
@@ -314,7 +315,7 @@ class Config implements ConfigInterface
         $fileContent = file_get_contents($path);
 
         if (!$fileContent) {
-            throw new UnitException('Fail to read certificate');
+            throw new FileNotFoundException();
         }
 
         if (empty(json_decode($fileContent, true))) {

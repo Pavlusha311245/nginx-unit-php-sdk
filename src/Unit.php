@@ -4,6 +4,7 @@ namespace UnitPhpSdk;
 
 use UnitPhpSdk\Config\Statistics;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
+use UnitPhpSdk\Exceptions\FileNotFoundException;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Http\UnitRequest;
 use UnitPhpSdk\Contracts\{
@@ -93,7 +94,7 @@ class Unit implements UnitInterface
         $fileContent = file_get_contents($path);
 
         if (!$fileContent) {
-            throw new UnitException('Fail to read certificate');
+            throw new FileNotFoundException();
         }
 
         try {
