@@ -7,8 +7,8 @@ We use [SemVer](https://semver.org/) for versioning. For the versions available,
 
 | Version | Nginx Unit Capability | Supported          |
 |---------|:----------------------|--------------------|
-| 0.5.x   | 1.30.0 & 1.31.0       | :white_check_mark: |
-| < 0.4.x | 1.30.0                | :x:                |
+| 0.6.x   | 1.30.0 & 1.31.0       | :white_check_mark: |
+| < 0.5.x | 1.30.0                | :x:                |
 
 ## Vulnerability Report
 

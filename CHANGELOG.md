@@ -7,6 +7,7 @@
 - Added traits
 - Updated NodeJsApplication, JavaApplication, GoApplication
 - Updated package namespace from Pavlusha311245\UnitPhpSdk to UnitPhpSdk
+- Update UnitRequest. Replaced curl with guzzle package
 - Moved ListenerPass to Listener\ListenerPass
 - Mark some class as Arrayble
 
