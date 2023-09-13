@@ -186,7 +186,7 @@ class Unit implements UnitInterface
         $fileContent = file_get_contents($path);
 
         if (!$fileContent) {
-            throw new UnitException('Fail to read certificate');
+            throw new FileNotFoundException();
         }
 
         if (!json_decode($fileContent, true)) {
