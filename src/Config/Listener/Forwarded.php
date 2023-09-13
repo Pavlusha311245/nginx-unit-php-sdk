@@ -49,14 +49,11 @@ class Forwarded
         }
 
         $this->setSource($data['source']);
-
-        if (!empty($data)) {
-            $this->parseFromArray($data);
-        }
+        $this->parseFromArray($data);
     }
 
     /**
-     * @throws UnitException
+     * @param array $data
      */
     private function parseFromArray(array $data): void
     {
