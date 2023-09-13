@@ -2,13 +2,20 @@
 
 namespace UnitPhpSdk\Http;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use UnitPhpSdk\Exceptions\UnitException;
 
+/**
+ * Base class for requests
+ */
 class UnitRequest
 {
     private string $_method = 'GET';
 
     private mixed $_data;
+
+    private readonly string $_address;
 
     /**
      * Constructor
@@ -18,9 +25,13 @@ class UnitRequest
      */
     public function __construct(
         private readonly string $socket,
-        private readonly string $address
-    ) {
-        //
+        string                  $address
+    )
+    {
+        $scheme = parse_url($address, PHP_URL_SCHEME);
+        $host = parse_url($address, PHP_URL_HOST);
+
+        $this->_address = "{$scheme}://{$host}";
     }
 
     /**
@@ -50,38 +61,33 @@ class UnitRequest
      */
     public function send($uri, $associative = true)
     {
-        $curlHandler = curl_init();
+        $request = new Client([
+            'base_uri' => $this->_address
+        ]);
 
-        curl_setopt($curlHandler, CURLOPT_UNIX_SOCKET_PATH, $this->socket);
-        curl_setopt($curlHandler, CURLOPT_URL, $this->address . $uri);
-        curl_setopt($curlHandler, CURLOPT_RETURNTRANSFER, 1);
-
-        if ($this->_method) {
-            curl_setopt($curlHandler, CURLOPT_CUSTOMREQUEST, mb_strtoupper($this->_method));
-        }
+        $requestOptions = [
+            'curl' => [
+                CURLOPT_UNIX_SOCKET_PATH => $this->socket
+            ]
+        ];
 
         if (!empty($this->_data)) {
-            curl_setopt($curlHandler, CURLOPT_HTTPHEADER, [
-                'Content-Type: application/x-www-form-urlencoded',
-            ]);
-
-            curl_setopt($curlHandler, CURLOPT_POSTFIELDS, $this->_data);
+            $requestOptions['form_params'] = $this->_data;
         }
 
-        $result = curl_exec($curlHandler);
-        if (curl_errno($curlHandler)) {
-            throw new UnitException('Error:' . curl_error($curlHandler));
+        try {
+            $response = $request->request($this->_method, $uri, $requestOptions);
+        } catch (GuzzleException $exception) {
+            throw new UnitException($exception->getMessage());
         }
-        curl_close($curlHandler);
+
+        $rawData = json_decode($response->getBody()->getContents(), $associative);
+
+        if ($associative && array_key_exists('error', $rawData)) {
+            throw new UnitException($rawData['error']);
+        }
+
         $this->clean();
-
-        $rawData = json_decode($result, $associative);
-
-        if ($associative) {
-            if (array_key_exists('error', $rawData)) {
-                throw new UnitException($rawData['error']);
-            }
-        }
 
         return $rawData;
     }

@@ -22,12 +22,15 @@
       "./vendor/bin/pest",
       "./vendor/bin/phpstan analyse -c phpstan.neon"
     ],
+    "test:unit": "./vendor/bin/pest",
+    "test:phpstan": "./vendor/bin/phpstan analyse -c phpstan.neon",
     "lint": "./vendor/bin/php-cs-fixer fix --rules=@PSR12 ."
   },
   "require": {
     "php": ">=8.2",
     "friendsofphp/php-cs-fixer": "^3.21",
-    "ext-curl": "*"
+    "ext-curl": "*",
+    "guzzlehttp/guzzle": "^7.0"
   },
   "require-dev": {
     "pestphp/pest": "^2.8",
