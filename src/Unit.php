@@ -2,15 +2,12 @@
 
 namespace UnitPhpSdk;
 
-use UnitPhpSdk\Config\Statistics;
+use UnitPhpSdk\Contracts\{CertificateInterface, UnitInterface};
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\FileNotFoundException;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Http\UnitRequest;
-use UnitPhpSdk\Contracts\{
-    CertificateInterface,
-    UnitInterface
-};
+use UnitPhpSdk\Statistics\Statistics;
 
 /**
  * This is main class of Nginx Unit manipulation

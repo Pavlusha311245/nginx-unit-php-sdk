@@ -26,8 +26,7 @@ class UnitRequest
     public function __construct(
         private readonly string $socket,
         string                  $address
-    )
-    {
+    ) {
         $scheme = parse_url($address, PHP_URL_SCHEME);
         $host = parse_url($address, PHP_URL_HOST);
 
