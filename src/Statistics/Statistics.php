@@ -1,14 +1,12 @@
 <?php
 
-namespace UnitPhpSdk\Config;
+namespace UnitPhpSdk\Statistics;
 
 use UnitPhpSdk\Abstract\ApplicationAbstract;
-use UnitPhpSdk\Contracts\{
-    ApplicationsStatisticsInterface,
+use UnitPhpSdk\Contracts\{ApplicationsStatisticsInterface,
     ConnectionsStatisticsInterface,
     RequestsStatisticsInterface,
-    StatisticsInterface
-};
+    StatisticsInterface};
 
 /**
  * This class returns statistics from Nginx Unit
