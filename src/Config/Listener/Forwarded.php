@@ -2,6 +2,7 @@
 
 namespace UnitPhpSdk\Config\Listener;
 
+use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 
 class Forwarded
@@ -43,7 +44,15 @@ class Forwarded
      */
     public function __construct(array $data)
     {
-        $this->parseFromArray($data);
+        if (!array_key_exists('source', $data)) {
+            throw new RequiredKeyException('source');
+        }
+
+        $this->setSource($data['source']);
+
+        if (!empty($data)) {
+            $this->parseFromArray($data);
+        }
     }
 
     /**
@@ -51,12 +60,6 @@ class Forwarded
      */
     private function parseFromArray(array $data): void
     {
-        if (!array_key_exists('source', $data)) {
-            throw new UnitException("Missing required 'source' array key");
-        }
-
-        $this->setSource($data['source']);
-
         if (array_key_exists('client_ip', $data)) {
             $this->setClientIp($data['client_ip']);
         }
