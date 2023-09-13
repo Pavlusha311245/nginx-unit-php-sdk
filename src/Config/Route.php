@@ -3,6 +3,7 @@
 namespace UnitPhpSdk\Config;
 
 use UnitPhpSdk\Config\Routes\RouteBlock;
+use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\RouteInterface;
 use UnitPhpSdk\Traits\HasListeners;
 
@@ -11,7 +12,7 @@ use UnitPhpSdk\Traits\HasListeners;
  *
  * @implements RouteInterface
  */
-class Route implements RouteInterface
+class Route implements RouteInterface, Arrayable
 {
     use HasListeners;
 
@@ -27,14 +28,16 @@ class Route implements RouteInterface
 
     public function __construct(
         private readonly string $_name,
-        $data,
+        $data = [],
         bool                    $single = false
     ) {
-        if ($single) {
-            $this->_routeBlocks[] = new RouteBlock($data);
-        } else {
-            foreach ($data as $routeBlock) {
-                $this->_routeBlocks[] = new RouteBlock($routeBlock);
+        if (!empty($data)) {
+            if ($single) {
+                $this->_routeBlocks[] = new RouteBlock($data);
+            } else {
+                foreach ($data as $routeBlock) {
+                    $this->_routeBlocks[] = new RouteBlock($routeBlock);
+                }
             }
         }
     }
@@ -48,10 +51,31 @@ class Route implements RouteInterface
     }
 
     /**
+     * @param array $routeBlocks
+     */
+    public function setRouteBlocks(array $routeBlocks): void
+    {
+        $this->_routeBlocks = $routeBlocks;
+    }
+
+    /**
      * @inheritDoc
      */
     public function getRouteBlocks(): array
     {
         return $this->_routeBlocks;
+    }
+
+    public function toArray(): array
+    {
+        return $this->getRouteBlocks();
+    }
+
+    /**
+     * @return string|false
+     */
+    public function toJson(): string|false
+    {
+        return json_encode(array_filter($this->toArray(), fn ($item) => !empty($item)));
     }
 }

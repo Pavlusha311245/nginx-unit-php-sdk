@@ -2,34 +2,57 @@
 
 namespace UnitPhpSdk\Config\Routes;
 
-class RouteBlock
+use UnitPhpSdk\Contracts\Arrayable;
+
+/**
+ * @implements Arrayable
+ */
+class RouteBlock implements Arrayable
 {
     /**
-     * @var RouteAction
+     * @var RouteAction|null
      */
-    private RouteAction $_action;
+    private ?RouteAction $_action = null;
 
     /**
-     * @var RouteMatch
+     * @var RouteMatch|null
      */
-    private RouteMatch $_match;
+    private ?RouteMatch $_match = null;
 
-    public function __construct(array $data)
+    public function __construct(array $data = [])
     {
-        $this->_action = new RouteAction($data['action']);
-        if (isset($data['match'])) {
-            $this->_match = new RouteMatch($data['match']);
+        if (!empty($data)) {
+            $this->_action = new RouteAction($data['action']);
+            if (isset($data['match'])) {
+                $this->_match = new RouteMatch($data['match']);
+            }
         }
+    }
+
+    /**
+     * @param RouteMatch|null $match
+     */
+    public function setMatch(?RouteMatch $match): void
+    {
+        $this->_match = $match;
     }
 
     /**
      * Get match
      *
-     * @return RouteMatch
+     * @return RouteMatch|null
      */
-    public function getMatch()
+    public function getMatch(): RouteMatch|null
     {
         return $this->_match;
+    }
+
+    /**
+     * @param RouteAction|null $action
+     */
+    public function setAction(?RouteAction $action): void
+    {
+        $this->_action = $action;
     }
 
     /**
@@ -37,8 +60,16 @@ class RouteBlock
      *
      * @return mixed
      */
-    public function getAction(): mixed
+    public function getAction(): RouteAction
     {
         return $this->_action;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'match' => $this->getMatch()?->toArray(),
+            'action' => $this->getAction()->toArray(),
+        ];
     }
 }
