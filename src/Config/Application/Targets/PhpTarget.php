@@ -16,12 +16,15 @@ class PhpTarget
      *
      * @var string
      */
-    private string $_script;
+    private string $_script = 'index.php';
 
     public function __construct(array $data)
     {
+        if (array_key_exists('script', $data)) {
+            $this->setScript($data['script']);
+        }
+
         $this->setRoot($data['root']);
-        $this->setScript($data['script']);
     }
 
     /**
