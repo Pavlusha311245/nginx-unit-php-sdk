@@ -1,13 +1,16 @@
 # Changelog
 
-## Version 0.5.0 (2023/09/01)
+## Version 0.6.0 (2023/09/13)
 
-* Added ProcessIsolation implementation
-* Added [Upstream](broken-reference) class
-* Added phpstan
-* Updated [RouteAction](broken-reference) and [RouteMatch](broken-reference). Added toArray methods
-* Updated [Config](broken-reference) class
-* Updated [Unit](broken-reference) class
+* Rename method in ListenerPass getPassType() to getType()
+* Added PythonApplication, PerlApplication, WebAssemblyApplication
+* Added traits
+* Updated NodeJsApplication, JavaApplication, GoApplication
+* Updated package namespace from Pavlusha311245\UnitPhpSdk to UnitPhpSdk
+* Update UnitRequest. Replaced curl with guzzle package
+* Moved ListenerPass to Listener\ListenerPass
+* Mark some class as Arrayble
+* Create new namespace Statistics
 
 ***
 

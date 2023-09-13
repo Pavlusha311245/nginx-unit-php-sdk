@@ -12,6 +12,7 @@
 * [Config](basic-usage/config/README.md)
   * [Listeners](basic-usage/config/listeners.md)
   * [Statistics](basic-usage/config/statistics.md)
+  * [Applications](basic-usage/config/applications.md)
 * [Certificates](basic-usage/certificates.md)
 
 ## API Reference
