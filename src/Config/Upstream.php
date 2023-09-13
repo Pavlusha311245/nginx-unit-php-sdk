@@ -4,6 +4,7 @@ namespace UnitPhpSdk\Config;
 
 use OutOfRangeException;
 use UnitPhpSdk\Contracts\UpstreamInterface;
+use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\HasListeners;
 
 /**
@@ -46,11 +47,16 @@ class Upstream implements UpstreamInterface
      * @param string $ip
      * @param int $weight
      * @return void
+     * @throws UnitException
      */
     public function setServer(string $ip, int $weight = 1): void
     {
         if ($weight < 0 || $weight > 1000000) {
             throw new OutOfRangeException('Weight should be between 0 and 1000000');
+        }
+
+        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+            throw new UnitException("{$ip} isn't a valid IP address");
         }
 
         $this->_servers[$ip] = [
