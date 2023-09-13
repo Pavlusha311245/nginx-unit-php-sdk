@@ -16,7 +16,7 @@ use UnitPhpSdk\Contracts\ConfigInterface;
  *
  * @implements ConfigInterface
  */
-class Config implements ConfigInterface
+class Config implements ConfigInterface, Arrayable
 {
     /**
      * Listeners that accept requests
@@ -408,6 +408,54 @@ class Config implements ConfigInterface
     public function getUpstreams(): array
     {
         return $this->_upstreams;
+    }
+
+    /**
+     * @inheritDoc
+     * @throws UnitException
+     */
+    public function uploadUpstream(Upstream $upstream, string $name = ''): bool
+    {
+        if (empty($upstream->getName()) && empty($name)) {
+            throw new UnitException('Name isn\'t be empty');
+        }
+
+        $upstreamName = empty($upstream->getName()) ? $name : $upstream->getName();
+
+        try {
+            $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
+            $this->_unitRequest->setData(json_encode($upstream->toJson()));
+            $this->_unitRequest->send("/config/upstreams/{$upstreamName}");
+        } catch (UnitException $exception) {
+            print_r($exception->getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    public function uploadUpstreamsFromFile(string $path): bool
+    {
+        $fileContent = file_get_contents($path);
+
+        if (!$fileContent) {
+            throw new FileNotFoundException();
+        }
+
+        if (empty(json_decode($fileContent, true))) {
+            throw new UnitException('It\'s not a JSON file');
+        }
+
+        try {
+            $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
+            $this->_unitRequest->setData(json_encode($fileContent));
+            $this->_unitRequest->send('/config/upstreams');
+        } catch (UnitException $exception) {
+            print_r($exception->getMessage());
+            return false;
+        }
+
+        return true;
     }
 
     /**

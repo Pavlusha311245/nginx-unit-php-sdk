@@ -115,6 +115,23 @@ interface ConfigInterface
     public function getUpstreams(): array;
 
     /**
+     * Upload Upstream object to nginx Unit
+     *
+     * @param Upstream $upstream
+     * @param string $name
+     * @return mixed
+     */
+    public function uploadUpstream(Upstream $upstream, string $name): bool;
+
+    /**
+     * Upload all upstreams from file to Nginx Unit
+     *
+     * @param string $path
+     * @return mixed
+     */
+    public function uploadUpstreamsFromFile(string $path): bool;
+
+    /**
      * Setup access log file
      *
      * @param $path
