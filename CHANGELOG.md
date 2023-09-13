@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.6.0 - [In development]
+## v0.6.0 - [2023/09/13] _Release on Programmer's Day. Happy holiday everyone :)_
 
 - Rename method in ListenerPass getPassType() to getType()
 - Added PythonApplication, PerlApplication, WebAssemblyApplication
