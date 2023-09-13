@@ -2,12 +2,16 @@
 
 namespace UnitPhpSdk\Config;
 
+use UnitPhpSdk\Config\Settings\Http;
+
 class Settings
 {
     /**
-     * @var
+     * Fine-tunes handling of HTTP requests from the clients
+     *
+     * @var Http
      */
-    private $_http;
+    private Http $_http;
 
     /**
      * @var string|array

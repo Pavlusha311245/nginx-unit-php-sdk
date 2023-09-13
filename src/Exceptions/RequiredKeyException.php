@@ -4,8 +4,10 @@ namespace UnitPhpSdk\Exceptions;
 
 class RequiredKeyException extends UnitException
 {
-    public function __construct(string $key = "")
+    public function __construct(string ...$keys)
     {
-        parent::__construct("Missing key '{$key}' is required");
+        $keysAsString = implode('\', \'', $keys);
+
+        parent::__construct("Missing keys '{$keysAsString}' is required");
     }
 }

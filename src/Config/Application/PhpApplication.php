@@ -4,6 +4,7 @@ namespace UnitPhpSdk\Config\Application;
 
 use UnitPhpSdk\Abstract\ApplicationAbstract;
 use UnitPhpSdk\Config\Application\Targets\PhpTarget;
+use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Traits\HasTargets;
 
 /**
@@ -106,8 +107,21 @@ class PhpApplication extends ApplicationAbstract
     {
         parent::parseFromArray($data);
 
+        if (!array_key_exists('root', $data) && !array_key_exists('targets', $data)) {
+            throw new RequiredKeyException('root', 'targets');
+        }
+
         if (array_key_exists('root', $data)) {
             $this->setRoot($data['root']);
+        }
+
+        if (array_key_exists('targets', $data)) {
+            $targets = [];
+            foreach ($data['targets'] as $targetName => $targetData) {
+                $targets[$targetName] = new PhpTarget($targetData);
+            }
+
+            $this->setTargets($targets);
         }
 
         if (array_key_exists('index', $data)) {
@@ -120,15 +134,6 @@ class PhpApplication extends ApplicationAbstract
 
         if (array_key_exists('options', $data)) {
             $this->setOptions($data['options']);
-        }
-
-        if (array_key_exists('targets', $data)) {
-            $targets = [];
-            foreach ($data['targets'] as $targetName => $targetData) {
-                $targets[$targetName] = new PhpTarget($targetData);
-            }
-
-            $this->setTargets($targets);
         }
     }
 

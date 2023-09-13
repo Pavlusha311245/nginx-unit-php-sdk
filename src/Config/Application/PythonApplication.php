@@ -3,6 +3,7 @@
 namespace UnitPhpSdk\Config\Application;
 
 use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Config\Application\Targets\PythonTarget;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\HasTargets;
@@ -147,11 +148,23 @@ class PythonApplication extends ApplicationAbstract
     {
         parent::parseFromArray($data);
 
-        if (!array_key_exists('module', $data)) {
-            throw new RequiredKeyException('module');
+        if (!array_key_exists('module', $data) && !array_key_exists('targets', $data)) {
+            throw new RequiredKeyException('module', 'targets');
         }
 
-        $this->setModule($data['module']);
+        if (array_key_exists('module', $data)) {
+            $this->setModule($data['module']);
+        }
+
+        if (array_key_exists('targets', $data)) {
+            $targets = [];
+
+            foreach ($data['targets'] as $targetName => $targetValues) {
+                $targets[$targetName] = new PythonTarget($targetValues);
+            }
+
+            $this->setTargets($targets);
+        }
 
         if (array_key_exists('callable', $data)) {
             $this->setCallable($data['callable']);
@@ -171,10 +184,6 @@ class PythonApplication extends ApplicationAbstract
 
         if (array_key_exists('protocol', $data)) {
             $this->setProtocol($data['protocol']);
-        }
-
-        if (array_key_exists('targets', $data)) {
-            $this->setTargets($data['targets']);
         }
 
         if (array_key_exists('thread_stack_size', $data)) {
