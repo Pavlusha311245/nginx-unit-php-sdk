@@ -2,14 +2,15 @@
 
 namespace UnitPhpSdk\Statistics;
 
+use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\RequestsStatisticsInterface;
 
 /**
  * @readonly RequestsStatistics
- * @implements RequestsStatisticsInterface
+ * @implements RequestsStatisticsInterface, Arrayable
  * @final
  */
-final readonly class RequestsStatistics implements RequestsStatisticsInterface
+final readonly class RequestsStatistics implements RequestsStatisticsInterface, Arrayable
 {
     public function __construct(private array $_data)
     {
@@ -19,16 +20,16 @@ final readonly class RequestsStatistics implements RequestsStatisticsInterface
     /**
      * @inheritDoc
      */
-    public function getData(): array
+    public function getTotalRequests(): int
     {
-        return $this->_data;
+        return $this->_data['total'];
     }
 
     /**
      * @inheritDoc
      */
-    public function getTotalRequests(): int
+    public function toArray(): array
     {
-        return $this->_data['total'];
+        return $this->_data;
     }
 }

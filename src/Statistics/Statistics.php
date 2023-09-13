@@ -3,7 +3,7 @@
 namespace UnitPhpSdk\Statistics;
 
 use UnitPhpSdk\Abstract\ApplicationAbstract;
-use UnitPhpSdk\Contracts\{ApplicationsStatisticsInterface,
+use UnitPhpSdk\Contracts\{ApplicationStatisticsInterface,
     ConnectionsStatisticsInterface,
     RequestsStatisticsInterface,
     StatisticsInterface};
@@ -27,7 +27,7 @@ final class Statistics implements StatisticsInterface
     private RequestsStatisticsInterface $_requests;
 
     /**
-     * @var array|ApplicationsStatistics[]
+     * @var array|ApplicationStatistics[]
      */
     private array $_applications;
 
@@ -35,7 +35,7 @@ final class Statistics implements StatisticsInterface
     {
         $this->_connections = new ConnectionsStatistics($data['connections']);
         $this->_requests = new RequestsStatistics($data['requests']);
-        $this->_applications = array_map(fn ($item) => new ApplicationsStatistics($item), $data['applications']);
+        $this->_applications = array_map(fn ($item) => new ApplicationStatistics($item), $data['applications']);
     }
 
     /**
@@ -65,7 +65,7 @@ final class Statistics implements StatisticsInterface
     /**
      * @inheritDoc
      */
-    public function getApplicationStatistics(ApplicationAbstract|string $application): ApplicationsStatisticsInterface
+    public function getApplicationStatistics(ApplicationAbstract|string $application): ApplicationStatisticsInterface
     {
         if (is_string($application)) {
             return $this->_applications[$application];

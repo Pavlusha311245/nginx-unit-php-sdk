@@ -5,13 +5,6 @@ namespace UnitPhpSdk\Contracts;
 interface ConnectionsStatisticsInterface
 {
     /**
-     * Return all connections statistics
-     *
-     * @return array
-     */
-    public function getData(): array;
-
-    /**
      * Get count of idle connection
      *
      * @return int

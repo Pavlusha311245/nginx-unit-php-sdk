@@ -2,26 +2,19 @@
 
 namespace UnitPhpSdk\Statistics;
 
-use UnitPhpSdk\Contracts\ApplicationsStatisticsInterface;
+use UnitPhpSdk\Contracts\ApplicationStatisticsInterface;
+use UnitPhpSdk\Contracts\Arrayable;
 
 /**
- * @readonly ApplicationsStatistics
- * @implements ApplicationsStatisticsInterface
+ * @readonly ApplicationStatistics
+ * @implements ApplicationStatisticsInterface
  * @final
  */
-final readonly class ApplicationsStatistics implements ApplicationsStatisticsInterface
+final readonly class ApplicationStatistics implements ApplicationStatisticsInterface, Arrayable
 {
     public function __construct(private array $_data)
     {
         //
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getData(): array
-    {
-        return $this->_data;
     }
 
     /**
@@ -70,5 +63,13 @@ final readonly class ApplicationsStatistics implements ApplicationsStatisticsInt
     public function getIdleProcesses(): int
     {
         return $this->_data['processes']['idle'];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toArray(): array
+    {
+        return $this->_data;
     }
 }

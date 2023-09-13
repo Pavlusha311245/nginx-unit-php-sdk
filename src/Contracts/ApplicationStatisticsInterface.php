@@ -2,15 +2,8 @@
 
 namespace UnitPhpSdk\Contracts;
 
-interface ApplicationsStatisticsInterface
+interface ApplicationStatisticsInterface
 {
-    /**
-     * Return all application statistics
-     *
-     * @return array
-     */
-    public function getData(): array;
-
     /**
      * Get array of all application requests
      *
