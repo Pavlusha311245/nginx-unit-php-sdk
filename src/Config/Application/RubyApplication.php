@@ -6,6 +6,9 @@ use UnitPhpSdk\Abstract\ApplicationAbstract;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Traits\HasThreads;
 
+/**
+ * @extends ApplicationAbstract
+ */
 class RubyApplication extends ApplicationAbstract
 {
     use HasThreads;

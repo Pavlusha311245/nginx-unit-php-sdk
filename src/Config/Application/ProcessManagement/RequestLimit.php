@@ -4,6 +4,9 @@ namespace UnitPhpSdk\Config\Application\ProcessManagement;
 
 use UnitPhpSdk\Contracts\Arrayable;
 
+/**
+ * @implements Arrayable
+ */
 class RequestLimit implements Arrayable
 {
     /**

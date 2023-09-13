@@ -6,6 +6,9 @@ use OutOfRangeException;
 use UnitPhpSdk\Contracts\UpstreamInterface;
 use UnitPhpSdk\Traits\HasListeners;
 
+/**
+ * @implements UpstreamInterface
+ */
 class Upstream implements UpstreamInterface
 {
     use HasListeners;

@@ -4,6 +4,10 @@ namespace UnitPhpSdk\Config;
 
 use UnitPhpSdk\Contracts\ConnectionsStatisticsInterface;
 
+/**
+ * @readonly ConnectionsStatistics
+ * @implements ConnectionsStatisticsInterface
+ */
 readonly class ConnectionsStatistics implements ConnectionsStatisticsInterface
 {
     public function __construct(private array $_data)

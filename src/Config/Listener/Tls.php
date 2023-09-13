@@ -7,15 +7,27 @@ use UnitPhpSdk\Exceptions\UnitException;
 
 class Tls
 {
+    /**
+     * Refers to one or more certificate bundles uploaded earlier, enabling secure communication via the listener.
+     *
+     * @var string|array
+     */
     private string|array $_certificate;
 
+    /**
+     * Defines the OpenSSL configuration commands to be set for the listener.
+     *
+     * @var array
+     */
     private array $_conf_commands = [];
 
+    /**
+     * Configures the TLS session cache and tickets for the listener.
+     *
+     * @var array
+     */
     private array $_session = [];
 
-    /**
-     * @throws UnitException
-     */
     public function __construct(array $data = [])
     {
         $this->parseFromArray($data);

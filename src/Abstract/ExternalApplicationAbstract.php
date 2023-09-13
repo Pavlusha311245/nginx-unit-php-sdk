@@ -6,6 +6,9 @@ use UnitPhpSdk\Abstract\ApplicationAbstract;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 
+/**
+ * @implements ApplicationAbstract
+ */
 class ExternalApplicationAbstract extends ApplicationAbstract
 {
     protected string $_type = 'external';

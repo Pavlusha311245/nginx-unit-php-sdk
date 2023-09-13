@@ -6,11 +6,15 @@ use UnitPhpSdk\Config\Statistics;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Http\UnitRequest;
-use UnitPhpSdk\Contracts\CertificateInterface;
-use UnitPhpSdk\Contracts\UnitInterface;
+use UnitPhpSdk\Contracts\{
+    CertificateInterface,
+    UnitInterface
+};
 
 /**
  * This is main class of Nginx Unit manipulation
+ *
+ * @implements UnitInterface
  */
 class Unit implements UnitInterface
 {

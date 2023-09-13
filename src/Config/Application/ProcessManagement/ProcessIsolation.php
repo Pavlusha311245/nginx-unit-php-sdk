@@ -12,6 +12,9 @@ use UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation\{
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Contracts\Arrayable;
 
+/**
+ * @implements Arrayable
+ */
 class ProcessIsolation implements Arrayable
 {
     /**

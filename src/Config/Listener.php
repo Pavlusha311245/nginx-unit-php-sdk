@@ -2,9 +2,11 @@
 
 namespace UnitPhpSdk\Config;
 
-use UnitPhpSdk\Config\Listener\Forwarded;
-use UnitPhpSdk\Config\Listener\ListenerPass;
-use UnitPhpSdk\Config\Listener\Tls;
+use UnitPhpSdk\Config\Listener\{
+    Forwarded,
+    ListenerPass,
+    Tls
+};
 use UnitPhpSdk\Exceptions\UnitException;
 
 /**
@@ -185,9 +187,9 @@ class Listener
     /**
      * Return Listener as JSON
      *
-     * @return string
+     * @return string|false
      */
-    public function toJson(): string
+    public function toJson(): string|false
     {
         return json_encode($this->toArray());
     }

@@ -9,6 +9,9 @@ use UnitPhpSdk\Traits\HasTargets;
 use UnitPhpSdk\Traits\HasThreads;
 use UnitPhpSdk\Traits\HasThreadStackSize;
 
+/**
+ * @extends ApplicationAbstract
+ */
 class PythonApplication extends ApplicationAbstract
 {
     use HasThreads;

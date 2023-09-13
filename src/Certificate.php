@@ -6,6 +6,8 @@ use UnitPhpSdk\Contracts\CertificateInterface;
 
 /**
  * Certificate class
+ *
+ * @implements CertificateInterface
  */
 readonly class Certificate implements CertificateInterface
 {

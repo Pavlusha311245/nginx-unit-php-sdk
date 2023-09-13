@@ -2,6 +2,9 @@
 
 namespace UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 
+/**
+ * @readonly Automount
+ */
 readonly class Automount
 {
     public function __construct(private array $_data)

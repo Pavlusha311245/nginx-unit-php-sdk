@@ -6,12 +6,36 @@ use UnitPhpSdk\Exceptions\UnitException;
 
 class Forwarded
 {
+    /**
+     * Defines address-based patterns for trusted addresses.
+     * Replacement occurs only if the source IP of the request is a match.
+     * A special case here is the "unix" string; it matches any UNIX domain sockets.
+     *
+     * @var string|array
+     */
     private string|array $_source;
 
+    /**
+     * Names the HTTP header fields to expect in the request.
+     * They should use the X-Forwarded-For format where the value is a comma- or space-separated list of IPv4s or IPv6s.
+     *
+     * @var string|null
+     */
     private ?string $_client_ip;
 
+    /**
+     * Defines the relevant HTTP header field to look for in the request.
+     * Unit expects it to follow the X-Forwarded-Proto notation, with the field value itself being http, https, or on.
+     *
+     * @var string|null
+     */
     private ?string $_protocol;
 
+    /**
+     * Controls how the client_ip fields are traversed
+     *
+     * @var bool
+     */
     private bool $_recursive = false;
 
     /**

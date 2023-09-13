@@ -4,6 +4,10 @@ namespace UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 
 use UnitPhpSdk\Contracts\Arrayable;
 
+/**
+ * @readonly Namespaces
+ * @implements Arrayable
+ */
 readonly class Namespaces implements Arrayable
 {
     private bool $_cgroup;

@@ -8,6 +8,8 @@ use UnitPhpSdk\Traits\HasListeners;
 
 /**
  * This class presents "routes" section from config
+ *
+ * @implements RouteInterface
  */
 class Route implements RouteInterface
 {

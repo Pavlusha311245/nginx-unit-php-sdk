@@ -5,11 +5,15 @@ namespace UnitPhpSdk\Config;
 class AccessLog
 {
     /**
+     * Pathname of the access log file.
+     *
      * @var string|mixed|null
      */
     private ?string $_path;
 
     /**
+     * Log format. Besides arbitrary text, can contain any variables Unit supports
+     *
      * @var string|mixed|null
      */
     private ?string $_format;

@@ -12,6 +12,8 @@ use UnitPhpSdk\Contracts\ConfigInterface;
 
 /**
  * This class contains Nginx Unit config data
+ *
+ * @implements ConfigInterface
  */
 class Config implements ConfigInterface
 {

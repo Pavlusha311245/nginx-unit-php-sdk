@@ -4,6 +4,10 @@ namespace UnitPhpSdk\Config;
 
 use UnitPhpSdk\Contracts\ApplicationsStatisticsInterface;
 
+/**
+ * @readonly ApplicationsStatistics
+ * @implements ApplicationsStatisticsInterface
+ */
 readonly class ApplicationsStatistics implements ApplicationsStatisticsInterface
 {
     public function __construct(private array $_data)

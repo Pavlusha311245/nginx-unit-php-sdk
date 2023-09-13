@@ -10,6 +10,9 @@ use UnitPhpSdk\Traits\{
     HasThreadStackSize
 };
 
+/**
+ * @extends ApplicationAbstract
+ */
 class PerlApplication extends ApplicationAbstract
 {
     use HasThreads;

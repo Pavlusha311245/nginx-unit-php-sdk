@@ -6,6 +6,9 @@ use UnitPhpSdk\Abstract\ApplicationAbstract;
 use UnitPhpSdk\Config\Application\Targets\PhpTarget;
 use UnitPhpSdk\Traits\HasTargets;
 
+/**
+ * @extends ApplicationAbstract
+ */
 class PhpApplication extends ApplicationAbstract
 {
     use HasTargets;

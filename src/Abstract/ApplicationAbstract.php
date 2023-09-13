@@ -4,12 +4,16 @@ namespace UnitPhpSdk\Abstract;
 
 use UnitPhpSdk\Config\Application\{ProcessManagement\ApplicationProcess,
     ProcessManagement\ProcessIsolation,
-    ProcessManagement\RequestLimit};
+    ProcessManagement\RequestLimit
+};
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Http\UnitRequest;
 use UnitPhpSdk\Contracts\{ApplicationControlInterface, ApplicationInterface, Arrayable};
 use UnitPhpSdk\Traits\HasListeners;
 
+/**
+ * @implements ApplicationInterface, ApplicationControlInterface, Arrayable
+ */
 abstract class ApplicationAbstract implements ApplicationInterface, ApplicationControlInterface, Arrayable
 {
     use HasListeners;

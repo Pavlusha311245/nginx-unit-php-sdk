@@ -6,6 +6,9 @@ use UnitPhpSdk\Abstract\ApplicationAbstract;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 
+/**
+ * @extends ApplicationAbstract
+ */
 class WebAssemblyApplication extends ApplicationAbstract
 {
     protected string $_type = 'wasm';

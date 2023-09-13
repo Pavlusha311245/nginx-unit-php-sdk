@@ -8,6 +8,9 @@ use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\HasThreads;
 use UnitPhpSdk\Traits\HasThreadStackSize;
 
+/**
+ * @extends ApplicationAbstract
+ */
 class JavaApplication extends ApplicationAbstract
 {
     use HasThreads;

@@ -4,6 +4,9 @@ namespace UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 
 use UnitPhpSdk\Exceptions\UnitException;
 
+/**
+ * @readonly Cgroup
+ */
 readonly class Cgroup
 {
     private string $_path;
