@@ -30,7 +30,6 @@ _THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
 ### Pre-requirements
 
 * [PHP](https://www.php.net/) >= 8.2
-* [PHP curl extension](https://www.php.net/manual/en/book.curl.php)
 * [Composer](https://getcomposer.org/) >= 2
 * [Nginx unit](https://unit.nginx.org/installation/) >= 1.30.0
 

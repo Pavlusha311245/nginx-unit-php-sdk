@@ -2,6 +2,8 @@
 
 namespace UnitPhpSdk\Exceptions;
 
+use UnitPhpSdk\Exceptions\UnitException;
+
 class RequiredKeyException extends UnitException
 {
     public function __construct(string ...$keys)
