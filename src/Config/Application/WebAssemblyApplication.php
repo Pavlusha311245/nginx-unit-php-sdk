@@ -2,14 +2,14 @@
 
 namespace UnitPhpSdk\Config\Application;
 
-use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 
 /**
- * @extends ApplicationAbstract
+ * @extends AbstractApplication
  */
-class WebAssemblyApplication extends ApplicationAbstract
+class WebAssemblyApplication extends AbstractApplication
 {
     protected string $_type = 'wasm';
 

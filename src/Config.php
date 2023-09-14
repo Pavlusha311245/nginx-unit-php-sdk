@@ -2,7 +2,7 @@
 
 namespace UnitPhpSdk;
 
-use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Upstream};
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\FileNotFoundException;
@@ -108,7 +108,7 @@ class Config implements ConfigInterface, Arrayable
                     'python' => new Application\PythonApplication($appData),
                     'wasm' => new Application\WebAssemblyApplication($appData),
                     'ruby' => new Application\RubyApplication($appData),
-                    'external' => $this->isNodeJsApplication($appData) ? new Application\NodeJsApplication($appData) : new Application\GoApplication($appData),
+                    'external' => $this->isNodeJsApplication($appData) ? new Application\NodeJsExternalApplication($appData) : new Application\GoExternalApplication($appData),
                 };
                 $this->_applications[$appName]->setName($appName);
                 $this->_applications[$appName]->setUnitRequest($this->_unitRequest);
@@ -117,7 +117,7 @@ class Config implements ConfigInterface, Arrayable
     }
 
     /**
-     * Detect if NodeJsApplication
+     * Detect if NodeJsExternalApplication
      *
      * @param $appData
      * @return bool
@@ -279,14 +279,14 @@ class Config implements ConfigInterface, Arrayable
      * Get application from config by name
      *
      * @param $applicationName
-     * @return ApplicationAbstract|null
+     * @return AbstractApplication|null
      */
-    public function getApplication($applicationName): ?ApplicationAbstract
+    public function getApplication($applicationName): ?AbstractApplication
     {
         return $this->_applications[$applicationName] ?? null;
     }
 
-    public function uploadApplication(ApplicationAbstract $application, string $name = ''): bool
+    public function uploadApplication(AbstractApplication $application, string $name = ''): bool
     {
         if (empty($application->getName()) && empty($name)) {
             throw new UnitException('Application name not specified');
@@ -339,7 +339,7 @@ class Config implements ConfigInterface, Arrayable
      *
      * @throws UnitException
      */
-    public function removeApplication(ApplicationAbstract|string $application): bool
+    public function removeApplication(AbstractApplication|string $application): bool
     {
         $this->_unitRequest->setMethod(HttpMethodsEnum::DELETE->value);
 

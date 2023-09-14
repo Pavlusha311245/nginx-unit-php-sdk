@@ -2,16 +2,16 @@
 
 namespace UnitPhpSdk\Config\Application;
 
-use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\HasThreads;
 use UnitPhpSdk\Traits\HasThreadStackSize;
 
 /**
- * @extends ApplicationAbstract
+ * @extends AbstractApplication
  */
-class JavaApplication extends ApplicationAbstract
+class JavaApplication extends AbstractApplication
 {
     use HasThreads;
     use HasThreadStackSize;

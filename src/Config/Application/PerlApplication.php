@@ -2,7 +2,7 @@
 
 namespace UnitPhpSdk\Config\Application;
 
-use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\{
@@ -11,9 +11,9 @@ use UnitPhpSdk\Traits\{
 };
 
 /**
- * @extends ApplicationAbstract
+ * @extends AbstractApplication
  */
-class PerlApplication extends ApplicationAbstract
+class PerlApplication extends AbstractApplication
 {
     use HasThreads;
     use HasThreadStackSize;

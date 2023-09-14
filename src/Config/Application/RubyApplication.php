@@ -2,14 +2,14 @@
 
 namespace UnitPhpSdk\Config\Application;
 
-use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Traits\HasThreads;
 
 /**
- * @extends ApplicationAbstract
+ * @extends AbstractApplication
  */
-class RubyApplication extends ApplicationAbstract
+class RubyApplication extends AbstractApplication
 {
     use HasThreads;
 

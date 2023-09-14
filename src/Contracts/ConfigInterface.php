@@ -2,11 +2,13 @@
 
 namespace UnitPhpSdk\Contracts;
 
-use UnitPhpSdk\Abstract\ApplicationAbstract;
-use UnitPhpSdk\Config\AccessLog;
-use UnitPhpSdk\Config\Listener;
-use UnitPhpSdk\Config\Route;
-use UnitPhpSdk\Config\Upstream;
+use UnitPhpSdk\Abstract\AbstractApplication;
+use UnitPhpSdk\Config\{
+    AccessLog,
+    Listener,
+    Route,
+    Upstream
+};
 
 interface ConfigInterface
 {
@@ -79,18 +81,18 @@ interface ConfigInterface
 
     /**
      * @param $applicationName
-     * @return ApplicationAbstract|null
+     * @return AbstractApplication|null
      */
-    public function getApplication($applicationName): ?ApplicationAbstract;
+    public function getApplication($applicationName): ?AbstractApplication;
 
     /**
      * Upload application to Nginx Unit
      *
-     * @param ApplicationAbstract $application
+     * @param AbstractApplication $application
      * @param string $name
      * @return bool
      */
-    public function uploadApplication(ApplicationAbstract $application, string $name = ''): bool;
+    public function uploadApplication(AbstractApplication $application, string $name = ''): bool;
 
     /**
      * Upload application to Nginx Unit from file
@@ -102,10 +104,10 @@ interface ConfigInterface
     public function uploadApplicationFromFile(string $path, string $name): bool;
 
     /**
-     * @param ApplicationAbstract|string $application
+     * @param AbstractApplication|string $application
      * @return bool
      */
-    public function removeApplication(ApplicationAbstract|string $application): bool;
+    public function removeApplication(AbstractApplication|string $application): bool;
 
     /**
      * Get all upstreams

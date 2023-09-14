@@ -2,7 +2,7 @@
 
 namespace UnitPhpSdk\Statistics;
 
-use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Contracts\{ApplicationStatisticsInterface,
     ConnectionsStatisticsInterface,
     RequestsStatisticsInterface,
@@ -65,7 +65,7 @@ final class Statistics implements StatisticsInterface
     /**
      * @inheritDoc
      */
-    public function getApplicationStatistics(ApplicationAbstract|string $application): ApplicationStatisticsInterface
+    public function getApplicationStatistics(AbstractApplication|string $application): ApplicationStatisticsInterface
     {
         if (is_string($application)) {
             return $this->_applications[$application];

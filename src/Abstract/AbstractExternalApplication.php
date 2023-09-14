@@ -2,14 +2,14 @@
 
 namespace UnitPhpSdk\Abstract;
 
-use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 
 /**
- * @implements ApplicationAbstract
+ * @implements AbstractApplication
  */
-class ExternalApplicationAbstract extends ApplicationAbstract
+class AbstractExternalApplication extends AbstractApplication
 {
     protected string $_type = 'external';
 

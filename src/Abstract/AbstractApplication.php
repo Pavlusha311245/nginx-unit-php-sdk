@@ -14,7 +14,7 @@ use UnitPhpSdk\Traits\HasListeners;
 /**
  * @implements ApplicationInterface, ApplicationControlInterface, Arrayable
  */
-abstract class ApplicationAbstract implements ApplicationInterface, ApplicationControlInterface, Arrayable
+abstract class AbstractApplication implements ApplicationInterface, ApplicationControlInterface, Arrayable
 {
     use HasListeners;
 

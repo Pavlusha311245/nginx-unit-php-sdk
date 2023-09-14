@@ -2,15 +2,15 @@
 
 namespace UnitPhpSdk\Config\Application;
 
-use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Config\Application\Targets\PhpTarget;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Traits\HasTargets;
 
 /**
- * @extends ApplicationAbstract
+ * @extends AbstractApplication
  */
-class PhpApplication extends ApplicationAbstract
+class PhpApplication extends AbstractApplication
 {
     use HasTargets;
 

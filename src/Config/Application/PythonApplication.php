@@ -2,7 +2,7 @@
 
 namespace UnitPhpSdk\Config\Application;
 
-use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Config\Application\Targets\PythonTarget;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
@@ -11,9 +11,9 @@ use UnitPhpSdk\Traits\HasThreads;
 use UnitPhpSdk\Traits\HasThreadStackSize;
 
 /**
- * @extends ApplicationAbstract
+ * @extends AbstractApplication
  */
-class PythonApplication extends ApplicationAbstract
+class PythonApplication extends AbstractApplication
 {
     use HasThreads;
     use HasThreadStackSize;
