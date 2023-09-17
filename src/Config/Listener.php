@@ -34,7 +34,8 @@ class Listener
         string                  $pass,
         private ?Tls            $_tls = null,
         private ?Forwarded      $_forwarded = null,
-    ) {
+    )
+    {
         $this->parsePort();
         $this->generateLink();
 
@@ -60,8 +61,20 @@ class Listener
     {
         $separatedListener = explode(':', $this->_listener);
 
-        $this->_link = $separatedListener[0] == '*' ?
-            "0.0.0.0:{$separatedListener[1]}" : $this->_listener;
+        $host = $separatedListener[0] == '*' ? "0.0.0.0:{$separatedListener[1]}" : $this->_listener;
+        $secure = $this->isSecure() ? 'https' : 'http';
+
+        $this->_link = "{$secure}://{$host}";
+    }
+
+    /**
+     * Check if listener has certificate
+     *
+     * @return bool
+     */
+    public function isSecure(): bool
+    {
+        return !empty($this->_tls);
     }
 
     /**
