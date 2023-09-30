@@ -71,7 +71,7 @@ class UnitRequest
         ];
 
         if (!empty($this->_data)) {
-            $requestOptions['form_params'] = $this->_data;
+            $requestOptions['json'] = $this->_data;
         }
 
         try {

@@ -186,14 +186,16 @@ class Unit implements UnitInterface
             throw new FileNotFoundException();
         }
 
-        if (!json_decode($fileContent, true)) {
+        $data = json_decode($fileContent, true);
+
+        if (!$data) {
             throw new UnitException('File is not JSON format');
         }
 
         try {
             $request = new UnitRequest($this->socket, $this->address);
             $request->setMethod('PUT');
-            $request->setData($fileContent);
+            $request->setData($data);
             $result = $request->send("/config");
         } catch (UnitException $exception) {
             print_r($exception->getMessage());

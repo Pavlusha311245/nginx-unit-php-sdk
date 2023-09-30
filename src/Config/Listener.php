@@ -57,7 +57,7 @@ class Listener
      *
      * @return void
      */
-    private function generateLink()
+    private function generateLink(): void
     {
         $separatedListener = explode(':', $this->_listener);
 
