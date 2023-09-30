@@ -29,7 +29,8 @@
   "require": {
     "php": ">=8.2",
     "friendsofphp/php-cs-fixer": "^3.21",
-    "guzzlehttp/guzzle": "^7.0"
+    "guzzlehttp/guzzle": "^7.0",
+    "ext-curl": "*"
   },
   "require-dev": {
     "pestphp/pest": "^2.8",
@@ -38,7 +39,10 @@
   "autoload": {
     "psr-4": {
       "UnitPhpSdk\\": "src/"
-    }
+    },
+    "files": [
+      "src/helpers.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
