@@ -2,6 +2,7 @@
 
 namespace UnitPhpSdk;
 
+use GuzzleHttp\Exception\GuzzleException;
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Upstream};
 use UnitPhpSdk\Enums\HttpMethodsEnum;
@@ -482,7 +483,12 @@ class Config implements ConfigInterface, Arrayable
 
     public function getAccessLog(): ?AccessLog
     {
-        $result = $this->_unitRequest->send('/config/access_log');
+        try {
+            $result = $this->_unitRequest->send('/config/access_log');
+        } catch (GuzzleException $exception)
+        {
+            return null;
+        }
 
         return new AccessLog($result);
     }
