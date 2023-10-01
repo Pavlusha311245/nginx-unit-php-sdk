@@ -41,8 +41,8 @@ class Unit implements UnitInterface
      * @throws UnitException
      */
     public function __construct(
-        private readonly string $socket,
-        private readonly string $address
+        private readonly string $address,
+        private readonly ?string $socket = null
     ) {
         $this->loadConfig();
     }
@@ -66,9 +66,9 @@ class Unit implements UnitInterface
      */
     private function loadConfig(): void
     {
-        $request = new UnitRequest($this->socket, $this->address);
+        $request = new UnitRequest($this->address, $this->socket);
         $result = $request->send('/config', false);
-        $this->_config = new Config($result, new UnitRequest($this->socket, $this->address));
+        $this->_config = new Config($result, new UnitRequest($this->address, $this->socket));
     }
 
     /**
@@ -95,7 +95,7 @@ class Unit implements UnitInterface
         }
 
         try {
-            $request = new UnitRequest($this->socket, $this->address);
+            $request = new UnitRequest($this->address, $this->socket);
             $request->setMethod('PUT');
             $request->setData($fileContent);
             $result = $request->send("/certificates/{$certificateName}");
@@ -113,7 +113,7 @@ class Unit implements UnitInterface
     {
         // TODO: need to review
         try {
-            $request = new UnitRequest($this->socket, $this->address);
+            $request = new UnitRequest($this->address, $this->socket);
             $request->setMethod('DELETE');
             $result = $request->send("/certificates/{$certificateName}");
         } catch (UnitException $exception) {
@@ -125,7 +125,7 @@ class Unit implements UnitInterface
 
     private function loadCertificates(): void
     {
-        $request = new UnitRequest($this->socket, $this->address);
+        $request = new UnitRequest($this->address, $this->socket);
         $result = $request->send('/certificates');
         foreach ($result as $key => $value) {
             $this->_certificates[$key] = new Certificate($value, $key);
@@ -160,7 +160,7 @@ class Unit implements UnitInterface
 
     private function loadStatistics(): void
     {
-        $result = (new UnitRequest($this->socket, $this->address))->send('/status');
+        $result = (new UnitRequest($this->address, $this->socket))->send('/status');
         $this->_statistics = new Statistics($result);
     }
 
@@ -193,7 +193,7 @@ class Unit implements UnitInterface
         }
 
         try {
-            $request = new UnitRequest($this->socket, $this->address);
+            $request = new UnitRequest($this->address, $this->socket);
             $request->setMethod('PUT');
             $request->setData($data);
             $result = $request->send("/config");
@@ -211,7 +211,7 @@ class Unit implements UnitInterface
     public function removeConfig(): bool
     {
         try {
-            $request = new UnitRequest($this->socket, $this->address);
+            $request = new UnitRequest($this->address, $this->socket);
             $request->setMethod(HttpMethodsEnum::DELETE->value);
             $request->send('/config');
         } catch (UnitException $exception) {

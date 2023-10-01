@@ -20,17 +20,25 @@ class UnitRequest
     /**
      * Constructor
      *
-     * @param string $socket
      * @param string $address
+     * @param string|null $socket
      */
     public function __construct(
-        private readonly string $socket,
-        string                  $address
-    ) {
+        string                   $address,
+        private readonly ?string $socket = null
+    )
+    {
         $scheme = parse_url($address, PHP_URL_SCHEME);
         $host = parse_url($address, PHP_URL_HOST);
+        $port = parse_url($address, PHP_URL_PORT);
 
-        $this->_address = "{$scheme}://{$host}";
+        $address = "{$scheme}://{$host}";
+
+        if ($port) {
+            $address .= ":{$port}";
+        }
+
+        $this->_address = $address;
     }
 
     /**
@@ -64,11 +72,11 @@ class UnitRequest
             'base_uri' => $this->_address
         ]);
 
-        $requestOptions = [
-            'curl' => [
-                CURLOPT_UNIX_SOCKET_PATH => $this->socket
-            ]
-        ];
+        $requestOptions = [];
+
+        if (!empty($this->socket)) {
+            $requestOptions['curl'] = [CURLOPT_UNIX_SOCKET_PATH => $this->socket];
+        }
 
         if (!empty($this->_data)) {
             $requestOptions['json'] = $this->_data;
