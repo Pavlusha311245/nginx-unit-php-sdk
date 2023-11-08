@@ -19,7 +19,7 @@ class PythonApplication extends AbstractApplication
     use HasThreadStackSize;
     use HasTargets;
 
-    protected string $_type = 'python';
+    public const TYPE = 'python';
 
     /**
      * app’s module name

@@ -18,7 +18,7 @@ class PerlApplication extends AbstractApplication
     use HasThreads;
     use HasThreadStackSize;
 
-    protected string $_type = 'perl';
+    public const TYPE = 'perl';
 
     /**
      * PSGI script path

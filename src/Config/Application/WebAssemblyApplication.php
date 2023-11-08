@@ -11,7 +11,7 @@ use UnitPhpSdk\Exceptions\UnitException;
  */
 class WebAssemblyApplication extends AbstractApplication
 {
-    protected string $_type = 'wasm';
+    public const TYPE = 'wasm';
 
     /**
      * WebAssembly module pathname, including the .wasm extension
@@ -287,6 +287,9 @@ class WebAssemblyApplication extends AbstractApplication
         }
     }
 
+    /**
+     * @return array
+     */
     public function toArray(): array
     {
         return array_merge(

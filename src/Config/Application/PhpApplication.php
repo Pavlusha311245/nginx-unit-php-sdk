@@ -14,7 +14,7 @@ class PhpApplication extends AbstractApplication
 {
     use HasTargets;
 
-    protected string $_type = 'php';
+    public const TYPE = 'php';
 
     /**
      * @var string

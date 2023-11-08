@@ -16,7 +16,7 @@ class JavaApplication extends AbstractApplication
     use HasThreads;
     use HasThreadStackSize;
 
-    protected string $_type = 'java';
+    public const TYPE = 'java';
 
     /**
      * Pathname of the application’s .war file (packaged or unpackaged)

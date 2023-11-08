@@ -13,6 +13,11 @@ class RubyApplication extends AbstractApplication
 {
     use HasThreads;
 
+    public const TYPE = 'ruby';
+
+    /**
+     * @var string
+     */
     private string $_script;
 
     /**
