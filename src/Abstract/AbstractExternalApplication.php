@@ -7,11 +7,11 @@ use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 
 /**
- * @implements AbstractApplication
+ * @extends  AbstractApplication
  */
 class AbstractExternalApplication extends AbstractApplication
 {
-    protected string $_type = 'external';
+    public const TYPE = 'external';
 
     /**
      * Pathname of the app, absolute or relative to working_directory
@@ -59,6 +59,14 @@ class AbstractExternalApplication extends AbstractApplication
         $this->_arguments = $arguments;
     }
 
+    /**
+     * Parse data from array
+     *
+     * @param array $data
+     * @return void
+     * @throws RequiredKeyException
+     * @throws UnitException
+     */
     final public function parseFromArray(array $data): void
     {
         parent::parseFromArray($data);

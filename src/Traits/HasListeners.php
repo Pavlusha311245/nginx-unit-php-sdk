@@ -6,6 +6,11 @@ use UnitPhpSdk\Config\Listener;
 
 trait HasListeners
 {
+    /**
+     * Array of listeners
+     *
+     * @var array
+     */
     private array $_listeners = [];
 
     /**

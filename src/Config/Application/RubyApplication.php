@@ -14,6 +14,10 @@ class RubyApplication extends AbstractApplication
     use HasThreads;
 
     private string $_script;
+
+    /**
+     * @var string
+     */
     private string $_hooks;
 
     /**

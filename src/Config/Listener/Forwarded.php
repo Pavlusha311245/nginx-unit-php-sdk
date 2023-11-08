@@ -134,6 +134,9 @@ class Forwarded
         return $this->_recursive;
     }
 
+    /**
+     * @return array[]|string[]
+     */
     public function toArray(): array
     {
         $data = [

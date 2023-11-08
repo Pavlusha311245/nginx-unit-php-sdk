@@ -14,6 +14,11 @@ class Upstream implements UpstreamInterface
 {
     use HasListeners;
 
+    /**
+     * Array of servers
+     *
+     * @var array
+     */
     private array $_servers = [];
 
     public function __construct(
@@ -72,6 +77,9 @@ class Upstream implements UpstreamInterface
         return $this->_servers;
     }
 
+    /**
+     * @return array[]
+     */
     public function toArray(): array
     {
         return [

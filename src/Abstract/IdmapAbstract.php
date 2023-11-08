@@ -2,6 +2,9 @@
 
 namespace UnitPhpSdk\Abstract;
 
+/**
+ * IDmap Abstract class
+ */
 class IdmapAbstract
 {
     /**
@@ -78,6 +81,10 @@ class IdmapAbstract
         $this->_host = $host;
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
     public function parseFromArray(array $data): void
     {
         if (array_key_exists('container', $data)) {
@@ -93,6 +100,9 @@ class IdmapAbstract
         }
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
         return [

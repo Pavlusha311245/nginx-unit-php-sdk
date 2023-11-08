@@ -113,37 +113,69 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
         $this->_unitRequest = $unitRequest;
     }
 
+    /**
+     * Return application type
+     *
+     * @return string
+     */
     public function getType(): string
     {
         return $this->_type;
     }
 
+    /**
+     * Return application group
+     *
+     * @return string
+     */
     public function getGroup(): string
     {
         return $this->_group;
     }
 
+    /**
+     * Set application group
+     *
+     * @param string $name
+     * @return void
+     */
     public function setGroup(string $name): void
     {
         $this->_group = $name;
     }
 
+    /**
+     * Return application user
+     *
+     * @return string
+     */
     public function getUser(): string
     {
         return $this->_user;
     }
 
+    /**
+     * Set application user
+     *
+     * @param string $name
+     * @return void
+     */
     public function setUser(string $name): void
     {
         $this->_user = $name;
     }
 
+    /**
+     * @return array
+     */
     public function getEnvironment(): array
     {
         return $this->_environment;
     }
 
     /**
+     * Set application environment variables
+     *
      * @throws UnitException
      */
     public function setEnvironment(array $environment): void
@@ -157,67 +189,135 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
         $this->_environment = $environment;
     }
 
+    /**
+     * Return ProcessIsolation object
+     *
+     * @return ProcessIsolation|null
+     */
     public function getIsolation(): ?ProcessIsolation
     {
         return $this->_isolation;
     }
 
+    /**
+     * Set ProcessIsolation object
+     *
+     * @param ProcessIsolation $isolation
+     * @return void
+     */
     public function setIsolation(ProcessIsolation $isolation): void
     {
         $this->_isolation = $isolation;
     }
 
+    /**
+     * Return ProcessApplication object
+     *
+     * @return ApplicationProcess|int|null
+     */
     public function getProcesses(): ApplicationProcess|int|null
     {
         return $this->_processes;
     }
 
+    /**
+     * Set ProcessApplication object
+     *
+     * @param ApplicationProcess|int $processes
+     * @return void
+     */
     public function setProcesses(ApplicationProcess|int $processes): void
     {
         $this->_processes = $processes;
     }
 
+    /**
+     * Return RequestLimit object
+     *
+     * @return RequestLimit|null
+     */
     public function getLimits(): ?RequestLimit
     {
         return $this->_limits;
     }
 
+    /**
+     * Set RequestLimit object
+     *
+     * @param RequestLimit $requestLimit
+     * @return void
+     */
     public function setLimits(RequestLimit $requestLimit): void
     {
         $this->_limits = $requestLimit;
     }
 
+    /**
+     * Return stderr stream
+     *
+     * @return string
+     */
     public function getStdErr(): string
     {
         return $this->_stderr;
     }
 
+    /**
+     * Set stderr stream
+     *
+     * @param string $path
+     * @return void
+     */
     public function setStdErr(string $path): void
     {
         $this->_stderr = $path;
     }
 
+    /**
+     * Return stdout stream
+     *
+     * @return string
+     */
     public function getStdOut(): string
     {
         return $this->_stdout;
     }
 
+    /**
+     * Set stdout
+     *
+     * @param string $path
+     * @return void
+     */
     public function setStdOut(string $path): void
     {
         $this->_stdout = $path;
     }
 
+    /**
+     * Return working directory
+     *
+     * @return string
+     */
     public function getWorkingDirectory(): string
     {
         return $this->_working_directory;
     }
 
+    /**
+     * Set working directory
+     *
+     * @param string $path
+     * @return void
+     */
     public function setWorkingDirectory(string $path): void
     {
         $this->_working_directory = $path;
     }
 
     /**
+     * Return application name
+     *
      * @return string
      */
     public function getName(): string
@@ -226,6 +326,8 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
     }
 
     /**
+     * Set application name
+     *
      * @param string $name
      */
     public function setName(string $name): void
@@ -303,6 +405,9 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
         return true;
     }
 
+    /**
+     * @return array
+     */
     public function toArray(): array
     {
         return [
@@ -318,6 +423,9 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
         ];
     }
 
+    /**
+     * @return string|false
+     */
     public function toJson(): string|false
     {
         return json_encode(array_filter(static::toArray(), fn ($item) => !empty($item)));

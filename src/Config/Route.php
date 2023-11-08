@@ -66,6 +66,9 @@ class Route implements RouteInterface, Arrayable
         return $this->_routeBlocks;
     }
 
+    /**
+     * @return array
+     */
     public function toArray(): array
     {
         return $this->getRouteBlocks();

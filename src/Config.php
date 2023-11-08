@@ -485,8 +485,7 @@ class Config implements ConfigInterface, Arrayable
     {
         try {
             $result = $this->_unitRequest->send('/config/access_log');
-        } catch (GuzzleException $exception)
-        {
+        } catch (GuzzleException $exception) {
             return null;
         }
 

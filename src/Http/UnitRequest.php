@@ -7,6 +7,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use UnitPhpSdk\Exceptions\UnitException;
 
 /**
+ * TODO: make as DI container
  * Base class for requests
  */
 class UnitRequest
@@ -15,6 +16,11 @@ class UnitRequest
 
     private mixed $_data;
 
+    /**
+     * Nginx Unit address
+     *
+     * @var string
+     */
     private readonly string $_address;
 
     /**

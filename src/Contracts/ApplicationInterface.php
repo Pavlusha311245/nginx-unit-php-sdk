@@ -5,7 +5,6 @@ namespace UnitPhpSdk\Contracts;
 use UnitPhpSdk\Config\Application\ProcessManagement\ApplicationProcess;
 use UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 use UnitPhpSdk\Config\Application\ProcessManagement\RequestLimit;
-use UnitPhpSdk\Enums\ApplicationTypeEnum;
 
 interface ApplicationInterface
 {
