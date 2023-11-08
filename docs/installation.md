@@ -10,10 +10,6 @@ description: This page wants help you to start using package
 | ------------- | ------------------ | --------------- |
 | 8.2 or higher | 1.30.0 or higher   | 0.6.0           |
 
-{% hint style="info" %}
-The project uses curl requests, make sure the appropriate PHP extension is installed
-{% endhint %}
-
 ## Install via composer
 
 1. Install package via composer

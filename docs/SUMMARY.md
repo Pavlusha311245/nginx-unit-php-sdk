@@ -17,4 +17,4 @@
 
 ## API Reference
 
-* [Open](https://unit-api-ref.pavlusha.me/)
+* [Open](https://unit-api-ref.pavlusha.me/index.html)
