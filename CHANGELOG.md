@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.7.0 - [In progress]
+
+- Now SDK support connection via only address.
+
 ## v0.6.0 - [2023/09/13] _Release on Programmer's Day. Happy holiday everyone :)_
 
 - Rename method in ListenerPass getPassType() to getType()

@@ -20,8 +20,8 @@ server management into your projects
 
 | Version | Nginx Unit Capability | Supported          |
 |---------|:----------------------|--------------------|
-| 0.6.x   | 1.30.0 & 1.31.0       | :white_check_mark: |
-| < 0.4.x | 1.30.0                | :x:                |
+| 0.7.x   | 1.30.0 & 1.31.0       | :white_check_mark: |
+| < 0.6.x | -                     | :x:                |
 
 _THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
 
@@ -43,7 +43,7 @@ _THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
 {
   "name": "user/example-php-project",
   "require": {
-    "pavlusha311245/unit-php-sdk": "^0.6.0"
+    "pavlusha311245/unit-php-sdk": "^0.7.0"
   },
   "autoload": {
     "psr-4": {
