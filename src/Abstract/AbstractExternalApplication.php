@@ -18,29 +18,32 @@ class AbstractExternalApplication extends AbstractApplication
      *
      * @var string
      */
-    private string $_executable;
+    private string $executable;
 
     /**
      * Command-line arguments to be passed to the app
      *
      * @var array|string
      */
-    private array|string $_arguments = [];
+    private array|string $arguments = [];
 
     /**
      * @return string
      */
     public function getExecutable(): string
     {
-        return $this->_executable;
+        return $this->executable;
     }
 
     /**
      * @param string $executable
+     * @return AbstractExternalApplication
      */
-    public function setExecutable(string $executable): void
+    public function setExecutable(string $executable): self
     {
-        $this->_executable = $executable;
+        $this->executable = $executable;
+
+        return $this;
     }
 
     /**
@@ -48,15 +51,18 @@ class AbstractExternalApplication extends AbstractApplication
      */
     public function getArguments(): array|string
     {
-        return $this->_arguments;
+        return $this->arguments;
     }
 
     /**
      * @param array|string $arguments
+     * @return AbstractExternalApplication
      */
-    public function setArguments(array|string $arguments): void
+    public function setArguments(array|string $arguments): self
     {
-        $this->_arguments = $arguments;
+        $this->arguments = $arguments;
+
+        return $this;
     }
 
     /**

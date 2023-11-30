@@ -4,7 +4,6 @@ namespace UnitPhpSdk\Config\Application;
 
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
-use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\HasThreads;
 use UnitPhpSdk\Traits\HasThreadStackSize;
 
@@ -23,44 +22,50 @@ class JavaApplication extends AbstractApplication
      *
      * @var string
      */
-    private string $_webApp;
+    private string $webApp;
 
     /**
      * Defines JVM runtime options
      *
      * @var array
      */
-    private array $_options = [];
+    private array $options = [];
 
     /**
      * Paths to your app’s required libraries (may point to directories or individual .jar files).
      *
      * @var array
      */
-    private array $_classPath = [];
+    private array $classPath = [];
 
     /**
      * @return string
      */
     public function getWebApp(): string
     {
-        return $this->_webApp;
+        return $this->webApp;
     }
 
     /**
      * @param string $webApp
+     * @return JavaApplication
      */
-    public function setWebApp(string $webApp): void
+    public function setWebApp(string $webApp): self
     {
-        $this->_webApp = $webApp;
+        $this->webApp = $webApp;
+
+        return $this;
     }
 
     /**
      * @param array $classPath
+     * @return JavaApplication
      */
-    public function setClassPath(array $classPath): void
+    public function setClassPath(array $classPath): self
     {
-        $this->_classPath = $classPath;
+        $this->classPath = $classPath;
+
+        return $this;
     }
 
     /**
@@ -68,15 +73,18 @@ class JavaApplication extends AbstractApplication
      */
     public function getClassPath(): array
     {
-        return $this->_classPath;
+        return $this->classPath;
     }
 
     /**
      * @param array $options
+     * @return JavaApplication
      */
-    public function setOptions(array $options): void
+    public function setOptions(array $options): self
     {
-        $this->_options = $options;
+        $this->options = $options;
+
+        return $this;
     }
 
     /**
@@ -84,7 +92,7 @@ class JavaApplication extends AbstractApplication
      */
     public function getOptions(): array
     {
-        return $this->_options;
+        return $this->options;
     }
 
     /**

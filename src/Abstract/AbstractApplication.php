@@ -23,77 +23,77 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      *
      * @var string
      */
-    protected string $_type;
+    protected string $type;
 
     /**
      * @var UnitRequest
      */
-    private UnitRequest $_unitRequest;
+    private UnitRequest $unitRequest;
 
     /**
      * Environment variables to be passed to the app
      *
      * @var array
      */
-    private array $_environment = [];
+    private array $environment = [];
 
     /**
      * Group name that runs the app process
      *
      * @var string
      */
-    protected string $_group = '';
+    protected string $group = '';
 
     /**
      * Username that runs the app process
      *
      * @var string
      */
-    protected string $_user = '';
+    protected string $user = '';
 
     /**
      * The app working directory.
      *
      * @var string
      */
-    private string $_working_directory = '';
+    private string $working_directory = '';
 
-    private string $_name = '';
+    private string $name = '';
 
     /**
      * The file path to which Unit redirects the application's error stream output in --no-daemon mode.
      *
      * @var string
      */
-    private string $_stderr = '/dev/null';
+    private string $stderr = '/dev/null';
 
     /**
      * The file path to which Unit redirects the output of the application output stream in --no-daemon mode.
      *
      * @var string
      */
-    private string $_stdout = '/dev/null';
+    private string $stdout = '/dev/null';
 
     /**
      * Static number of app processes or object options
      *
      * @var string|ApplicationProcess|null
      */
-    private string|null|ApplicationProcess $_processes = null;
+    private string|null|ApplicationProcess $processes = null;
 
     /**
      * Control requests limits
      *
      * @var RequestLimit|null
      */
-    private ?RequestLimit $_limits = null;
+    private ?RequestLimit $limits = null;
 
     /**
      * You can use namespace and file system isolation for your apps if Unit’s underlying OS supports them
      *
      * @var ProcessIsolation|null
      */
-    private ?ProcessIsolation $_isolation = null;
+    private ?ProcessIsolation $isolation = null;
 
     /**
      * @throws UnitException
@@ -107,10 +107,13 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
 
     /**
      * @param UnitRequest $unitRequest
+     * @return AbstractApplication
      */
-    public function setUnitRequest(UnitRequest $unitRequest): void
+    public function setUnitRequest(UnitRequest $unitRequest): self
     {
-        $this->_unitRequest = $unitRequest;
+        $this->unitRequest = $unitRequest;
+
+        return $this;
     }
 
     /**
@@ -120,7 +123,7 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      */
     public function getType(): string
     {
-        return $this->_type;
+        return $this->type;
     }
 
     /**
@@ -130,18 +133,20 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      */
     public function getGroup(): string
     {
-        return $this->_group;
+        return $this->group;
     }
 
     /**
      * Set application group
      *
      * @param string $name
-     * @return void
+     * @return AbstractApplication
      */
-    public function setGroup(string $name): void
+    public function setGroup(string $name): self
     {
-        $this->_group = $name;
+        $this->group = $name;
+
+        return $this;
     }
 
     /**
@@ -151,18 +156,20 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      */
     public function getUser(): string
     {
-        return $this->_user;
+        return $this->user;
     }
 
     /**
      * Set application user
      *
      * @param string $name
-     * @return void
+     * @return AbstractApplication
      */
-    public function setUser(string $name): void
+    public function setUser(string $name): self
     {
-        $this->_user = $name;
+        $this->user = $name;
+
+        return $this;
     }
 
     /**
@@ -170,7 +177,7 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      */
     public function getEnvironment(): array
     {
-        return $this->_environment;
+        return $this->environment;
     }
 
     /**
@@ -178,7 +185,7 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      *
      * @throws UnitException
      */
-    public function setEnvironment(array $environment): void
+    public function setEnvironment(array $environment): self
     {
         foreach ($environment as $value) {
             if (!is_string($value)) {
@@ -186,7 +193,9 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
             }
         }
 
-        $this->_environment = $environment;
+        $this->environment = $environment;
+
+        return $this;
     }
 
     /**
@@ -196,18 +205,20 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      */
     public function getIsolation(): ?ProcessIsolation
     {
-        return $this->_isolation;
+        return $this->isolation;
     }
 
     /**
      * Set ProcessIsolation object
      *
      * @param ProcessIsolation $isolation
-     * @return void
+     * @return AbstractApplication
      */
-    public function setIsolation(ProcessIsolation $isolation): void
+    public function setIsolation(ProcessIsolation $isolation): self
     {
-        $this->_isolation = $isolation;
+        $this->isolation = $isolation;
+
+        return $this;
     }
 
     /**
@@ -217,18 +228,20 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      */
     public function getProcesses(): ApplicationProcess|int|null
     {
-        return $this->_processes;
+        return $this->processes;
     }
 
     /**
      * Set ProcessApplication object
      *
      * @param ApplicationProcess|int $processes
-     * @return void
+     * @return AbstractApplication
      */
-    public function setProcesses(ApplicationProcess|int $processes): void
+    public function setProcesses(ApplicationProcess|int $processes): self
     {
-        $this->_processes = $processes;
+        $this->processes = $processes;
+
+        return $this;
     }
 
     /**
@@ -238,18 +251,20 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      */
     public function getLimits(): ?RequestLimit
     {
-        return $this->_limits;
+        return $this->limits;
     }
 
     /**
      * Set RequestLimit object
      *
      * @param RequestLimit $requestLimit
-     * @return void
+     * @return AbstractApplication
      */
-    public function setLimits(RequestLimit $requestLimit): void
+    public function setLimits(RequestLimit $requestLimit): self
     {
-        $this->_limits = $requestLimit;
+        $this->limits = $requestLimit;
+
+        return $this;
     }
 
     /**
@@ -259,18 +274,20 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      */
     public function getStdErr(): string
     {
-        return $this->_stderr;
+        return $this->stderr;
     }
 
     /**
      * Set stderr stream
      *
      * @param string $path
-     * @return void
+     * @return AbstractApplication
      */
-    public function setStdErr(string $path): void
+    public function setStdErr(string $path): self
     {
-        $this->_stderr = $path;
+        $this->stderr = $path;
+
+        return $this;
     }
 
     /**
@@ -280,18 +297,20 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      */
     public function getStdOut(): string
     {
-        return $this->_stdout;
+        return $this->stdout;
     }
 
     /**
      * Set stdout
      *
      * @param string $path
-     * @return void
+     * @return AbstractApplication
      */
-    public function setStdOut(string $path): void
+    public function setStdOut(string $path): self
     {
-        $this->_stdout = $path;
+        $this->stdout = $path;
+
+        return $this;
     }
 
     /**
@@ -301,18 +320,20 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      */
     public function getWorkingDirectory(): string
     {
-        return $this->_working_directory;
+        return $this->working_directory;
     }
 
     /**
      * Set working directory
      *
      * @param string $path
-     * @return void
+     * @return AbstractApplication
      */
-    public function setWorkingDirectory(string $path): void
+    public function setWorkingDirectory(string $path): self
     {
-        $this->_working_directory = $path;
+        $this->working_directory = $path;
+
+        return $this;
     }
 
     /**
@@ -322,17 +343,20 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      */
     public function getName(): string
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
      * Set application name
      *
      * @param string $name
+     * @return AbstractApplication
      */
-    public function setName(string $name): void
+    public function setName(string $name): self
     {
-        $this->_name = $name;
+        $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -348,7 +372,7 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
             throw new UnitException('Parse Exception');
         }
 
-        $this->_type = $data['type'];
+        $this->type = $data['type'];
 
         if (array_key_exists('working_directory', $data)) {
             $this->setWorkingDirectory($data['working_directory']);
@@ -397,8 +421,8 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
     public function restartApplication(): bool
     {
         try {
-            $this->_unitRequest->send("/control/applications/{$this->getName()}/restart");
-        } catch (UnitException $exception) {
+            $this->unitRequest->send("/control/applications/{$this->getName()}/restart");
+        } catch (UnitException) {
             return false;
         }
 
@@ -428,6 +452,6 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      */
     public function toJson(): string|false
     {
-        return json_encode(array_filter(static::toArray(), fn ($item) => !empty($item)));
+        return json_encode(array_filter(static::toArray(), fn($item) => !empty($item)));
     }
 }

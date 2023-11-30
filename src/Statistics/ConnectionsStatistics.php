@@ -12,7 +12,7 @@ use UnitPhpSdk\Contracts\ConnectionsStatisticsInterface;
  */
 final readonly class ConnectionsStatistics implements ConnectionsStatisticsInterface, Arrayable
 {
-    public function __construct(private array $_data)
+    public function __construct(private array $data)
     {
         //
     }
@@ -22,7 +22,7 @@ final readonly class ConnectionsStatistics implements ConnectionsStatisticsInter
      */
     public function getIdleConnections(): int
     {
-        return $this->_data['idle'];
+        return $this->data['idle'];
     }
 
     /**
@@ -30,7 +30,7 @@ final readonly class ConnectionsStatistics implements ConnectionsStatisticsInter
      */
     public function getActiveConnections(): int
     {
-        return $this->_data['active'];
+        return $this->data['active'];
     }
 
     /**
@@ -38,7 +38,7 @@ final readonly class ConnectionsStatistics implements ConnectionsStatisticsInter
      */
     public function getAcceptedConnections(): int
     {
-        return $this->_data['accepted'];
+        return $this->data['accepted'];
     }
 
     /**
@@ -46,7 +46,7 @@ final readonly class ConnectionsStatistics implements ConnectionsStatisticsInter
      */
     public function getClosedConnections(): int
     {
-        return $this->_data['closed'];
+        return $this->data['closed'];
     }
 
     /**
@@ -54,6 +54,6 @@ final readonly class ConnectionsStatistics implements ConnectionsStatisticsInter
      */
     public function toArray(): array
     {
-        return $this->_data;
+        return $this->data;
     }
 }

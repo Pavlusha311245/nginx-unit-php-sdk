@@ -5,7 +5,6 @@ namespace UnitPhpSdk\Config\Application;
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Config\Application\Targets\PythonTarget;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
-use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\HasTargets;
 use UnitPhpSdk\Traits\HasThreads;
 use UnitPhpSdk\Traits\HasThreadStackSize;
@@ -26,31 +25,34 @@ class PythonApplication extends AbstractApplication
      *
      * @var string
      */
-    private string $_module;
+    private string $module;
 
     /**
      * Name of the module-based callable that Unit runs as the app.
      *
      * @var string
      */
-    private string $_callable = 'application';
-    private string $_home = '';
+    private string $callable = 'application';
+    private string $home = '';
 
     /**
      * Additional Python module lookup paths
      *
      * @var string|array
      */
-    private string|array $_path = '';
-    private string $_prefix = '';
-    private string $_protocol = '';
+    private string|array $path = '';
+    private string $prefix = '';
+    private string $protocol = '';
 
     /**
      * @param string $module
+     * @return PythonApplication
      */
-    public function setModule(string $module): void
+    public function setModule(string $module): self
     {
-        $this->_module = $module;
+        $this->module = $module;
+
+        return $this;
     }
 
     /**
@@ -58,15 +60,18 @@ class PythonApplication extends AbstractApplication
      */
     public function getModule(): string
     {
-        return $this->_module;
+        return $this->module;
     }
 
     /**
      * @param string $callable
+     * @return PythonApplication
      */
-    public function setCallable(string $callable): void
+    public function setCallable(string $callable): self
     {
-        $this->_callable = $callable;
+        $this->callable = $callable;
+
+        return $this;
     }
 
     /**
@@ -74,15 +79,18 @@ class PythonApplication extends AbstractApplication
      */
     public function getCallable(): string
     {
-        return $this->_callable;
+        return $this->callable;
     }
 
     /**
      * @param string $home
+     * @return PythonApplication
      */
-    public function setHome(string $home): void
+    public function setHome(string $home): self
     {
-        $this->_home = $home;
+        $this->home = $home;
+
+        return $this;
     }
 
     /**
@@ -90,15 +98,18 @@ class PythonApplication extends AbstractApplication
      */
     public function getHome(): string
     {
-        return $this->_home;
+        return $this->home;
     }
 
     /**
      * @param array|string $path
+     * @return PythonApplication
      */
-    public function setPath(array|string $path): void
+    public function setPath(array|string $path): self
     {
-        $this->_path = $path;
+        $this->path = $path;
+
+        return $this;
     }
 
     /**
@@ -106,15 +117,18 @@ class PythonApplication extends AbstractApplication
      */
     public function getPath(): array|string
     {
-        return $this->_path;
+        return $this->path;
     }
 
     /**
      * @param string $prefix
+     * @return PythonApplication
      */
-    public function setPrefix(string $prefix): void
+    public function setPrefix(string $prefix): self
     {
-        $this->_prefix = $prefix;
+        $this->prefix = $prefix;
+
+        return $this;
     }
 
     /**
@@ -122,15 +136,18 @@ class PythonApplication extends AbstractApplication
      */
     public function getPrefix(): string
     {
-        return $this->_prefix;
+        return $this->prefix;
     }
 
     /**
      * @param string $protocol
+     * @return PythonApplication
      */
-    public function setProtocol(string $protocol): void
+    public function setProtocol(string $protocol): self
     {
-        $this->_protocol = $protocol;
+        $this->protocol = $protocol;
+
+        return $this;
     }
 
     /**
@@ -138,7 +155,7 @@ class PythonApplication extends AbstractApplication
      */
     public function getProtocol(): string
     {
-        return $this->_protocol;
+        return $this->protocol;
     }
 
     /**

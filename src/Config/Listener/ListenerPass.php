@@ -2,16 +2,18 @@
 
 namespace UnitPhpSdk\Config\Listener;
 
-readonly class ListenerPass
+use UnitPhpSdk\Contracts\Arrayable;
+
+readonly class ListenerPass implements Arrayable
 {
     /**
      * @var string
      */
-    private string $_type;
+    private string $type;
 
-    public function __construct(private string $_data)
+    public function __construct(private string $data)
     {
-        $this->_type = explode('/', $_data)[0];
+        $this->type = explode('/', $data)[0];
     }
 
 
@@ -22,7 +24,7 @@ readonly class ListenerPass
      */
     public function getType(): string
     {
-        return $this->_type;
+        return $this->type;
     }
 
     /**
@@ -32,7 +34,7 @@ readonly class ListenerPass
      */
     public function toString(): string
     {
-        return $this->_data;
+        return $this->data;
     }
 
     /**
@@ -42,6 +44,6 @@ readonly class ListenerPass
      */
     public function toArray(): array
     {
-        return explode('/', $this->_data);
+        return explode('/', $this->data);
     }
 }

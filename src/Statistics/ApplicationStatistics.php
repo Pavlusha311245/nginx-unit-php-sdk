@@ -12,7 +12,7 @@ use UnitPhpSdk\Contracts\Arrayable;
  */
 final readonly class ApplicationStatistics implements ApplicationStatisticsInterface, Arrayable
 {
-    public function __construct(private array $_data)
+    public function __construct(private array $data)
     {
         //
     }
@@ -22,7 +22,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function getRequests(): array
     {
-        return $this->_data['requests'];
+        return $this->data['requests'];
     }
 
     /**
@@ -30,7 +30,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function getActiveRequests(): int
     {
-        return $this->_data['requests']['active'];
+        return $this->data['requests']['active'];
     }
 
     /**
@@ -38,7 +38,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function getProcesses(): array
     {
-        return $this->_data['processes'];
+        return $this->data['processes'];
     }
 
     /**
@@ -46,7 +46,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function getStartingProcesses(): int
     {
-        return $this->_data['processes']['starting'];
+        return $this->data['processes']['starting'];
     }
 
     /**
@@ -54,7 +54,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function getRunningProcesses(): int
     {
-        return $this->_data['processes']['running'];
+        return $this->data['processes']['running'];
     }
 
     /**
@@ -62,7 +62,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function getIdleProcesses(): int
     {
-        return $this->_data['processes']['idle'];
+        return $this->data['processes']['idle'];
     }
 
     /**
@@ -70,6 +70,6 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function toArray(): array
     {
-        return $this->_data;
+        return $this->data;
     }
 }

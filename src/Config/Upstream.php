@@ -19,10 +19,10 @@ class Upstream implements UpstreamInterface
      *
      * @var array
      */
-    private array $_servers = [];
+    private array $servers = [];
 
     public function __construct(
-        private readonly string $_name,
+        private readonly string $name,
         array                   $data = []
     ) {
         if (!empty($data)) {
@@ -37,7 +37,7 @@ class Upstream implements UpstreamInterface
      */
     public function getName(): string
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -45,7 +45,7 @@ class Upstream implements UpstreamInterface
      */
     private function setServers(array $servers): void
     {
-        $this->_servers = $servers;
+        $this->servers = $servers;
     }
 
     /**
@@ -61,10 +61,10 @@ class Upstream implements UpstreamInterface
         }
 
         if (!filter_var($ip, FILTER_VALIDATE_IP)) {
-            throw new UnitException("{$ip} isn't a valid IP address");
+            throw new UnitException("$ip isn't a valid IP address");
         }
 
-        $this->_servers[$ip] = [
+        $this->servers[$ip] = [
             'weight' => $weight
         ];
     }
@@ -74,7 +74,7 @@ class Upstream implements UpstreamInterface
      */
     public function getServers(): array
     {
-        return $this->_servers;
+        return $this->servers;
     }
 
     /**

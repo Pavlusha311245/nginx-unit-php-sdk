@@ -12,19 +12,19 @@ class RouteBlock implements Arrayable
     /**
      * @var RouteAction|null
      */
-    private ?RouteAction $_action = null;
+    private ?RouteAction $action = null;
 
     /**
      * @var RouteMatch|null
      */
-    private ?RouteMatch $_match = null;
+    private ?RouteMatch $match = null;
 
     public function __construct(array $data = [])
     {
         if (!empty($data)) {
-            $this->_action = new RouteAction($data['action']);
+            $this->action = new RouteAction($data['action']);
             if (isset($data['match'])) {
-                $this->_match = new RouteMatch($data['match']);
+                $this->match = new RouteMatch($data['match']);
             }
         }
     }
@@ -34,7 +34,7 @@ class RouteBlock implements Arrayable
      */
     public function setMatch(?RouteMatch $match): void
     {
-        $this->_match = $match;
+        $this->match = $match;
     }
 
     /**
@@ -44,7 +44,7 @@ class RouteBlock implements Arrayable
      */
     public function getMatch(): RouteMatch|null
     {
-        return $this->_match;
+        return $this->match;
     }
 
     /**
@@ -52,7 +52,7 @@ class RouteBlock implements Arrayable
      */
     public function setAction(?RouteAction $action): void
     {
-        $this->_action = $action;
+        $this->action = $action;
     }
 
     /**
@@ -62,7 +62,7 @@ class RouteBlock implements Arrayable
      */
     public function getAction(): RouteAction
     {
-        return $this->_action;
+        return $this->action;
     }
 
     public function toArray(): array

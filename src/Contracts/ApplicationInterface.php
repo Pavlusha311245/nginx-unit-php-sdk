@@ -20,9 +20,9 @@ interface ApplicationInterface
 
     /**
      * @param array $environment
-     * @return void
+     * @return ApplicationInterface
      */
-    public function setEnvironment(array $environment): void;
+    public function setEnvironment(array $environment): self;
 
     /**
      * @return string
@@ -31,9 +31,9 @@ interface ApplicationInterface
 
     /**
      * @param string $name
-     * @return void
+     * @return ApplicationInterface
      */
-    public function setGroup(string $name): void;
+    public function setGroup(string $name): self;
 
     /**
      * @return string
@@ -42,9 +42,9 @@ interface ApplicationInterface
 
     /**
      * @param string $name
-     * @return void
+     * @return ApplicationInterface
      */
-    public function setUser(string $name): void;
+    public function setUser(string $name): self;
 
     /**
      * @return ProcessIsolation|null
@@ -53,9 +53,9 @@ interface ApplicationInterface
 
     /**
      * @param ProcessIsolation $isolation
-     * @return void
+     * @return ApplicationInterface
      */
-    public function setIsolation(ProcessIsolation $isolation): void;
+    public function setIsolation(ProcessIsolation $isolation): self;
 
     /**
      * @return RequestLimit|null
@@ -66,7 +66,7 @@ interface ApplicationInterface
      * @param RequestLimit $requestLimit
      * @return void
      */
-    public function setLimits(RequestLimit $requestLimit): void;
+    public function setLimits(RequestLimit $requestLimit): self;
 
     /**
      * @return ApplicationProcess|int|null
@@ -77,7 +77,7 @@ interface ApplicationInterface
      * @param ApplicationProcess|int $processes
      * @return void
      */
-    public function setProcesses(ApplicationProcess|int $processes): void;
+    public function setProcesses(ApplicationProcess|int $processes): self;
 
     /**
      * @return string
@@ -86,9 +86,9 @@ interface ApplicationInterface
 
     /**
      * @param string $path
-     * @return void
+     * @return ApplicationInterface
      */
-    public function setStdErr(string $path): void;
+    public function setStdErr(string $path): self;
 
     /**
      * @return string
@@ -97,9 +97,9 @@ interface ApplicationInterface
 
     /**
      * @param string $path
-     * @return void
+     * @return ApplicationInterface
      */
-    public function setStdOut(string $path): void;
+    public function setStdOut(string $path): self;
 
     /**
      * @return string
@@ -108,7 +108,7 @@ interface ApplicationInterface
 
     /**
      * @param string $path
-     * @return void
+     * @return ApplicationInterface
      */
-    public function setWorkingDirectory(string $path): void;
+    public function setWorkingDirectory(string $path): self;
 }

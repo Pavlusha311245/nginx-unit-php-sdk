@@ -12,9 +12,10 @@ use UnitPhpSdk\Contracts\CertificateInterface;
 readonly class Certificate implements CertificateInterface
 {
     public function __construct(
-        private array           $_data,
-        private readonly string $_name
-    ) {
+        private array  $data,
+        private string $name
+    )
+    {
         //
     }
 
@@ -25,7 +26,7 @@ readonly class Certificate implements CertificateInterface
      */
     public function getName(): string
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -33,7 +34,7 @@ readonly class Certificate implements CertificateInterface
      */
     public function getKey(): string
     {
-        return $this->_data['key'];
+        return $this->data['key'];
     }
 
     /**
@@ -41,7 +42,7 @@ readonly class Certificate implements CertificateInterface
      */
     public function getChain(): array
     {
-        return $this->_data['chain'];
+        return $this->data['chain'];
     }
 
     /**
@@ -51,6 +52,6 @@ readonly class Certificate implements CertificateInterface
      */
     public function getData(): array
     {
-        return $this->_data;
+        return $this->data;
     }
 }

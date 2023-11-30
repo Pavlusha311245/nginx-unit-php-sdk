@@ -20,33 +20,36 @@ class ProcessIsolation implements Arrayable
     /**
      * @var Automount
      */
-    private Automount $_automount;
+    private Automount $automount;
 
     /**
      * @var Cgroup
      */
-    private Cgroup $_cgroup;
+    private Cgroup $cgroup;
 
     /**
      * @var Gidmap
      */
-    private Gidmap $_gidmap;
+    private Gidmap $gidmap;
 
     /**
      * @var Namespaces
      */
-    private Namespaces $_namespaces;
+    private Namespaces $namespaces;
 
     /**
      * @var string
      */
-    private string $_rootfs;
+    private string $rootfs;
 
     /**
      * @var Uidmap
      */
-    private Uidmap $_uidmap;
+    private Uidmap $uidmap;
 
+    /**
+     * @throws UnitException
+     */
     public function __construct(array $data)
     {
         $this->parseFromArray($data);
@@ -57,7 +60,7 @@ class ProcessIsolation implements Arrayable
      */
     public function setAutomount(Automount $automount): void
     {
-        $this->_automount = $automount;
+        $this->automount = $automount;
     }
 
     /**
@@ -65,7 +68,7 @@ class ProcessIsolation implements Arrayable
      */
     public function getAutomount(): Automount
     {
-        return $this->_automount;
+        return $this->automount;
     }
 
     /**
@@ -73,7 +76,7 @@ class ProcessIsolation implements Arrayable
      */
     public function setCgroup(Cgroup $cgroup): void
     {
-        $this->_cgroup = $cgroup;
+        $this->cgroup = $cgroup;
     }
 
     /**
@@ -81,7 +84,7 @@ class ProcessIsolation implements Arrayable
      */
     public function getCgroup(): Cgroup
     {
-        return $this->_cgroup;
+        return $this->cgroup;
     }
 
     /**
@@ -89,7 +92,7 @@ class ProcessIsolation implements Arrayable
      */
     public function setGidmap(Gidmap $gidmap): void
     {
-        $this->_gidmap = $gidmap;
+        $this->gidmap = $gidmap;
     }
 
     /**
@@ -97,7 +100,7 @@ class ProcessIsolation implements Arrayable
      */
     public function getGidmap(): Gidmap
     {
-        return $this->_gidmap;
+        return $this->gidmap;
     }
 
     /**
@@ -105,7 +108,7 @@ class ProcessIsolation implements Arrayable
      */
     public function setUidmap(Uidmap $uidmap): void
     {
-        $this->_uidmap = $uidmap;
+        $this->uidmap = $uidmap;
     }
 
     /**
@@ -113,7 +116,7 @@ class ProcessIsolation implements Arrayable
      */
     public function getUidmap(): Uidmap
     {
-        return $this->_uidmap;
+        return $this->uidmap;
     }
 
     /**
@@ -123,7 +126,7 @@ class ProcessIsolation implements Arrayable
      */
     public function getRootfs(): string
     {
-        return $this->_rootfs;
+        return $this->rootfs;
     }
 
     /**
@@ -133,7 +136,7 @@ class ProcessIsolation implements Arrayable
      */
     public function setRootfs(string $rootfs): void
     {
-        $this->_rootfs = $rootfs;
+        $this->rootfs = $rootfs;
     }
 
     /**
@@ -141,7 +144,7 @@ class ProcessIsolation implements Arrayable
      */
     public function setNamespaces(Namespaces $namespaces): void
     {
-        $this->_namespaces = $namespaces;
+        $this->namespaces = $namespaces;
     }
 
     /**
@@ -149,10 +152,13 @@ class ProcessIsolation implements Arrayable
      */
     public function getNamespaces(): Namespaces
     {
-        return $this->_namespaces;
+        return $this->namespaces;
     }
 
-    public function parseFromArray(array $data)
+    /**
+     * @throws UnitException
+     */
+    public function parseFromArray(array $data): void
     {
         if (array_key_exists('automount', $data)) {
             $this->setAutomount(new Automount($data['automount']));

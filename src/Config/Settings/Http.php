@@ -12,7 +12,7 @@ class Http
      *
      * @var int
      */
-    private int $_body_read_timeout = 30;
+    private int $body_read_timeout = 30;
 
     /**
      * Controls header field name parsing.
@@ -21,7 +21,7 @@ class Http
      *
      * @var bool
      */
-    private bool $_discard_unsafe_fields = true;
+    private bool $discard_unsafe_fields = true;
 
     /**
      * Maximum number of seconds to read the header of a client’s request.
@@ -29,7 +29,7 @@ class Http
      *
      * @var int
      */
-    private int $_header_read_timeout = 30;
+    private int $header_read_timeout = 30;
 
     /**
      * Maximum number of seconds between requests in a keep-alive connection.
@@ -37,14 +37,14 @@ class Http
      *
      * @var int
      */
-    private int $_idle_timeout = 180;
+    private int $idle_timeout = 180;
 
     /**
      * Enables or disables router logging.
      *
      * @var bool
      */
-    private bool $_log_route = false;
+    private bool $log_route = false;
 
     /**
      * Maximum number of bytes in the body of a client’s request.
@@ -52,7 +52,7 @@ class Http
      *
      * @var int
      */
-    private int $_max_body_size = 8388608;
+    private int $max_body_size = 8388608;
 
     /**
      *
@@ -62,17 +62,91 @@ class Http
      *
      * @var int
      */
-    private int $_send_timeout = 30;
+    private int $send_timeout = 30;
 
     /**
      * If set to false, Unit omits version information in its Server response header fields.
      *
      * @var bool
      */
-    private bool $_server_version = true;
+    private bool $server_version = true;
 
     /**
      * @var
      */
-    private $_static;
+    private mixed $static;
+
+    /**
+     * @return int
+     */
+    public function getBodyReadTimeout(): int
+    {
+        return $this->body_read_timeout;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHeaderReadTimeout(): int
+    {
+        return $this->header_read_timeout;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdleTimeout(): int
+    {
+        return $this->idle_timeout;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxBodySize(): int
+    {
+        return $this->max_body_size;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getSendTimeout(): int
+    {
+        return $this->send_timeout;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getStatic()
+    {
+        return $this->static;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDiscardUnsafeFields(): bool
+    {
+        return $this->discard_unsafe_fields;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLogRoute(): bool
+    {
+        return $this->log_route;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isServerVersion(): bool
+    {
+        return $this->server_version;
+    }
 }

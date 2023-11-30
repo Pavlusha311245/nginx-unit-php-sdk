@@ -7,14 +7,14 @@ const ADDRESS = 'http://localhost';
 
 test('Can create unit object', function () {
     expect(new Unit(
-        socket: SOCKET,
-        address: ADDRESS
+        address: ADDRESS,
+        socket: SOCKET
     ))->toBeObject();
 });
 
 $unit = new Unit(
-    socket: SOCKET,
-    address: ADDRESS
+    address: ADDRESS,
+    socket: SOCKET
 );
 
 test('Can receive socket', function () use ($unit) {

@@ -19,23 +19,23 @@ final class Statistics implements StatisticsInterface
     /**
      * @var ConnectionsStatisticsInterface
      */
-    private ConnectionsStatisticsInterface $_connections;
+    private ConnectionsStatisticsInterface $connections;
 
     /**
      * @var RequestsStatisticsInterface
      */
-    private RequestsStatisticsInterface $_requests;
+    private RequestsStatisticsInterface $requests;
 
     /**
      * @var array|ApplicationStatistics[]
      */
-    private array $_applications;
+    private array $applications;
 
     public function __construct(array $data)
     {
-        $this->_connections = new ConnectionsStatistics($data['connections']);
-        $this->_requests = new RequestsStatistics($data['requests']);
-        $this->_applications = array_map(fn ($item) => new ApplicationStatistics($item), $data['applications']);
+        $this->connections = new ConnectionsStatistics($data['connections']);
+        $this->requests = new RequestsStatistics($data['requests']);
+        $this->applications = array_map(fn ($item) => new ApplicationStatistics($item), $data['applications']);
     }
 
     /**
@@ -43,7 +43,7 @@ final class Statistics implements StatisticsInterface
      */
     public function getConnections(): ConnectionsStatisticsInterface
     {
-        return $this->_connections;
+        return $this->connections;
     }
 
     /**
@@ -51,7 +51,7 @@ final class Statistics implements StatisticsInterface
      */
     public function getRequests(): RequestsStatisticsInterface
     {
-        return $this->_requests;
+        return $this->requests;
     }
 
     /**
@@ -59,7 +59,7 @@ final class Statistics implements StatisticsInterface
      */
     public function getApplications(): array
     {
-        return $this->_applications;
+        return $this->applications;
     }
 
     /**
@@ -68,9 +68,9 @@ final class Statistics implements StatisticsInterface
     public function getApplicationStatistics(AbstractApplication|string $application): ApplicationStatisticsInterface
     {
         if (is_string($application)) {
-            return $this->_applications[$application];
+            return $this->applications[$application];
         }
 
-        return $this->_applications[$application->getName()];
+        return $this->applications[$application->getName()];
     }
 }

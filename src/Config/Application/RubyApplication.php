@@ -8,6 +8,7 @@ use UnitPhpSdk\Traits\HasThreads;
 
 /**
  * @extends AbstractApplication
+ * TODO: make Arrayable
  */
 class RubyApplication extends AbstractApplication
 {
@@ -18,19 +19,22 @@ class RubyApplication extends AbstractApplication
     /**
      * @var string
      */
-    private string $_script;
+    private string $script;
 
     /**
      * @var string
      */
-    private string $_hooks;
+    private string $hooks;
 
     /**
      * @param string $script
+     * @return RubyApplication
      */
-    public function setScript(string $script): void
+    public function setScript(string $script): self
     {
-        $this->_script = $script;
+        $this->script = $script;
+
+        return $this;
     }
 
     /**
@@ -38,15 +42,18 @@ class RubyApplication extends AbstractApplication
      */
     public function getScript(): string
     {
-        return $this->_script;
+        return $this->script;
     }
 
     /**
      * @param string $hooks
+     * @return RubyApplication
      */
-    public function setHooks(string $hooks): void
+    public function setHooks(string $hooks): self
     {
-        $this->_hooks = $hooks;
+        $this->hooks = $hooks;
+
+        return $this;
     }
 
     /**
@@ -54,7 +61,7 @@ class RubyApplication extends AbstractApplication
      */
     public function getHooks(): string
     {
-        return $this->_hooks;
+        return $this->hooks;
     }
 
     /**

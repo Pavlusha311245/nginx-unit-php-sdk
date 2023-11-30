@@ -4,7 +4,6 @@ namespace UnitPhpSdk\Config\Application;
 
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
-use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\{
     HasThreads,
     HasThreadStackSize
@@ -25,22 +24,25 @@ class PerlApplication extends AbstractApplication
      *
      * @var string
      */
-    private string $_script;
+    private string $script;
 
     /**
      * @return string
      */
     public function getScript(): string
     {
-        return $this->_script;
+        return $this->script;
     }
 
     /**
      * @param string $script
+     * @return PerlApplication
      */
-    public function setScript(string $script): void
+    public function setScript(string $script): self
     {
-        $this->_script = $script;
+        $this->script = $script;
+
+        return $this;
     }
 
     /**

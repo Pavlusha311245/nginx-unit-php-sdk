@@ -19,37 +19,40 @@ class PhpApplication extends AbstractApplication
     /**
      * @var string
      */
-    private string $_root = '';
+    private string $root = '';
 
     /**
      * @var string
      */
-    private string $_index = '';
+    private string $index = '';
 
     /**
      * @var string
      */
-    private string $_script = '';
+    private string $script = '';
 
     /**
      * @var
      */
-    private $_options;
+    private $options;
 
     /**
      * @return mixed
      */
     public function getRoot(): string
     {
-        return $this->_root;
+        return $this->root;
     }
 
     /**
-     * @param mixed $root
+     * @param string $root
+     * @return PhpApplication
      */
-    public function setRoot(string $root): void
+    public function setRoot(string $root): self
     {
-        $this->_root = $root;
+        $this->root = $root;
+
+        return $this;
     }
 
     /**
@@ -57,15 +60,18 @@ class PhpApplication extends AbstractApplication
      */
     public function getIndex(): string
     {
-        return $this->_index;
+        return $this->index;
     }
 
     /**
      * @param string $index
+     * @return PhpApplication
      */
-    public function setIndex(string $index): void
+    public function setIndex(string $index): self
     {
-        $this->_index = $index;
+        $this->index = $index;
+
+        return $this;
     }
 
     /**
@@ -73,31 +79,36 @@ class PhpApplication extends AbstractApplication
      */
     public function getScript(): string
     {
-        return $this->_script;
+        return $this->script;
     }
 
     /**
      * @param string $script
      */
-    public function setScript(string $script = 'index.php'): void
+    public function setScript(string $script = 'index.php'): self
     {
-        $this->_script = $script;
+        $this->script = $script;
+
+        return $this;
     }
 
     /**
      * @return mixed
      */
-    public function getOptions()
+    public function getOptions(): mixed
     {
-        return $this->_options;
+        return $this->options;
     }
 
     /**
      * @param mixed $options
+     * @return PhpApplication
      */
-    public function setOptions($options): void
+    public function setOptions(mixed $options): self
     {
-        $this->_options = $options;
+        $this->options = $options;
+
+        return $this;
     }
 
     /**

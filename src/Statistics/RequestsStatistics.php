@@ -12,7 +12,7 @@ use UnitPhpSdk\Contracts\RequestsStatisticsInterface;
  */
 final readonly class RequestsStatistics implements RequestsStatisticsInterface, Arrayable
 {
-    public function __construct(private array $_data)
+    public function __construct(private array $data)
     {
         //
     }
@@ -22,7 +22,7 @@ final readonly class RequestsStatistics implements RequestsStatisticsInterface, 
      */
     public function getTotalRequests(): int
     {
-        return $this->_data['total'];
+        return $this->data['total'];
     }
 
     /**
@@ -30,6 +30,6 @@ final readonly class RequestsStatistics implements RequestsStatisticsInterface, 
      */
     public function toArray(): array
     {
-        return $this->_data;
+        return $this->data;
     }
 }

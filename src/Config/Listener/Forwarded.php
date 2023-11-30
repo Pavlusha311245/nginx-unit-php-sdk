@@ -14,7 +14,7 @@ class Forwarded
      *
      * @var string|array
      */
-    private string|array $_source;
+    private string|array $source;
 
     /**
      * Names the HTTP header fields to expect in the request.
@@ -22,7 +22,7 @@ class Forwarded
      *
      * @var string|null
      */
-    private ?string $_client_ip;
+    private ?string $client_ip;
 
     /**
      * Defines the relevant HTTP header field to look for in the request.
@@ -30,14 +30,14 @@ class Forwarded
      *
      * @var string|null
      */
-    private ?string $_protocol;
+    private ?string $protocol;
 
     /**
      * Controls how the client_ip fields are traversed
      *
      * @var bool
      */
-    private bool $_recursive = false;
+    private bool $recursive = false;
 
     /**
      * @throws UnitException
@@ -75,7 +75,7 @@ class Forwarded
      */
     public function setSource(array|string $source): void
     {
-        $this->_source = $source;
+        $this->source = $source;
     }
 
     /**
@@ -83,7 +83,7 @@ class Forwarded
      */
     public function getSource(): array|string
     {
-        return $this->_source;
+        return $this->source;
     }
 
     /**
@@ -91,7 +91,7 @@ class Forwarded
      */
     public function setProtocol(string $protocol): void
     {
-        $this->_protocol = $protocol;
+        $this->protocol = $protocol;
     }
 
     /**
@@ -99,7 +99,7 @@ class Forwarded
      */
     public function getProtocol(): string
     {
-        return $this->_protocol;
+        return $this->protocol;
     }
 
     /**
@@ -107,7 +107,7 @@ class Forwarded
      */
     public function setClientIp(string $client_ip): void
     {
-        $this->_client_ip = $client_ip;
+        $this->client_ip = $client_ip;
     }
 
     /**
@@ -115,7 +115,7 @@ class Forwarded
      */
     public function getClientIp(): string
     {
-        return $this->_client_ip;
+        return $this->client_ip;
     }
 
     /**
@@ -123,7 +123,7 @@ class Forwarded
      */
     public function setRecursive(bool $recursive): void
     {
-        $this->_recursive = $recursive;
+        $this->recursive = $recursive;
     }
 
     /**
@@ -131,7 +131,7 @@ class Forwarded
      */
     public function isRecursive(): bool
     {
-        return $this->_recursive;
+        return $this->recursive;
     }
 
     /**
@@ -140,7 +140,7 @@ class Forwarded
     public function toArray(): array
     {
         $data = [
-            'source' => $this->_source,
+            'source' => $this->source,
         ];
 
         if (empty($this->_client_ip)) {
@@ -155,6 +155,9 @@ class Forwarded
         return $data;
     }
 
+    /**
+     * @return false|string
+     */
     public function toJson(): false|string
     {
         return json_encode($this->toArray());

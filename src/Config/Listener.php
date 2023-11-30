@@ -17,28 +17,31 @@ class Listener
     /**
      * @var string
      */
-    private string $_link;
+    private string $link;
 
     /**
      * @var ListenerPass
      */
-    private ListenerPass $_pass;
+    private ListenerPass $pass;
+
+//    TODO: implement From 1.30.0
+//    private $response_headers
 
     /**
      * @var int
      */
-    private int $_port;
+    private int $port;
 
     public function __construct(
-        private readonly string $_listener,
+        private readonly string $listener,
         string                  $pass,
-        private ?Tls            $_tls = null,
-        private ?Forwarded      $_forwarded = null,
+        private ?Tls            $tls = null,
+        private ?Forwarded      $forwarded = null,
     ) {
         $this->parsePort();
         $this->generateLink();
 
-        $this->_pass = new ListenerPass($pass);
+        $this->pass = new ListenerPass($pass);
     }
 
     /**
@@ -48,7 +51,7 @@ class Listener
      */
     public function getLink(): string
     {
-        return $this->_link;
+        return $this->link;
     }
 
     /**
@@ -58,12 +61,12 @@ class Listener
      */
     private function generateLink(): void
     {
-        $separatedListener = explode(':', $this->_listener);
+        $separatedListener = explode(':', $this->listener);
 
-        $host = $separatedListener[0] == '*' ? "0.0.0.0:{$separatedListener[1]}" : $this->_listener;
+        $host = $separatedListener[0] == '*' ? "0.0.0.0:$separatedListener[1]" : $this->listener;
         $secure = $this->isSecure() ? 'https' : 'http';
 
-        $this->_link = "{$secure}://{$host}";
+        $this->link = "$secure://$host";
     }
 
     /**
@@ -73,7 +76,7 @@ class Listener
      */
     public function isSecure(): bool
     {
-        return !empty($this->_tls);
+        return !empty($this->tls);
     }
 
     /**
@@ -83,7 +86,7 @@ class Listener
      */
     private function parsePort(): void
     {
-        $this->_port = explode(':', $this->_listener)[1];
+        $this->port = explode(':', $this->listener)[1];
     }
 
     /**
@@ -93,17 +96,17 @@ class Listener
      */
     public function getPort(): int
     {
-        return $this->_port;
+        return $this->port;
     }
 
     /**
      * Get forwarded
      *
-     * @return array
+     * @return Forwarded
      */
-    public function getForwarded(): array
+    public function getForwarded(): Forwarded
     {
-        return $this->_forwarded;
+        return $this->forwarded;
     }
 
     /**
@@ -113,27 +116,27 @@ class Listener
      */
     public function getPass(): ListenerPass
     {
-        return $this->_pass;
+        return $this->pass;
     }
 
     /**
      * Get tls section
      *
-     * @return array
+     * @return Tls
      */
-    public function getTls(): array
+    public function getTls(): Tls
     {
-        return $this->_tls;
+        return $this->tls;
     }
 
     /**
      * Get listener
      *
-     * @return mixed
+     * @return string
      */
-    public function getListener()
+    public function getListener(): string
     {
-        return $this->_listener;
+        return $this->listener;
     }
 
     /**
@@ -148,11 +151,11 @@ class Listener
         }
 
         if (array_key_exists('forwarded', $data)) {
-            $this->_forwarded = new Forwarded($data['forwarded']);
+            $this->forwarded = new Forwarded($data['forwarded']);
         }
 
         if (array_key_exists('tls', $data)) {
-            $this->_tls = new Tls($data['tls']);
+            $this->tls = new Tls($data['tls']);
         }
 
         return $this;
@@ -166,15 +169,15 @@ class Listener
     public function toArray(): array
     {
         $listenerArray = [
-            'pass' => $this->_pass->toString(),
+            'pass' => $this->pass->toString(),
         ];
 
-        if (!empty($this->_tls)) {
-            $listenerArray['tls'] = $this->_tls->toArray();
+        if (!empty($this->tls)) {
+            $listenerArray['tls'] = $this->tls->toArray();
         }
 
-        if (!empty($this->_forwarded)) {
-            $listenerArray['forwarded'] = $this->_forwarded->toArray();
+        if (!empty($this->forwarded)) {
+            $listenerArray['forwarded'] = $this->forwarded->toArray();
         }
 
         return $listenerArray;
@@ -185,7 +188,7 @@ class Listener
      */
     public function setTls(?Tls $tls): void
     {
-        $this->_tls = $tls;
+        $this->tls = $tls;
     }
 
     /**
@@ -193,7 +196,7 @@ class Listener
      */
     public function setForwarded(?Forwarded $forwarded): void
     {
-        $this->_forwarded = $forwarded;
+        $this->forwarded = $forwarded;
     }
 
     /**

@@ -2,14 +2,15 @@
 
 namespace UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 
+use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Exceptions\UnitException;
 
 /**
  * @readonly Cgroup
  */
-readonly class Cgroup
+readonly class Cgroup implements Arrayable
 {
-    private string $_path;
+    private string $path;
 
     public function __construct(array $data)
     {
@@ -25,7 +26,7 @@ readonly class Cgroup
      */
     public function setPath(string $path): void
     {
-        $this->_path = $path;
+        $this->path = $path;
     }
 
     /**
@@ -33,10 +34,13 @@ readonly class Cgroup
      */
     public function getPath(): string
     {
-        return $this->_path;
+        return $this->path;
     }
 
-    public function toArray()
+    /**
+     * @inheritDoc
+     */
+    public function toArray(): array
     {
         return [
             'path' => $this->getPath()

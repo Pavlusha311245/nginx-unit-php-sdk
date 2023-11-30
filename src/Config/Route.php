@@ -19,24 +19,24 @@ class Route implements RouteInterface, Arrayable
     /**
      * @var array
      */
-    private array $_routeBlocks;
+    private array $routeBlocks;
 
     /**
      * @var array
      */
-    private array $_listeners = [];
+    private array $listeners = [];
 
     public function __construct(
-        private readonly string $_name,
+        private readonly string $name,
         $data = [],
         bool                    $single = false
     ) {
         if (!empty($data)) {
             if ($single) {
-                $this->_routeBlocks[] = new RouteBlock($data);
+                $this->routeBlocks[] = new RouteBlock($data);
             } else {
                 foreach ($data as $routeBlock) {
-                    $this->_routeBlocks[] = new RouteBlock($routeBlock);
+                    $this->routeBlocks[] = new RouteBlock($routeBlock);
                 }
             }
         }
@@ -47,7 +47,7 @@ class Route implements RouteInterface, Arrayable
      */
     public function getName(): string
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -55,7 +55,7 @@ class Route implements RouteInterface, Arrayable
      */
     public function setRouteBlocks(array $routeBlocks): void
     {
-        $this->_routeBlocks = $routeBlocks;
+        $this->routeBlocks = $routeBlocks;
     }
 
     /**
@@ -63,7 +63,7 @@ class Route implements RouteInterface, Arrayable
      */
     public function getRouteBlocks(): array
     {
-        return $this->_routeBlocks;
+        return $this->routeBlocks;
     }
 
     /**

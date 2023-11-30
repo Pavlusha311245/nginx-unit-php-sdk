@@ -11,19 +11,19 @@ class Settings
      *
      * @var Http
      */
-    private Http $_http;
+    private Http $http;
 
     /**
      * @var string|array
      */
-    private string|array $_jsmodules;
+    private string|array $jsmodules;
 
     /**
      * @return array|string
      */
     public function getJsmodules(): array|string
     {
-        return $this->_jsmodules;
+        return $this->jsmodules;
     }
 
     /**
@@ -31,6 +31,6 @@ class Settings
      */
     public function setJsmodules(array|string $jsmodules): void
     {
-        $this->_jsmodules = $jsmodules;
+        $this->jsmodules = $jsmodules;
     }
 }

@@ -12,16 +12,16 @@ use UnitPhpSdk\Exceptions\UnitException;
  */
 class UnitRequest
 {
-    private string $_method = 'GET';
+    private string $method = 'GET';
 
-    private mixed $_data;
+    private mixed $data;
 
     /**
      * Nginx Unit address
      *
      * @var string
      */
-    private readonly string $_address;
+    private readonly string $address;
 
     /**
      * Constructor
@@ -32,19 +32,27 @@ class UnitRequest
     public function __construct(
         string                   $address,
         private readonly ?string $socket = null
-    )
+    ) {
+        $this->address = $this->parseAddress($address);
+    }
+
+    /**
+     * @param string $address
+     * @return string
+     */
+    private function parseAddress(string $address): string
     {
         $scheme = parse_url($address, PHP_URL_SCHEME);
         $host = parse_url($address, PHP_URL_HOST);
         $port = parse_url($address, PHP_URL_PORT);
 
-        $address = "{$scheme}://{$host}";
+        $address = "$scheme://$host";
 
         if ($port) {
-            $address .= ":{$port}";
+            $address .= ":$port";
         }
 
-        $this->_address = $address;
+        return $address;
     }
 
     /**
@@ -52,9 +60,11 @@ class UnitRequest
      *
      * @param mixed $method
      */
-    public function setMethod(string $method): void
+    public function setMethod(string $method): self
     {
-        $this->_method = mb_strtoupper($method);
+        $this->method = mb_strtoupper($method);
+
+        return $this;
     }
 
     /**
@@ -62,9 +72,11 @@ class UnitRequest
      *
      * @param null $data
      */
-    public function setData(mixed $data): void
+    public function setData(mixed $data): self
     {
-        $this->_data = $data;
+        $this->data = $data;
+
+        return $this;
     }
 
     /**
@@ -72,24 +84,30 @@ class UnitRequest
      *
      * @throws UnitException
      */
-    public function send($uri, $associative = true)
+    public function send($uri, $associative = true, array $options = [])
     {
         $request = new Client([
-            'base_uri' => $this->_address
+            'base_uri' => $this->address
         ]);
 
-        $requestOptions = [];
+        $requestOptions = $options;
 
         if (!empty($this->socket)) {
             $requestOptions['curl'] = [CURLOPT_UNIX_SOCKET_PATH => $this->socket];
         }
 
-        if (!empty($this->_data)) {
-            $requestOptions['json'] = $this->_data;
-        }
+        //        DATA CAN BE JSON for config or RAW for certificates
+
+        //        if (!empty($this->_data)) {
+        //            if (json_decode($this->_data, true)) {
+        //                $requestOptions['json'] = $this->_data;
+        //            } else {
+        //                $requestOptions['body'] = $this->_data;
+        //            }
+        //        }
 
         try {
-            $response = $request->request($this->_method, $uri, $requestOptions);
+            $response = $request->request($this->method, $uri, $requestOptions);
         } catch (GuzzleException $exception) {
             throw new UnitException($exception->getMessage());
         }
@@ -112,7 +130,7 @@ class UnitRequest
      */
     private function clean(): void
     {
-        $this->_method = 'GET';
-        $this->_data = null;
+        $this->method = 'GET';
+        $this->data = null;
     }
 }

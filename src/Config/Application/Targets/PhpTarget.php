@@ -9,14 +9,14 @@ class PhpTarget
      *
      * @var string
      */
-    private string $_root;
+    private string $root;
 
     /**
      * Filename of a root-based PHP script that serves all requests to the app.
      *
      * @var string
      */
-    private string $_script = 'index.php';
+    private string $script = 'index.php';
 
     public function __construct(array $data)
     {
@@ -32,7 +32,7 @@ class PhpTarget
      */
     public function getScript(): string
     {
-        return $this->_script;
+        return $this->script;
     }
 
     /**
@@ -40,7 +40,7 @@ class PhpTarget
      */
     public function setScript(string $script): void
     {
-        $this->_script = $script;
+        $this->script = $script;
     }
 
     /**
@@ -48,7 +48,7 @@ class PhpTarget
      */
     public function getRoot(): string
     {
-        return $this->_root;
+        return $this->root;
     }
 
     /**
@@ -56,6 +56,6 @@ class PhpTarget
      */
     public function setRoot(string $root): void
     {
-        $this->_root = $root;
+        $this->root = $root;
     }
 }

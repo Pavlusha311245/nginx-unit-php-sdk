@@ -10,14 +10,14 @@ trait HasThreads
      *
      * @var int
      */
-    private int $_threads = 1;
+    private int $threads = 1;
 
     /**
      * @return int
      */
     public function getThreads(): int
     {
-        return $this->_threads;
+        return $this->threads;
     }
 
     /**
@@ -25,6 +25,6 @@ trait HasThreads
      */
     public function setThreads(int $threads): void
     {
-        $this->_threads = $threads;
+        $this->threads = $threads;
     }
 }

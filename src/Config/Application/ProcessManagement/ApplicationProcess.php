@@ -14,21 +14,21 @@ class ApplicationProcess implements Arrayable
      *
      * @var int|mixed
      */
-    private int $_max = 1;
+    private int $max = 1;
 
     /**
      * Minimum number of idle processes that Unit tries to maintain for an app.
      *
      * @var int|mixed
      */
-    private int|null $_spare = null;
+    private int|null $spare = null;
 
     /**
      * Number of seconds Unit waits for before terminating an idle process that exceeds spare.
      *
      * @var int|mixed
      */
-    private int|null $_idle_timeout = null;
+    private int|null $idle_timeout = null;
 
     public function __construct(array $data = [])
     {
@@ -72,15 +72,18 @@ class ApplicationProcess implements Arrayable
      */
     public function getMax(): int
     {
-        return $this->_max;
+        return $this->max;
     }
 
     /**
      * @param int $max
+     * @return ApplicationProcess
      */
-    public function setMax(int $max): void
+    public function setMax(int $max): self
     {
-        $this->_max = $max;
+        $this->max = $max;
+
+        return $this;
     }
 
     /**
@@ -88,15 +91,18 @@ class ApplicationProcess implements Arrayable
      */
     public function getSpare(): int|null
     {
-        return $this->_spare;
+        return $this->spare;
     }
 
     /**
      * @param int $spare
+     * @return ApplicationProcess
      */
-    public function setSpare(int $spare): void
+    public function setSpare(int $spare): self
     {
-        $this->_spare = $spare;
+        $this->spare = $spare;
+
+        return $this;
     }
 
     /**
@@ -104,14 +110,17 @@ class ApplicationProcess implements Arrayable
      */
     public function getIdleTimeout(): int|null
     {
-        return $this->_idle_timeout;
+        return $this->idle_timeout;
     }
 
     /**
      * @param int $idle_timeout
+     * @return ApplicationProcess
      */
-    public function setIdleTimeout(int $idle_timeout): void
+    public function setIdleTimeout(int $idle_timeout): self
     {
-        $this->_idle_timeout = $idle_timeout;
+        $this->idle_timeout = $idle_timeout;
+
+        return $this;
     }
 }

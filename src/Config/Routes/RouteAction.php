@@ -2,6 +2,7 @@
 
 namespace UnitPhpSdk\Config\Routes;
 
+use OutOfRangeException;
 use UnitPhpSdk\Exceptions\UnitException;
 
 class RouteAction
@@ -11,14 +12,14 @@ class RouteAction
      *
      * @var string
      */
-    private string $_pass = '';
+    private string $pass = '';
 
     /**
      * Socket address of an HTTP server to where the request is proxied.
      *
      * @var string
      */
-    private string $_proxy = '';
+    private string $proxy = '';
 
     /**
      * HTTP status code with a context-dependent redirect location.
@@ -26,53 +27,53 @@ class RouteAction
      *
      * @var int|null
      */
-    private ?int $_return = null;
+    private ?int $return = null;
 
     /**
      * String URI; used if the return value implies redirection.
      *
      * @var string
      */
-    private string $_location = '';
+    private string $location = '';
 
     /**
      * Lists file paths that are tried until a file is found.
      *
      * @var array|string
      */
-    private array|string $_share = '';
+    private array|string $share = '';
 
-    private string $_index = '';
-
-    /**
-     * @var array
-     */
-    private array $_fallback = [];
+    private string $index = '';
 
     /**
      * @var array
      */
-    private array $_types = [];
+    private array $fallback = [];
+
+    /**
+     * @var array
+     */
+    private array $types = [];
 
     /**
      * @var string
      */
-    private string $_chroot = '';
+    private string $chroot = '';
 
     /**
      * @var bool
      */
-    protected bool $_follow_symlinks = true;
+    protected bool $follow_symlinks = true;
 
     /**
      * @var bool
      */
-    protected bool $_traverse_mounts = true;
+    protected bool $traverse_mounts = true;
 
     /**
      * @var string
      */
-    private string $_rewrite = '';
+    private string $rewrite = '';
 
     public function __construct($data = null)
     {
@@ -88,7 +89,7 @@ class RouteAction
      */
     public function getReturn(): ?int
     {
-        return $this->_return;
+        return $this->return;
     }
 
     /**
@@ -96,7 +97,7 @@ class RouteAction
      */
     public function getPass(): string
     {
-        return $this->_pass;
+        return $this->pass;
     }
 
     /**
@@ -107,10 +108,10 @@ class RouteAction
     public function setReturn(int $return): void
     {
         if ($return > 999 && $return < 0) {
-            throw new \OutOfRangeException();
+            throw new OutOfRangeException();
         }
 
-        $this->_return = $return;
+        $this->return = $return;
     }
 
     /**
@@ -118,7 +119,7 @@ class RouteAction
      */
     public function setPass(string $pass): void
     {
-        $this->_pass = $pass;
+        $this->pass = $pass;
     }
 
     /**
@@ -126,7 +127,7 @@ class RouteAction
      */
     public function getProxy(): string
     {
-        return $this->_proxy;
+        return $this->proxy;
     }
 
     /**
@@ -134,7 +135,7 @@ class RouteAction
      */
     public function setProxy(string $proxy): void
     {
-        $this->_proxy = $proxy;
+        $this->proxy = $proxy;
     }
 
     /**
@@ -142,7 +143,7 @@ class RouteAction
      */
     public function getLocation(): string
     {
-        return $this->_location;
+        return $this->location;
     }
 
     /**
@@ -150,7 +151,7 @@ class RouteAction
      */
     public function setLocation(string $location): void
     {
-        $this->_location = $location;
+        $this->location = $location;
     }
 
     /**
@@ -158,7 +159,7 @@ class RouteAction
      */
     public function getRewrite(): string
     {
-        return $this->_rewrite;
+        return $this->rewrite;
     }
 
     /**
@@ -166,7 +167,7 @@ class RouteAction
      */
     public function setRewrite(string $rewrite): void
     {
-        $this->_rewrite = $rewrite;
+        $this->rewrite = $rewrite;
     }
 
     /**
@@ -174,7 +175,7 @@ class RouteAction
      */
     public function getShare(): array|string
     {
-        return $this->_share;
+        return $this->share;
     }
 
     /**
@@ -182,7 +183,7 @@ class RouteAction
      */
     public function setShare(array|string $share): void
     {
-        $this->_share = $share;
+        $this->share = $share;
     }
 
     /**
@@ -190,7 +191,7 @@ class RouteAction
      */
     public function getIndex(): string
     {
-        return $this->_index;
+        return $this->index;
     }
 
     /**
@@ -198,7 +199,7 @@ class RouteAction
      */
     public function setIndex(string $index): void
     {
-        $this->_index = $index;
+        $this->index = $index;
     }
 
     /**
@@ -206,7 +207,7 @@ class RouteAction
      */
     public function getChroot(): string
     {
-        return $this->_chroot;
+        return $this->chroot;
     }
 
     /**
@@ -214,7 +215,7 @@ class RouteAction
      */
     public function setChroot(string $chroot): void
     {
-        $this->_chroot = $chroot;
+        $this->chroot = $chroot;
     }
 
     /**
@@ -222,7 +223,7 @@ class RouteAction
      */
     public function getTypes(): array
     {
-        return $this->_types;
+        return $this->types;
     }
 
     /**
@@ -230,7 +231,7 @@ class RouteAction
      */
     public function setTypes(array $types): void
     {
-        $this->_types = $types;
+        $this->types = $types;
     }
 
     /**
@@ -238,11 +239,12 @@ class RouteAction
      */
     public function getFallback(): array
     {
-        return $this->_fallback;
+        return $this->fallback;
     }
 
     /**
      * @param array $fallback
+     * @throws UnitException
      */
     public function setFallback(array $fallback): void
     {
@@ -250,7 +252,7 @@ class RouteAction
             throw new UnitException('Parse Exception');
         }
 
-        $this->_fallback = $fallback;
+        $this->fallback = $fallback;
     }
 
     /**
@@ -258,7 +260,7 @@ class RouteAction
      */
     public function setFollowSymlinks(bool $follow_symlinks): void
     {
-        $this->_follow_symlinks = $follow_symlinks;
+        $this->follow_symlinks = $follow_symlinks;
     }
 
     /**
@@ -266,10 +268,13 @@ class RouteAction
      */
     public function setTraverseMounts(bool $traverse_mounts): void
     {
-        $this->_traverse_mounts = $traverse_mounts;
+        $this->traverse_mounts = $traverse_mounts;
     }
 
-    public function parseFromArray(array $data)
+    /**
+     * @throws UnitException
+     */
+    public function parseFromArray(array $data): void
     {
         if (array_key_exists('pass', $data)) {
             $this->setPass($data['pass']);
@@ -325,7 +330,7 @@ class RouteAction
      */
     public function isFollowSymlinks(): bool
     {
-        return $this->_follow_symlinks;
+        return $this->follow_symlinks;
     }
 
     /**
@@ -333,7 +338,7 @@ class RouteAction
      */
     public function isTraverseMounts(): bool
     {
-        return $this->_traverse_mounts;
+        return $this->traverse_mounts;
     }
 
     /**

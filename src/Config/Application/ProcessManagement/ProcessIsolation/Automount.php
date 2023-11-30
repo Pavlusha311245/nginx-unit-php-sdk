@@ -7,7 +7,7 @@ namespace UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
  */
 readonly class Automount
 {
-    public function __construct(private array $_data)
+    public function __construct(private array $data)
     {
         //
     }
@@ -17,6 +17,6 @@ readonly class Automount
      */
     public function getData(): array
     {
-        return $this->_data;
+        return $this->data;
     }
 }

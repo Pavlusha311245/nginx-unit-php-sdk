@@ -9,20 +9,21 @@ class AccessLog
      *
      * @var string|mixed|null
      */
-    private ?string $_path;
+    private ?string $path;
 
     /**
      * Log format. Besides arbitrary text, can contain any variables Unit supports
      *
      * @var string|mixed|null
      */
-    private ?string $_format;
+    private ?string $format;
 
     public function __construct(
         array $data
-    ) {
-        $this->_path = $data['path'] ?? null;
-        $this->_format = $data['format'] ?? null;
+    )
+    {
+        $this->path = $data['path'] ?? null;
+        $this->format = $data['format'] ?? null;
     }
 
     /**
@@ -30,7 +31,7 @@ class AccessLog
      */
     public function getPath(): ?string
     {
-        return $this->_path;
+        return $this->path;
     }
 
     /**
@@ -38,7 +39,7 @@ class AccessLog
      */
     public function setPath(string $path): void
     {
-        $this->_path = $path;
+        $this->path = $path;
     }
 
     /**
@@ -46,7 +47,7 @@ class AccessLog
      */
     public function getFormat(): ?string
     {
-        return $this->_format;
+        return $this->format;
     }
 
     /**
@@ -54,6 +55,6 @@ class AccessLog
      */
     public function setFormat(string $format): void
     {
-        $this->_format = $format;
+        $this->format = $format;
     }
 }

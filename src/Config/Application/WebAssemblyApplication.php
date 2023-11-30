@@ -4,7 +4,6 @@ namespace UnitPhpSdk\Config\Application;
 
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
-use UnitPhpSdk\Exceptions\UnitException;
 
 /**
  * @extends AbstractApplication
@@ -18,75 +17,78 @@ class WebAssemblyApplication extends AbstractApplication
      *
      * @var string
      */
-    private string $_module = '';
+    private string $module = '';
 
     /**
      * The runtime calls this handler, providing the address of the shared memory block used to pass data in and out the app
      *
      * @var string
      */
-    private string $_request_handler = '';
+    private string $request_handler = '';
 
     /**
      * The runtime calls this handler at language module startup to allocate the shared memory block used to pass data in and out the app
      *
      * @var string
      */
-    private string $_malloc_handler = '';
+    private string $malloc_handler = '';
 
     /**
      * The runtime calls this handler at language module shutdown to free the shared memory block used to pass data in and out the app
      *
      * @var string
      */
-    private string $_free_handler = '';
+    private string $free_handler = '';
 
     /**
      * @var object|null
      */
-    private ?object $_access = null;
+    private ?object $access = null;
 
     /**
      * It is invoked by the WebAssembly language module at language module startup, after the WebAssembly module was initialised
      *
      * @var string
      */
-    private string $_module_init_handler = '';
+    private string $module_init_handler = '';
 
     /**
      * It is invoked by the WebAssembly language module at language module shutdown
      *
      * @var string
      */
-    private string $_module_end_handler = '';
+    private string $module_end_handler = '';
 
     /**
      * It is invoked by the WebAssembly language module at the start of each request
      *
      * @var string
      */
-    private string $_request_init_handler = '';
+    private string $request_init_handler = '';
 
     /**
      * It is invoked by the WebAssembly language module at the end of each request, when the headers and the request body were received
      *
      * @var string
      */
-    private string $_request_end_handler = '';
+    private string $request_end_handler = '';
 
     /**
      * It is invoked by the WebAssembly language module at the end of each response, when the headers and the response body were sent
      *
      * @var string
      */
-    private string $_response_end_handler = '';
+    private string $response_end_handler = '';
 
     /**
      * @param string $module
+     * @return WebAssemblyApplication
      */
-    public function setModule(string $module): void
+    public function setModule(string $module): self
     {
-        $this->_module = $module;
+        $this->module = $module;
+
+        return $this;
     }
 
     /**
@@ -94,15 +96,18 @@ class WebAssemblyApplication extends AbstractApplication
      */
     public function getModule(): string
     {
-        return $this->_module;
+        return $this->module;
     }
 
     /**
      * @param string $request_handler
+     * @return WebAssemblyApplication
      */
-    public function setRequestHandler(string $request_handler): void
+    public function setRequestHandler(string $request_handler): self
     {
-        $this->_request_handler = $request_handler;
+        $this->request_handler = $request_handler;
+
+        return $this;
     }
 
     /**
@@ -110,15 +115,18 @@ class WebAssemblyApplication extends AbstractApplication
      */
     public function getRequestHandler(): string
     {
-        return $this->_request_handler;
+        return $this->request_handler;
     }
 
     /**
      * @param string $malloc_handler
+     * @return WebAssemblyApplication
      */
-    public function setMallocHandler(string $malloc_handler): void
+    public function setMallocHandler(string $malloc_handler): self
     {
-        $this->_malloc_handler = $malloc_handler;
+        $this->malloc_handler = $malloc_handler;
+
+        return $this;
     }
 
     /**
@@ -126,15 +134,18 @@ class WebAssemblyApplication extends AbstractApplication
      */
     public function getMallocHandler(): string
     {
-        return $this->_malloc_handler;
+        return $this->malloc_handler;
     }
 
     /**
      * @param string $free_handler
+     * @return WebAssemblyApplication
      */
-    public function setFreeHandler(string $free_handler): void
+    public function setFreeHandler(string $free_handler): self
     {
-        $this->_free_handler = $free_handler;
+        $this->free_handler = $free_handler;
+
+        return $this;
     }
 
     /**
@@ -142,15 +153,18 @@ class WebAssemblyApplication extends AbstractApplication
      */
     public function getFreeHandler(): string
     {
-        return $this->_free_handler;
+        return $this->free_handler;
     }
 
     /**
      * @param object $access
+     * @return WebAssemblyApplication
      */
-    public function setAccess(object $access): void
+    public function setAccess(object $access): self
     {
-        $this->_access = $access;
+        $this->access = $access;
+
+        return $this;
     }
 
     /**
@@ -158,15 +172,18 @@ class WebAssemblyApplication extends AbstractApplication
      */
     public function getAccess(): object
     {
-        return $this->_access;
+        return $this->access;
     }
 
     /**
      * @param string $module_init_handler
+     * @return WebAssemblyApplication
      */
-    public function setModuleInitHandler(string $module_init_handler): void
+    public function setModuleInitHandler(string $module_init_handler): self
     {
-        $this->_module_init_handler = $module_init_handler;
+        $this->module_init_handler = $module_init_handler;
+
+        return $this;
     }
 
     /**
@@ -174,15 +191,18 @@ class WebAssemblyApplication extends AbstractApplication
      */
     public function getModuleEndHandler(): string
     {
-        return $this->_module_end_handler;
+        return $this->module_end_handler;
     }
 
     /**
      * @param string $module_end_handler
+     * @return WebAssemblyApplication
      */
-    public function setModuleEndHandler(string $module_end_handler): void
+    public function setModuleEndHandler(string $module_end_handler): self
     {
-        $this->_module_end_handler = $module_end_handler;
+        $this->module_end_handler = $module_end_handler;
+
+        return $this;
     }
 
     /**
@@ -190,15 +210,18 @@ class WebAssemblyApplication extends AbstractApplication
      */
     public function getModuleInitHandler(): string
     {
-        return $this->_module_init_handler;
+        return $this->module_init_handler;
     }
 
     /**
      * @param string $request_init_handler
+     * @return WebAssemblyApplication
      */
-    public function setRequestInitHandler(string $request_init_handler): void
+    public function setRequestInitHandler(string $request_init_handler): self
     {
-        $this->_request_init_handler = $request_init_handler;
+        $this->request_init_handler = $request_init_handler;
+
+        return $this;
     }
 
     /**
@@ -206,16 +229,19 @@ class WebAssemblyApplication extends AbstractApplication
      */
     public function getRequestInitHandler(): string
     {
-        return $this->_request_init_handler;
+        return $this->request_init_handler;
     }
 
 
     /**
      * @param string $request_end_handler
+     * @return WebAssemblyApplication
      */
-    public function setRequestEndHandler(string $request_end_handler): void
+    public function setRequestEndHandler(string $request_end_handler): self
     {
-        $this->_request_end_handler = $request_end_handler;
+        $this->request_end_handler = $request_end_handler;
+
+        return $this;
     }
 
     /**
@@ -223,15 +249,18 @@ class WebAssemblyApplication extends AbstractApplication
      */
     public function getRequestEndHandler(): string
     {
-        return $this->_request_end_handler;
+        return $this->request_end_handler;
     }
 
     /**
      * @param string $response_end_handler
+     * @return WebAssemblyApplication
      */
-    public function setResponseEndHandler(string $response_end_handler): void
+    public function setResponseEndHandler(string $response_end_handler): self
     {
-        $this->_response_end_handler = $response_end_handler;
+        $this->response_end_handler = $response_end_handler;
+
+        return $this;
     }
 
     /**
@@ -239,7 +268,7 @@ class WebAssemblyApplication extends AbstractApplication
      */
     public function getResponseEndHandler(): string
     {
-        return $this->_response_end_handler;
+        return $this->response_end_handler;
     }
 
     /**

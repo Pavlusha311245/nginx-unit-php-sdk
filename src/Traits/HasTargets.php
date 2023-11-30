@@ -4,14 +4,14 @@ namespace UnitPhpSdk\Traits;
 
 trait HasTargets
 {
-    private array $_targets = [];
+    private array $targets = [];
 
     /**
      * @return array
      */
     public function getTargets(): array
     {
-        return $this->_targets;
+        return $this->targets;
     }
 
     /**
@@ -19,6 +19,6 @@ trait HasTargets
      */
     public function setTargets(array $targets): void
     {
-        $this->_targets = $targets;
+        $this->targets = $targets;
     }
 }
