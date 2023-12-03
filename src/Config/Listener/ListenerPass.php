@@ -11,9 +11,12 @@ readonly class ListenerPass implements Arrayable
      */
     private string $type;
 
+    private ?string $name;
+
     public function __construct(private string $data)
     {
         $this->type = explode('/', $data)[0];
+        $this->name = explode('/', $data)[1] ?? null;
     }
 
 
@@ -25,6 +28,14 @@ readonly class ListenerPass implements Arrayable
     public function getType(): string
     {
         return $this->type;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
     }
 
     /**
