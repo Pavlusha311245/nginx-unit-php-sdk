@@ -27,13 +27,13 @@
     "lint": "./vendor/bin/php-cs-fixer fix --rules=@PSR12 ."
   },
   "require": {
-    "php": ">=8.2",
-    "friendsofphp/php-cs-fixer": "^3.21",
-    "guzzlehttp/guzzle": "^7.0",
+    "php": "^8.3",
+    "friendsofphp/php-cs-fixer": "^3.40",
+    "guzzlehttp/guzzle": "^7.8",
     "ext-curl": "*"
   },
   "require-dev": {
-    "pestphp/pest": "^2.8",
+    "pestphp/pest": "^2.26",
     "phpstan/phpstan": "^1.10"
   },
   "autoload": {
@@ -54,6 +54,6 @@
       "pestphp/pest-plugin": true
     }
   },
-  "minimum-stability": "stable",
+  "minimum-stability": "beta",
   "prefer-stable": true
 }
