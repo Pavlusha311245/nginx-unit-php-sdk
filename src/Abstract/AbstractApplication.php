@@ -438,6 +438,7 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
             'type' => $this->getType(),
             'user' => $this->getUser(),
             'group' => $this->getGroup(),
+            'working_directory' => $this->getWorkingDirectory(),
             'environment' => $this->getEnvironment(),
             'stderr' => $this->getStdErr(),
             'stdout' => $this->getStdOut(),

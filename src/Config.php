@@ -4,12 +4,10 @@ namespace UnitPhpSdk;
 
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Upstream};
-use UnitPhpSdk\Enums\HttpMethodsEnum;
-use UnitPhpSdk\Exceptions\FileNotFoundException;
-use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Exceptions\{FileNotFoundException, UnitException};
+use UnitPhpSdk\Contracts\{Arrayable, ConfigInterface};
 use UnitPhpSdk\Http\UnitRequest;
-use UnitPhpSdk\Contracts\Arrayable;
-use UnitPhpSdk\Contracts\ConfigInterface;
+use UnitPhpSdk\Enums\HttpMethodsEnum;
 
 /**
  * This class contains Nginx Unit config data
@@ -80,7 +78,7 @@ class Config implements ConfigInterface, Arrayable
                 ))->parseFromArray($listenerData);
 
                 $typePath = $listener->getPass()->getType();
-                $typePathName = $listener->getPass()->toArray()[1] ?? null;
+                $typePathName = $listener->getPass()->getName();
 
                 ($this->{"$typePath"}[$typePathName ?? 'default'])?->setListener($listener);
 
