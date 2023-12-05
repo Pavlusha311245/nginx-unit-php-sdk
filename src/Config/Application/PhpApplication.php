@@ -67,7 +67,7 @@ class PhpApplication extends AbstractApplication
      * @param string $index
      * @return PhpApplication
      */
-    public function setIndex(string $index): self
+    public function setIndex(string $index = 'index.php'): self
     {
         $this->index = $index;
 
@@ -84,6 +84,7 @@ class PhpApplication extends AbstractApplication
 
     /**
      * @param string $script
+     * @return PhpApplication
      */
     public function setScript(string $script = 'index.php'): self
     {
@@ -101,11 +102,25 @@ class PhpApplication extends AbstractApplication
     }
 
     /**
-     * @param mixed $options
+     * @param array $optionsData
      * @return PhpApplication
      */
-    public function setOptions(mixed $options): self
+    public function setOptions(array $optionsData): self
     {
+        $options = new PhpOptions();
+
+        if (array_key_exists('admin', $optionsData)) {
+            $options->setAdmin($optionsData['admin']);
+        }
+
+        if (array_key_exists('user', $optionsData)) {
+            $options->setUser($optionsData['user']);
+        }
+
+        if (array_key_exists('file', $optionsData) && is_string($optionsData['file'])) {
+            $options->setFile($optionsData['file']);
+        }
+
         $this->options = $options;
 
         return $this;

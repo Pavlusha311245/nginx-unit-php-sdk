@@ -5,6 +5,8 @@
 - Now SDK support connection via only address.
 - All private fields renamed from `_pattern` to `pattern`
 - Some classes become a builders
+- Updated PhpTarget class
+- Added PhpOptions class
 
 ## v0.6.0 - [2023/09/13] _Release on Programmer's Day. Happy holiday everyone :)_
 
