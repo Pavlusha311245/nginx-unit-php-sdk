@@ -2,9 +2,10 @@
 
 namespace UnitPhpSdk\Config\Application\Targets;
 
+use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 
-class PythonTarget
+class PythonTarget implements Arrayable
 {
     /**
      * App’s module nam
@@ -66,5 +67,16 @@ class PythonTarget
     public function getCallable(): string
     {
         return $this->callable;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'module' => $this->getModule(),
+            'callable' => $this->getCallable()
+        ];
     }
 }
