@@ -15,11 +15,6 @@ use UnitPhpSdk\Exceptions\UnitException;
 class Listener
 {
     /**
-     * @var string
-     */
-    private string $link;
-
-    /**
      * @var ListenerPass
      */
     private ListenerPass $pass;
@@ -37,36 +32,37 @@ class Listener
         string                  $pass,
         private ?Tls            $tls = null,
         private ?Forwarded      $forwarded = null,
-    ) {
+    )
+    {
         $this->parsePort();
-        $this->generateLink();
-
         $this->pass = new ListenerPass($pass);
     }
 
     /**
      * Get link
      *
+     * @param string $host
      * @return string
      */
-    public function getLink(): string
+    public function getLink(string $host = '127.0.0.1'): string
     {
-        return $this->link;
+        return $this->generateLink($host);
     }
 
     /**
      * Generate link from listener
      *
-     * @return void
+     * @param string $host
+     * @return string
      */
-    private function generateLink(): void
+    private function generateLink(string $host = '127.0.0.1'): string
     {
         $separatedListener = explode(':', $this->listener);
 
-        $host = $separatedListener[0] == '*' ? "0.0.0.0:$separatedListener[1]" : $this->listener;
+        $host = $separatedListener[0] == '*' ? "$host:$separatedListener[1]" : $this->listener;
         $secure = $this->isSecure() ? 'https' : 'http';
 
-        $this->link = "$secure://$host";
+        return "$secure://$host";
     }
 
     /**
