@@ -11,7 +11,7 @@ class PhpOptions implements Arrayable
      *
      * @var string
      */
-    private string $file;
+    private string $file = '';
 
     /**
      * Key-value
@@ -32,7 +32,7 @@ class PhpOptions implements Arrayable
      */
     public function getAdmin(): array
     {
-        return $this->admin;
+        return $this->admin ?? [];
     }
 
     /**
@@ -51,7 +51,7 @@ class PhpOptions implements Arrayable
      */
     public function getUser(): array
     {
-        return $this->user;
+        return $this->user ?? [];
     }
 
     /**

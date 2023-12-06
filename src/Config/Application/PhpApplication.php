@@ -96,7 +96,7 @@ class PhpApplication extends AbstractApplication
     /**
      * @return mixed
      */
-    public function getOptions(): mixed
+    public function getOptions(): PhpOptions
     {
         return $this->options;
     }
