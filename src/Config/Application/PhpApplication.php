@@ -34,7 +34,7 @@ class PhpApplication extends AbstractApplication
     /**
      * @var
      */
-    private $options;
+    private ?PhpOptions $options;
 
     /**
      * @return mixed
@@ -94,9 +94,9 @@ class PhpApplication extends AbstractApplication
     }
 
     /**
-     * @return mixed
+     * @return PhpOptions|null
      */
-    public function getOptions(): PhpOptions
+    public function getOptions(): ?PhpOptions
     {
         return $this->options;
     }
