@@ -10,7 +10,7 @@ use UnitPhpSdk\Exceptions\RequiredKeyException;
  */
 class WebAssemblyApplication extends AbstractApplication
 {
-    public const TYPE = 'wasm';
+    public const string TYPE = 'wasm';
 
     /**
      * WebAssembly module pathname, including the .wasm extension
@@ -317,7 +317,7 @@ class WebAssemblyApplication extends AbstractApplication
     }
 
     /**
-     * @return array
+     * @inheritDoc
      */
     public function toArray(): array
     {

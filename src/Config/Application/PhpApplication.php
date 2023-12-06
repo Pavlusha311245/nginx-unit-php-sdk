@@ -4,17 +4,18 @@ namespace UnitPhpSdk\Config\Application;
 
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Config\Application\Targets\PhpTarget;
+use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Traits\HasTargets;
 
 /**
  * @extends AbstractApplication
  */
-class PhpApplication extends AbstractApplication
+class PhpApplication extends AbstractApplication implements Arrayable
 {
     use HasTargets;
 
-    public const TYPE = 'php';
+    public const string TYPE = 'php';
 
     /**
      * @var string
@@ -163,6 +164,9 @@ class PhpApplication extends AbstractApplication
         }
     }
 
+    /**
+     * @inheritDoc
+     */
     public function toArray(): array
     {
         return array_merge(

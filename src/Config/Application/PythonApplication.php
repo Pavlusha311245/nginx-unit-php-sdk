@@ -212,6 +212,9 @@ class PythonApplication extends AbstractApplication
         }
     }
 
+    /**
+     * @inheritDoc
+     */
     public function toArray(): array
     {
         return array_merge(

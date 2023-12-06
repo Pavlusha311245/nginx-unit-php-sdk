@@ -17,7 +17,7 @@ class PerlApplication extends AbstractApplication
     use HasThreads;
     use HasThreadStackSize;
 
-    public const TYPE = 'perl';
+    public const string TYPE = 'perl';
 
     /**
      * PSGI script path
@@ -67,6 +67,9 @@ class PerlApplication extends AbstractApplication
         }
     }
 
+    /**
+     * @inheritDoc
+     */
     public function toArray(): array
     {
         return array_merge(

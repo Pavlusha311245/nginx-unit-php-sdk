@@ -2,7 +2,6 @@
 
 namespace UnitPhpSdk\Abstract;
 
-use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 
@@ -11,7 +10,7 @@ use UnitPhpSdk\Exceptions\UnitException;
  */
 class AbstractExternalApplication extends AbstractApplication
 {
-    public const TYPE = 'external';
+    public const string TYPE = 'external';
 
     /**
      * Pathname of the app, absolute or relative to working_directory
@@ -89,7 +88,7 @@ class AbstractExternalApplication extends AbstractApplication
     }
 
     /**
-     * @return array
+     * @inheritDoc
      */
     public function toArray(): array
     {

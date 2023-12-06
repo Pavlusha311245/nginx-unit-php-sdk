@@ -15,7 +15,7 @@ class JavaApplication extends AbstractApplication
     use HasThreads;
     use HasThreadStackSize;
 
-    public const TYPE = 'java';
+    public const string TYPE = 'java';
 
     /**
      * Pathname of the application’s .war file (packaged or unpackaged)

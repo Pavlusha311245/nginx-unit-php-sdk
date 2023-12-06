@@ -8,13 +8,12 @@ use UnitPhpSdk\Traits\HasThreads;
 
 /**
  * @extends AbstractApplication
- * TODO: make Arrayable
  */
 class RubyApplication extends AbstractApplication
 {
     use HasThreads;
 
-    public const TYPE = 'ruby';
+    public const string TYPE = 'ruby';
 
     /**
      * @var string
@@ -84,5 +83,20 @@ class RubyApplication extends AbstractApplication
         if (array_key_exists('threads', $data)) {
             $this->setThreads($data['threads']);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toArray(): array
+    {
+        return array_merge(
+            parent::toArray(),
+            [
+                'script' => $this->getScript(),
+                'hooks' => $this->getHooks(),
+                'threads' => $this->getThreads()
+            ]
+        );
     }
 }
