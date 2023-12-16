@@ -63,14 +63,23 @@ class RouteAction
     /**
      * @var bool
      */
-    protected bool $follow_symlinks = true;
+    private bool $follow_symlinks = true;
 
     /**
      * @var bool
      */
-    protected bool $traverse_mounts = true;
+    private bool $traverse_mounts = true;
 
     /**
+     * Updates the header fields of the upcoming response.
+     *
+     * @var array
+     */
+    private array $response_headers = [];
+
+    /**
+     * Updated the request URI, preserving the query string.
+     *
      * @var string
      */
     private string $rewrite = '';
@@ -275,6 +284,38 @@ class RouteAction
     }
 
     /**
+     * @return bool
+     */
+    public function isFollowSymlinks(): bool
+    {
+        return $this->follow_symlinks;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTraverseMounts(): bool
+    {
+        return $this->traverse_mounts;
+    }
+
+    /**
+     * @return array
+     */
+    public function getResponseHeaders(): array
+    {
+        return $this->response_headers;
+    }
+
+    /**
+     * @param array $response_headers
+     */
+    public function setResponseHeaders(array $response_headers): void
+    {
+        $this->response_headers = $response_headers;
+    }
+
+    /**
      * @throws UnitException
      */
     public function parseFromArray(array $data): void
@@ -329,28 +370,13 @@ class RouteAction
     }
 
     /**
-     * @return bool
-     */
-    public function isFollowSymlinks(): bool
-    {
-        return $this->follow_symlinks;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isTraverseMounts(): bool
-    {
-        return $this->traverse_mounts;
-    }
-
-    /**
      * @return array
      */
     public function toArray(): array
     {
         return [
             'pass' => $this->getPass(),
+            'response_headers' => $this->getResponseHeaders(),
             'proxy' => $this->getProxy(),
             'return' => $this->getReturn(),
             'location' => $this->getLocation(),
@@ -361,7 +387,7 @@ class RouteAction
             'types' => $this->getTypes(),
             'fallback' => $this->getFallback(),
             'follow_symlinks' => $this->isFollowSymlinks(),
-            'traverse_mounts' => $this->isTraverseMounts()
+            'traverse_mounts' => $this->isTraverseMounts(),
         ];
     }
 }

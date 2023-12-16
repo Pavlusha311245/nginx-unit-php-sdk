@@ -2,11 +2,13 @@
 
 use UnitPhpSdk\Config\Routes\RouteAction;
 use UnitPhpSdk\Exceptions\UnitException;
+
 use function PHPUnit\Framework\assertEquals;
 
 it('test RouteAction setters and getters', function () {
     $data = [
         'pass' => 'from_here',
+        'response_headers' => [],
         'proxy' => 'to_there',
         'return' => 200,
         'location' => 'location_string',
@@ -23,6 +25,7 @@ it('test RouteAction setters and getters', function () {
     $routeAction = new RouteAction($data);
 
     assertEquals($data['pass'], $routeAction->getPass());
+    assertEquals($data['response_headers'], $routeAction->getResponseHeaders());
     assertEquals($data['proxy'], $routeAction->getProxy());
     assertEquals($data['return'], $routeAction->getReturn());
     assertEquals($data['location'], $routeAction->getLocation());
