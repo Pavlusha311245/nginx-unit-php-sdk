@@ -19,7 +19,7 @@ class Route implements RouteInterface, Arrayable
     /**
      * @var array
      */
-    private array $routeBlocks;
+    private array $routeBlocks = [];
 
     /**
      * @var array

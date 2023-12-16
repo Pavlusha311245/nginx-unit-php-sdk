@@ -50,7 +50,7 @@ class ProcessIsolation implements Arrayable
     /**
      * @throws UnitException
      */
-    public function __construct(array $data)
+    public function __construct(array $data = [])
     {
         $this->parseFromArray($data);
     }

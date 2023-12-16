@@ -23,6 +23,7 @@
       "./vendor/bin/phpstan analyse -c phpstan.neon"
     ],
     "test:unit": "./vendor/bin/pest",
+    "test:coverage": "./vendor/bin/pest --coverage",
     "test:phpstan": "./vendor/bin/phpstan analyse -c phpstan.neon",
     "lint": "./vendor/bin/php-cs-fixer fix --rules=@PSR12 ."
   },

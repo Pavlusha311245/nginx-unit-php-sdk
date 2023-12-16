@@ -2,6 +2,9 @@
 
 namespace UnitPhpSdk\Traits;
 
+use UnitPhpSdk\Config\Application\PhpApplication;
+use UnitPhpSdk\Config\Application\PythonApplication;
+
 trait HasTargets
 {
     private array $targets = [];
@@ -16,6 +19,7 @@ trait HasTargets
 
     /**
      * @param array $targets
+     * @return HasTargets|PhpApplication|PythonApplication
      */
     public function setTargets(array $targets): self
     {

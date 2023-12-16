@@ -3,6 +3,7 @@
 namespace UnitPhpSdk\Config\Routes;
 
 use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Exceptions\UnitException;
 
 /**
  * @implements Arrayable
@@ -19,6 +20,9 @@ class RouteBlock implements Arrayable
      */
     private ?RouteMatch $match = null;
 
+    /**
+     * @throws UnitException
+     */
     public function __construct(array $data = [])
     {
         if (!empty($data)) {
@@ -31,10 +35,13 @@ class RouteBlock implements Arrayable
 
     /**
      * @param RouteMatch|null $match
+     * @return RouteBlock
      */
-    public function setMatch(?RouteMatch $match): void
+    public function setMatch(?RouteMatch $match): self
     {
         $this->match = $match;
+
+        return $this;
     }
 
     /**
@@ -49,10 +56,13 @@ class RouteBlock implements Arrayable
 
     /**
      * @param RouteAction|null $action
+     * @return RouteBlock
      */
-    public function setAction(?RouteAction $action): void
+    public function setAction(?RouteAction $action): self
     {
         $this->action = $action;
+
+        return $this;
     }
 
     /**
@@ -68,8 +78,8 @@ class RouteBlock implements Arrayable
     public function toArray(): array
     {
         return [
-            'match' => $this->getMatch()?->toArray(),
             'action' => $this->getAction()->toArray(),
+            'match' => $this->getMatch()?->toArray(),
         ];
     }
 }
