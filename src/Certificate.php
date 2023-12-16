@@ -14,8 +14,7 @@ readonly class Certificate implements CertificateInterface
     public function __construct(
         private array  $data,
         private string $name
-    )
-    {
+    ) {
         //
     }
 

@@ -19,9 +19,6 @@ class Listener
      */
     private ListenerPass $pass;
 
-//    TODO: implement From 1.30.0
-//    private $response_headers
-
     /**
      * @var int
      */

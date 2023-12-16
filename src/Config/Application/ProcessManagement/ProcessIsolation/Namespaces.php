@@ -10,7 +10,6 @@ use UnitPhpSdk\Contracts\Arrayable;
  */
 readonly class Namespaces implements Arrayable
 {
-
     /**
      * @var bool
      */

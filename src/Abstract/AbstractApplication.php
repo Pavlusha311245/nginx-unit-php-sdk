@@ -450,6 +450,6 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      */
     public function toJson(): string|false
     {
-        return json_encode(array_filter(static::toArray(), fn($item) => !empty($item)));
+        return json_encode(array_filter(static::toArray(), fn ($item) => !empty($item)));
     }
 }

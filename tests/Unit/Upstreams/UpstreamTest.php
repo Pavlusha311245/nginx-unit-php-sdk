@@ -2,6 +2,7 @@
 
 use UnitPhpSdk\Config\Upstream;
 use UnitPhpSdk\Exceptions\UnitException;
+
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertSame;
 

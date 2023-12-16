@@ -20,8 +20,7 @@ class AccessLog
 
     public function __construct(
         array $data
-    )
-    {
+    ) {
         $this->path = $data['path'] ?? null;
         $this->format = $data['format'] ?? null;
     }
