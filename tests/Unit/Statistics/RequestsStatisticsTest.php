@@ -3,7 +3,7 @@
 use UnitPhpSdk\Statistics\RequestsStatistics;
 use UnitPhpSdk\Exceptions\UnitParseException;
 
-it('checks total requests and array conversion', function() {
+it('checks total requests and array conversion', function () {
     $data = ['total' => 5, 'foo' => 'bar'];
     $stats = new RequestsStatistics($data);
 

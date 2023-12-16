@@ -34,19 +34,19 @@ it('test statistics', function () {
 
     $statistics = new Statistics($data);
 
-// Below are added some partial checks for sample. Add more according to your requirements.
+    // Below are added some partial checks for sample. Add more according to your requirements.
 
-// Test getConnections method
+    // Test getConnections method
     $this->assertInstanceOf(ConnectionsStatisticsInterface::class, $statistics->getConnections());
     $this->assertEquals($statistics->getConnections()->getActiveConnections(), $connectionsData['active']);
 
-// Test getRequests method
+    // Test getRequests method
     $this->assertInstanceOf(RequestsStatisticsInterface::class, $statistics->getRequests());
 
-// Test getApplications method
+    // Test getApplications method
     $this->assertIsArray($statistics->getApplications());
 
-// Test getApplicationStatistics method
+    // Test getApplicationStatistics method
     $application = 'application1';
     $this->assertInstanceOf(ApplicationStatisticsInterface::class, $statistics->getApplicationStatistics($application));
 });

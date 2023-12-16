@@ -1,10 +1,12 @@
 <?php
+
 use Pest\TestSuite;
 use UnitPhpSdk\Traits\HasThreadStackSize;
+
 use function PHPUnit\Framework\assertNull;
 
 it('tests HasThreadStackSize trait', function () {
-    $class = new class {
+    $class = new class () {
         use HasThreadStackSize;
     };
 

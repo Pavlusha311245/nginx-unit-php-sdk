@@ -1,8 +1,9 @@
 <?php
-use \UnitPhpSdk\Config\Routes\RouteBlock;
-use \UnitPhpSdk\Config\Routes\RouteAction;
-use \UnitPhpSdk\Config\Routes\RouteMatch;
-use \UnitPhpSdk\Enums\HttpMethodsEnum;
+
+use UnitPhpSdk\Config\Routes\RouteBlock;
+use UnitPhpSdk\Config\Routes\RouteAction;
+use UnitPhpSdk\Config\Routes\RouteMatch;
+use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Enums\HttpSchemeEnum;
 
 it('RouteBlock class functions correctly', function () {
@@ -50,8 +51,8 @@ it('RouteBlock class functions correctly', function () {
 
     // TODO: fix
     // test toArray function
-//    $toArrayResult = $routeBlock->toArray();
-//
-//    $this->assertEquals($routeActionData, $toArrayResult['action']);
-//    $this->assertEquals($routeMatchData, $toArrayResult['match']);
+    //    $toArrayResult = $routeBlock->toArray();
+    //
+    //    $this->assertEquals($routeActionData, $toArrayResult['action']);
+    //    $this->assertEquals($routeMatchData, $toArrayResult['match']);
 });

@@ -43,7 +43,7 @@ it('route blocks array is not empty when initialized with data', function () {
 
 });
 
-it('toJson should return a json string', function() {
+it('toJson should return a json string', function () {
     $data = [
         [
             'name' => 'block1',

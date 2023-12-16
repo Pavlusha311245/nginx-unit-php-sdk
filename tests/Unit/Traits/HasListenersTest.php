@@ -1,4 +1,5 @@
 <?php
+
 use Pest\TestSuite;
 use UnitPhpSdk\Config\Listener;
 use UnitPhpSdk\Traits\HasListeners;
@@ -7,7 +8,7 @@ it('sets and gets listeners correctly', function () {
     $listenerMock = \Mockery::mock(Listener::class);
     $listenerMock->shouldReceive('getListener')->andReturn('listener1');
 
-    $object = new class {
+    $object = new class () {
         use HasListeners;
     };
 

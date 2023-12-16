@@ -1,4 +1,5 @@
 <?php
+
 use UnitPhpSdk\Traits\HasThreads;
 
 it('gets and sets threads correctly', function () {
