@@ -2,7 +2,7 @@
 
 namespace UnitPhpSdk\Contracts;
 
-use UnitPhpSdk\Certificate;
+use UnitPhpSdk\Config;
 use UnitPhpSdk\Exceptions\UnitException;
 
 interface UnitInterface
@@ -60,6 +60,12 @@ interface UnitInterface
      * @return ConfigInterface
      */
     public function getConfig(): ConfigInterface;
+
+    /**
+     * @param Config $config
+     * @return bool
+     */
+    public function uploadConfig(Config $config): bool;
 
     /**
      * Upload full file config

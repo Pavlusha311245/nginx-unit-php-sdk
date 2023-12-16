@@ -35,10 +35,6 @@ class Tls
      */
     private function parseFromArray(array $data): void
     {
-        //        if (empty($data['certificate'])) {
-        //            throw new UnitException("Missing required 'source' array key");
-        //        }
-
         if (array_key_exists('certificate', $data)) {
             $this->setCertificate($data['certificate']);
         }
@@ -109,12 +105,12 @@ class Tls
             'certificate' => $this->certificate
         ];
 
-        if (!empty($this->getSession())) {
-            $data['session'] = $this->getSession();
-        }
-
         if (!empty($this->getConfCommands())) {
             $data['conf_commands'] = $this->getConfCommands();
+        }
+
+        if (!empty($this->getSession())) {
+            $data['session'] = $this->getSession();
         }
 
         return $data;

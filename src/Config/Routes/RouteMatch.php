@@ -12,30 +12,30 @@ class RouteMatch
      *
      * @var string
      */
-    private string $host;
+    private string $host = '';
 
     /**
      * Method from the request line, uppercase.
      *
-     * @var HttpMethodsEnum
+     * @var HttpMethodsEnum|null
      */
-    private HttpMethodsEnum $method;
+    private ?HttpMethodsEnum $method = null;
 
-    private string $source;
+    private string $source = '';
 
     /**
      * Target IP address and optional port of the request.
      *
      * @var string
      */
-    private string $destination;
+    private string $destination = '';
 
     /**
      * URI scheme. Accepts only two patterns, either http or https.
      *
-     * @var HttpSchemeEnum
+     * @var HttpSchemeEnum|null
      */
-    private HttpSchemeEnum $scheme;
+    private ?HttpSchemeEnum $scheme = null;
 
     /**
      * Request target, percent decoded and normalized by removing the query string and
@@ -43,7 +43,7 @@ class RouteMatch
      *
      * @var array|string
      */
-    private array|string $uri;
+    private array|string $uri = '';
 
     /**
      * Arguments supplied with the request’s query string; these names and value pairs are percent decoded,
@@ -51,28 +51,28 @@ class RouteMatch
      *
      * @var array
      */
-    private array $arguments;
+    private array $arguments = [];
 
     /**
      *    Query string, percent decoded, with plus signs (+) replaced by spaces.
      *
      * @var array
      */
-    private array $query;
+    private array $query = [];
 
     /**
      *    Cookies supplied with the request.
      *
      * @var array
      */
-    private array $cookies;
+    private array $cookies = [];
 
     /**
      *    Header fields supplied with the request.
      *
      * @var array
      */
-    private array $headers;
+    private array $headers = [];
 
     public function __construct($data = null)
     {
@@ -84,9 +84,9 @@ class RouteMatch
     /**
      * Get method
      *
-     * @return HttpMethodsEnum
+     * @return HttpMethodsEnum|null
      */
-    public function getMethod(): HttpMethodsEnum
+    public function getMethod(): ?HttpMethodsEnum
     {
         return $this->method;
     }
@@ -122,16 +122,12 @@ class RouteMatch
     /**
      * Set HTTP scheme
      *
-     * @param string $scheme
+     * @param HttpSchemeEnum $scheme
      * @return void
      */
-    public function setScheme(string $scheme): void
+    public function setScheme(HttpSchemeEnum $scheme): void
     {
-        $this->scheme = match ($scheme) {
-            'http' => HttpSchemeEnum::HTTP,
-            'https' => HttpSchemeEnum::HTTPS,
-            default => null
-        };
+        $this->scheme = $scheme;
     }
 
     /**
@@ -279,7 +275,11 @@ class RouteMatch
         }
 
         if (array_key_exists('method', $data)) {
-            $this->setMethod(HttpMethodsEnum::from(strtoupper($data['method'])));
+            if (is_string($data['method'])) {
+                $this->setMethod(HttpMethodsEnum::from(strtoupper($data['method'])));
+            } else {
+                $this->setMethod($data['method']);
+            }
         }
 
         if (array_key_exists('query', $data)) {
@@ -287,7 +287,11 @@ class RouteMatch
         }
 
         if (array_key_exists('scheme', $data)) {
-            $this->setScheme(HttpSchemeEnum::from($data['scheme'])->value);
+            if (is_string($data['scheme'])) {
+                $this->setScheme(HttpSchemeEnum::from($data['scheme'])->value);
+            } else {
+                $this->setScheme($data['scheme']);
+            }
         }
 
         if (array_key_exists('source', $data)) {
@@ -305,16 +309,16 @@ class RouteMatch
     public function toArray(): array
     {
         return [
-            'arguments' => $this->getArguments(),
-            'cookies' => $this->getCookies(),
-            'destination' => $this->getDestination(),
-            'headers' => $this->getHeaders(),
             'host' => $this->getHost(),
             'method' => $this->getMethod(),
-            'query' => $this->getQuery(),
+            'destination' => $this->getDestination(),
             'scheme' => $this->getScheme(),
+            'uri' => $this->getUri(),
+            'arguments' => $this->getArguments(),
+            'query' => $this->getQuery(),
+            'cookies' => $this->getCookies(),
+            'headers' => $this->getHeaders(),
             'source' => $this->getSource(),
-            'uri' => $this->getUri()
         ];
     }
 }

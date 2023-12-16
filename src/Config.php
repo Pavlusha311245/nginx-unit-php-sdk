@@ -5,7 +5,7 @@ namespace UnitPhpSdk;
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Upstream};
 use UnitPhpSdk\Exceptions\{FileNotFoundException, UnitException};
-use UnitPhpSdk\Contracts\{Arrayable, ConfigInterface};
+use UnitPhpSdk\Contracts\{Arrayable, ConfigInterface, Jsonable};
 use UnitPhpSdk\Http\UnitRequest;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 
@@ -14,7 +14,7 @@ use UnitPhpSdk\Enums\HttpMethodsEnum;
  *
  * @implements ConfigInterface
  */
-class Config implements ConfigInterface, Arrayable
+class Config implements ConfigInterface, Arrayable, Jsonable
 {
     /**
      * Listeners that accept requests
@@ -45,12 +45,27 @@ class Config implements ConfigInterface, Arrayable
      */
     private array $upstreams = [];
 
+    private ?UnitRequest $unitRequest;
+
     /**
      * Constructor
      *
+     * @param object|null $data
      * @throws UnitException
      */
-    public function __construct(object $data, private readonly UnitRequest $unitRequest)
+    public function __construct(object $data = null, UnitRequest $unitRequest = null)
+    {
+        $this->unitRequest = $unitRequest;
+
+        if (!empty($data) && !empty($this->unitRequest)) {
+            $this->parseUnitObject($data);
+        }
+    }
+
+    /**
+     * @throws UnitException
+     */
+    private function parseUnitObject(object $data): void
     {
         $rawData = $data;
         $jsonData = json_decode(json_encode($data), true);
@@ -205,9 +220,11 @@ class Config implements ConfigInterface, Arrayable
     {
         try {
             $this->unitRequest->setMethod(HttpMethodsEnum::PUT->value)
-                ->setData($listener->toJson())
-                ->send("/config/listeners/{$listener->getListener()}");
-        } catch (UnitException) {
+                ->send("/config/listeners/{$listener->getListener()}", options: [
+                    'json' => $listener->toArray()
+                ]);
+        } catch (UnitException $e) {
+            print_r($e->getMessage());
             return false;
         }
 
@@ -524,5 +541,14 @@ class Config implements ConfigInterface, Arrayable
         }
 
         return $array;
+    }
+
+    /**
+     * @param int $options
+     * @return string
+     */
+    public function toJson(int $options = 0): string
+    {
+        return json_encode($this->toJson());
     }
 }

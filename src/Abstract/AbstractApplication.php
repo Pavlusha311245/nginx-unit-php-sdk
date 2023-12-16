@@ -403,11 +403,8 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
         }
 
         if (array_key_exists('processes', $data)) {
-            if (is_array($data['processes'])) {
-                $this->setProcesses(new ApplicationProcess($data['processes']));
-            } else {
-                $this->setProcesses($data['processes']);
-            }
+            $this->setProcesses(is_array($data['processes'])
+                ? new ApplicationProcess($data['processes']) : $data['processes']);
         }
 
         if (array_key_exists('limits', $data)) {

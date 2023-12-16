@@ -183,6 +183,11 @@ class Unit implements UnitInterface
         return $this->certificates[$certificateName] ?? null;
     }
 
+    public function uploadConfig(Config $config): bool
+    {
+        return true;
+    }
+
     /**
      * @inheritDoc
      * @throws UnitException
@@ -205,7 +210,7 @@ class Unit implements UnitInterface
             $request = new UnitRequest($this->address, $this->socket);
             $request
                 ->setMethod('PUT')
-                ->send("/config", true, [
+                ->send(uri: "/config", options: [
                     'form_params' => $data
                 ]);
         } catch (UnitException $exception) {

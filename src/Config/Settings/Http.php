@@ -74,7 +74,7 @@ class Http
     /**
      * @var
      */
-    private mixed $static;
+    private mixed $static = null;
 
     /**
      * @return int

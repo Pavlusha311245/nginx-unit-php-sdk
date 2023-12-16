@@ -75,6 +75,9 @@ class RouteAction
      */
     private string $rewrite = '';
 
+    /**
+     * @throws UnitException
+     */
     public function __construct($data = null)
     {
         if (!empty($data)) {
@@ -107,7 +110,7 @@ class RouteAction
      */
     public function setReturn(int $return): void
     {
-        if ($return > 999 && $return < 0) {
+        if ($return > 999 || $return < 0) {
             throw new OutOfRangeException();
         }
 

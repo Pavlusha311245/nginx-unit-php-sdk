@@ -29,12 +29,13 @@
   "require": {
     "php": "^8.3",
     "friendsofphp/php-cs-fixer": "^3.40",
-    "guzzlehttp/guzzle": "^7.8",
+    "guzzlehttp/guzzle": "^7.8.1",
     "ext-curl": "*"
   },
   "require-dev": {
     "pestphp/pest": "^2.26",
-    "phpstan/phpstan": "^1.10"
+    "phpstan/phpstan": "^1.10",
+    "mockery/mockery": "^1.6"
   },
   "autoload": {
     "psr-4": {

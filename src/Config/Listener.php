@@ -29,13 +29,18 @@ class Listener
 
     public function __construct(
         private readonly string $listener,
-        string                  $pass,
+        string|ListenerPass     $pass,
         private ?Tls            $tls = null,
         private ?Forwarded      $forwarded = null,
     )
     {
         $this->parsePort();
-        $this->pass = new ListenerPass($pass);
+
+        if ($pass instanceof ListenerPass) {
+            $this->pass = $pass;
+        } else {
+            $this->pass = new ListenerPass($pass);
+        }
     }
 
     /**
@@ -113,6 +118,14 @@ class Listener
     public function getPass(): ListenerPass
     {
         return $this->pass;
+    }
+
+    /**
+     * @param ListenerPass $pass
+     */
+    public function setPass(ListenerPass $pass): void
+    {
+        $this->pass = $pass;
     }
 
     /**

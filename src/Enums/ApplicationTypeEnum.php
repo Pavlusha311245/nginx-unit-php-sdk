@@ -2,12 +2,17 @@
 
 namespace UnitPhpSdk\Enums;
 
-enum ApplicationTypeEnum
+use UnitPhpSdk\Config\Application\JavaApplication;
+use UnitPhpSdk\Config\Application\PerlApplication;
+use UnitPhpSdk\Config\Application\PhpApplication;
+use UnitPhpSdk\Config\Application\PythonApplication;
+use UnitPhpSdk\Config\Application\RubyApplication;
+
+enum ApplicationTypeEnum: string
 {
-    case JAVA;
-    case NODEJS;
-    case PERL;
-    case PHP;
-    case PYTHON;
-    case RUBY;
+    case java = JavaApplication::class;
+    case perl = PerlApplication::class;
+    case php = PhpApplication::class;
+    case python = PythonApplication::class;
+    case ruby = RubyApplication::class;
 }
