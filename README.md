@@ -18,71 +18,23 @@
 
 SDK allows developers to interact with the Nginx Unit web server through php classes. This project will help embed web
 server management into your projects
+> This project in development. Don't use it in production. Some features may not work correctly. Please report bugs and issues to the issue tracker.
+
+### Requirements
+
+* [PHP](https://www.php.net/) >= 8.3
+* [Composer](https://getcomposer.org/) >= 2
 
 ### Supported Versions
 
 | Version | Nginx Unit Capability | Supported          |
 |---------|:----------------------|--------------------|
-| 0.7.x   | 1.30.0 & 1.31.0       | :white_check_mark: |
+| 0.7.x   | <= 1.30.0             | :white_check_mark: |
 | < 0.6.x | -                     | :x:                |
 
-_THIS PROJECT IN DEVELOPMENT. DON'T USE IT IN PRODUCTION_
+### Quick start
 
-## Quick start
-
-### Pre-requirements
-
-* [PHP](https://www.php.net/) >= 8.3
-* [Composer](https://getcomposer.org/) >= 2
-* [Nginx unit](https://unit.nginx.org/installation/) >= 1.30.0
-
-### Installation
-
-1. Create folder `mkdir example-php-project`
-2. Open folder `cd example-php-project`
-3. Crate composer.json file. Example below:
-
-```json
-{
-  "name": "user/example-php-project",
-  "require": {
-    "pavlusha311245/unit-php-sdk": "^0.7.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "User\\ExamplePhpProject\\": "src/"
-    }
-  }
-}
-
-```
-
-4. Install packages `composer install`
-
-Congratulations! You installed package. Now you can use the full power of this SDK.
-
-* Create `src/index.php` file
-    1. `cd src` (`mkdir src` if folder doesn't exist)
-    2. `touch src/index.php`
-    3. `nano src/index.php`
-* Paste code and change this line `socket: <your socket path to Nginx Unit>` for your configuration
-
-```php
-<?php
-
-use UnitPhpSdk\Unit;
-
-require '../vendor/autoload.php';
-
-$unit = new Unit(
-    socket: <your socket path to Nginx Unit>,
-    address: 'http://localhost'
-);
-
-$unit->getConfig();
-```
-
-* Run `php index.php`
+How to start using the SDK in your project you can find in the [documentation](https://unit-sdk.pavlusha.me/installation).
 
 ### Documentation
 
