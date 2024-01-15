@@ -85,20 +85,36 @@ $unit->getConfig();
 * Run `php index.php`
 
 ### Documentation
-The Unit SDK offers a wide range of functionality. More examples and detailed information about its features, installation, and use can be found [in the documentation](https://unit-sdk.pavlusha.me/). Check it out to make the most of this extensive tool. Happy coding 😊
+
+The Unit SDK offers a wide range of functionality. More examples and detailed information about its features,
+installation, and use can be found [in the documentation](https://unit-sdk.pavlusha.me/). Check it out to make the most
+of this extensive tool. Happy coding 😊
 
 ## Changelog
-We regularly update our code base due to new features, bug fixes or performance improvements. More information about these changes, including version details and update summaries, can be seen [here](CHANGELOG.md).
 
-## Contribution
-We appreciate all forms of contributions from code additions to reporting issues. Our project is open-source and thrives from the contributions made by our community. More info about how you can contribute to our project, contribution guidelines, and the whole process can be read [here](https://docs.github.com/en/get-started/quickstart/contributing-to-projects).
+We regularly update our code base due to new features, bug fixes or performance improvements. More information about
+these changes, including version details and update summaries, can be seen [here](CHANGELOG.md).
+
+## Contributing
+
+We appreciate all forms of contributions from code additions to reporting issues. Our project is open-source and thrives
+from the contributions made by our community. More info about how you can contribute to our project, contribution
+guidelines, and the whole process can be
+read [here](https://docs.github.com/en/get-started/quickstart/contributing-to-projects).
+
+## Code of Conduct
+
+We want to create a welcoming environment for all of our projects. Our code of conduct outlines our expectations for all
+those who participate in our community, as well as the consequences for unacceptable behavior. We invite you to help us
+create a safe and positive experience for everyone. More info about our code of conduct can be
+found [here](.github/CODE_OF_CONDUCT.md).
 
 ## Security Policy
 
 If you find bugs and vulnerabilities, please
 contact [unit@pavlusha.me](mailto:unit@pavlusha.me).
 
-More info [here](SECURITY.md)
+More info [here](.github/SECURITY.md)
 
 ## Support
 
@@ -106,3 +122,7 @@ More info [here](SECURITY.md)
 <p>The project is being developed with the support of IDE from JetBrains</p>
   <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg" alt="JetBrains Logo (Main) logo.">
 </div>
+
+## License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
