@@ -20,8 +20,7 @@ final readonly class RequestsStatistics implements RequestsStatisticsInterface, 
 
     public function __construct(private array $data)
     {
-        if (!array_key_exists('total', $data))
-        {
+        if (!array_key_exists('total', $data)) {
             throw new UnitParseException("Key 'total' not present");
         }
 

@@ -29,8 +29,7 @@ class Listener
         string|ListenerPass     $pass,
         private ?Tls            $tls = null,
         private ?Forwarded      $forwarded = null,
-    )
-    {
+    ) {
         $this->parsePort();
 
         if ($pass instanceof ListenerPass) {
