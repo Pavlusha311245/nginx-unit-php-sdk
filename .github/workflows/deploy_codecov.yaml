@@ -3,6 +3,7 @@ name: Deploy to Codecov
 on:
   push:
     branches:
+      - master
       - develop
 
 jobs:
