@@ -23,13 +23,13 @@
       "./vendor/bin/phpstan analyse -c phpstan.neon"
     ],
     "test:unit": "./vendor/bin/pest",
-    "test:coverage": "./vendor/bin/pest --coverage",
+    "test:coverage": "./vendor/bin/pest --coverage --coverage-clover coverage.xml",
     "test:phpstan": "./vendor/bin/phpstan analyse -c phpstan.neon",
     "lint": "./vendor/bin/php-cs-fixer fix --rules=@PSR12 ."
   },
   "require": {
     "php": "^8.3",
-    "friendsofphp/php-cs-fixer": "^3.40",
+    "friendsofphp/php-cs-fixer": "^3.46",
     "guzzlehttp/guzzle": "^7.8.1",
     "ext-curl": "*"
   },
