@@ -220,7 +220,7 @@ class Config implements ConfigInterface, Arrayable, Jsonable
     {
         try {
             $this->unitRequest->setMethod(HttpMethodsEnum::PUT->value)
-                ->send("/config/listeners/{$listener->getListener()}", options: [
+                ->send("/config/listeners/{$listener->getListener()}", requestOptions: [
                     'json' => $listener->toArray()
                 ]);
         } catch (UnitException $e) {
@@ -242,14 +242,15 @@ class Config implements ConfigInterface, Arrayable, Jsonable
             throw new FileNotFoundException();
         }
 
-        if (empty(json_decode($fileContent, true))) {
+        if (!json_validate($fileContent)) {
             throw new UnitException('It\'s not a JSON file');
         }
 
         try {
             $this->unitRequest->setMethod('PUT')
-                ->setData($fileContent)
-                ->send("/config/listeners/$listener");
+                ->send("/config/listeners/$listener", requestOptions: [
+                    'body' => $fileContent
+                ]);
         } catch (UnitException) {
             return false;
         }
@@ -264,10 +265,10 @@ class Config implements ConfigInterface, Arrayable, Jsonable
      */
     public function removeListener(Listener $listener): bool
     {
-        $this->unitRequest->setMethod(HttpMethodsEnum::DELETE->value);
-
         $listenerId = $listener->getListener();
-        $this->unitRequest->send("/config/listeners/$listenerId");
+        $this->unitRequest
+            ->setMethod(HttpMethodsEnum::DELETE->value)
+            ->send("/config/listeners/$listenerId");
 
         return true;
     }
@@ -313,9 +314,11 @@ class Config implements ConfigInterface, Arrayable, Jsonable
         $appName = empty($application->getName()) ? $name : $application->getName();
 
         try {
-            $this->unitRequest->setMethod(HttpMethodsEnum::PUT->value)
-                ->setData($application->toJson())
-                ->send("/config/applications/$appName");
+            $this->unitRequest
+                ->setMethod(HttpMethodsEnum::PUT->value)
+                ->send("/config/applications/$appName", requestOptions: [
+                    'json' => $application->toJson()
+                ]);
         } catch (UnitException) {
             return false;
         }
@@ -336,14 +339,16 @@ class Config implements ConfigInterface, Arrayable, Jsonable
             throw new FileNotFoundException();
         }
 
-        if (empty(json_decode($fileContent, true))) {
+        if (!json_validate($fileContent)) {
             throw new UnitException('It\'s not a JSON file');
         }
 
         try {
-            $this->unitRequest->setMethod(HttpMethodsEnum::PUT->value)
-                ->setData($fileContent)
-                ->send("/config/applications/$name");
+            $this->unitRequest
+                ->setMethod(HttpMethodsEnum::PUT->value)
+                ->send("/config/applications/$name", requestOptions: [
+                    'body' => $fileContent
+                ]);
         } catch (UnitException) {
             return false;
         }
@@ -359,10 +364,10 @@ class Config implements ConfigInterface, Arrayable, Jsonable
      */
     public function removeApplication(AbstractApplication|string $application): bool
     {
-        $this->unitRequest->setMethod(HttpMethodsEnum::DELETE->value);
-
         $applicationName = is_string($application) ? $application : $application->getName();
-        $this->unitRequest->send("/config/applications/$applicationName");
+        $this->unitRequest
+            ->setMethod(HttpMethodsEnum::DELETE->value)
+            ->send("/config/applications/$applicationName");
 
         return true;
     }
@@ -441,11 +446,12 @@ class Config implements ConfigInterface, Arrayable, Jsonable
         $upstreamName = empty($upstream->getName()) ? $name : $upstream->getName();
 
         try {
-            $this->unitRequest->setMethod(HttpMethodsEnum::PUT->value)
-                ->setData(json_encode($upstream->toJson()))
-                ->send("/config/upstreams/$upstreamName");
-        } catch (UnitException $exception) {
-            print_r($exception->getMessage());
+            $this->unitRequest
+                ->setMethod(HttpMethodsEnum::PUT->value)
+                ->send("/config/upstreams/$upstreamName", requestOptions: [
+                    'json' => $upstream->toJson()
+                ]);
+        } catch (UnitException) {
             return false;
         }
 
@@ -464,14 +470,16 @@ class Config implements ConfigInterface, Arrayable, Jsonable
             throw new FileNotFoundException();
         }
 
-        if (empty(json_decode($fileContent, true))) {
+        if (!json_validate($fileContent)) {
             throw new UnitException('It\'s not a JSON file');
         }
 
         try {
-            $this->unitRequest->setMethod(HttpMethodsEnum::PUT->value)
-                ->setData(json_encode($fileContent))
-                ->send('/config/upstreams');
+            $this->unitRequest
+                ->setMethod(HttpMethodsEnum::PUT->value)
+                ->send('/config/upstreams', requestOptions: [
+                    'body' => $fileContent
+                ]);
         } catch (UnitException $exception) {
             print_r($exception->getMessage());
             return false;
@@ -493,8 +501,9 @@ class Config implements ConfigInterface, Arrayable, Jsonable
 
         try {
             $this->unitRequest->setMethod(HttpMethodsEnum::PUT->value)
-                ->setData(json_encode($data))
-                ->send('/config/access_log');
+                ->send('/config/access_log', requestOptions: [
+                    'json' => json_encode($data)
+                ]);
         } catch (UnitException) {
             return false;
         }
@@ -516,7 +525,8 @@ class Config implements ConfigInterface, Arrayable, Jsonable
     public function removeAccessLog(): bool
     {
         try {
-            $this->unitRequest->setMethod(HttpMethodsEnum::DELETE->value)
+            $this->unitRequest
+                ->setMethod(HttpMethodsEnum::DELETE->value)
                 ->send('/config/access_log');
         } catch (UnitException) {
             return false;

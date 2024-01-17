@@ -68,46 +68,20 @@ class UnitRequest
     }
 
     /**
-     * Setup data
-     *
-     * @param null $data
-     */
-    public function setData(mixed $data): self
-    {
-        $this->data = $data;
-
-        return $this;
-    }
-
-    /**
      * Send request
      *
      * @throws UnitException
      */
-    public function send($uri, $associative = true, array $options = [])
+    public function send($uri, $associative = true, array $requestOptions = [])
     {
-        $request = new Client([
-            'base_uri' => $this->address
-        ]);
-
-        $requestOptions = $options;
+        $client = new Client();
 
         if (!empty($this->socket)) {
             $requestOptions['curl'] = [CURLOPT_UNIX_SOCKET_PATH => $this->socket];
         }
 
-        //        DATA CAN BE JSON for config or RAW for certificates
-
-        //        if (!empty($this->_data)) {
-        //            if (json_decode($this->_data, true)) {
-        //                $requestOptions['json'] = $this->_data;
-        //            } else {
-        //                $requestOptions['body'] = $this->_data;
-        //            }
-        //        }
-
         try {
-            $response = $request->request($this->method, $uri, $requestOptions);
+            $response = $client->request($this->method, $this->address . $uri, $requestOptions);
         } catch (GuzzleException $exception) {
             throw new UnitException($exception->getMessage());
         }
