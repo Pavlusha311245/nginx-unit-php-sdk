@@ -18,13 +18,30 @@ final readonly class RequestsStatistics implements RequestsStatisticsInterface, 
      */
     private int $total;
 
-    public function __construct(private array $data)
+    /**
+     * @throws UnitParseException
+     */
+    public function __construct(array $data)
+    {
+        $this->parseFromArray($data);
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     * @throws UnitParseException
+     */
+    private function parseFromArray(array $data): void
     {
         if (!array_key_exists('total', $data)) {
             throw new UnitParseException("Key 'total' not present");
         }
 
-        $this->total = $this->data['total'];
+        if (!is_int($data['total'])) {
+            throw new UnitParseException("Key 'total' must be integer");
+        }
+
+        $this->total = $data['total'];
     }
 
     /**
@@ -40,6 +57,8 @@ final readonly class RequestsStatistics implements RequestsStatisticsInterface, 
      */
     public function toArray(): array
     {
-        return $this->data;
+        return [
+            'total' => $this->getTotalRequests()
+        ];
     }
 }

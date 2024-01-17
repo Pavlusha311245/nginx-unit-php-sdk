@@ -7,12 +7,14 @@ use UnitPhpSdk\Config\Listener\{
     ListenerPass,
     Tls
 };
+use UnitPhpSdk\Contracts\Uploadable;
 use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Http\UnitRequest;
 
 /**
  * This class presents "listeners" section from config
  */
-class Listener
+class Listener implements Uploadable
 {
     /**
      * @var ListenerPass
@@ -31,12 +33,16 @@ class Listener
         private ?Forwarded      $forwarded = null,
     ) {
         $this->parsePort();
+        $this->parsePass($pass);
+    }
 
-        if ($pass instanceof ListenerPass) {
-            $this->pass = $pass;
-        } else {
-            $this->pass = new ListenerPass($pass);
+    private function parsePass($pass): void
+    {
+        if (is_string($pass)) {
+            parse_listener_pass($pass);
         }
+
+        $this->pass = $pass instanceof ListenerPass ? $pass : new ListenerPass($pass);
     }
 
     /**
@@ -212,5 +218,20 @@ class Listener
     public function toJson(): string|false
     {
         return json_encode($this->toArray());
+    }
+
+    public function toUnitArray()
+    {
+        return [
+            $this->getListener() => $this->toArray()
+        ];
+    }
+
+    #[\Override] public function upload(UnitRequest $request): void
+    {
+        $request->setMethod('PUT')
+            ->send("/config/listeners/{$this->getListener()}", true, [
+                'body' => $this->toJson()
+            ]);
     }
 }

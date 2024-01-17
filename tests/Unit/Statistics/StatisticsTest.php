@@ -7,12 +7,14 @@ use UnitPhpSdk\Contracts\RequestsStatisticsInterface;
 
 it('test statistics', function () {
     $appData = [
-        'requests' => [], // assume that you have data here
-        'activeRequests' => 0,
-        'processes' => [], // assume that you have data here
-        'startingProcesses' => 1,
-        'runningProcesses' => 1,
-        'idleProcesses' => 0,
+        'requests' => [
+            'active' => 0
+        ], // assume that you have data here
+        'processes' => [
+            'running' => 14,
+            'starting' => 0,
+            'idle' => 4
+        ],
     ];
     $connectionsData = [
         'idle' => 5,

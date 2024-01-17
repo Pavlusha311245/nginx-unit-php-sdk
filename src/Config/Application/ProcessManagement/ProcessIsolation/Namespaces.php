@@ -8,37 +8,37 @@ use UnitPhpSdk\Contracts\Arrayable;
  * @readonly Namespaces
  * @implements Arrayable
  */
-readonly class Namespaces implements Arrayable
+class Namespaces implements Arrayable
 {
     /**
      * @var bool
      */
-    private bool $cgroup;
+    private bool $cgroup = false;
 
     /**
      * @var bool
      */
-    private bool $credential;
+    private bool $credential = false;
 
     /**
      * @var bool
      */
-    private bool $mount;
+    private bool $mount = false;
 
     /**
      * @var bool
      */
-    private bool $network;
+    private bool $network = false;
 
     /**
      * @var bool
      */
-    private bool $pid;
+    private bool $pid = false;
 
     /**
      * @var bool
      */
-    private bool $uname;
+    private bool $uname = false;
 
     public function __construct(array $data)
     {

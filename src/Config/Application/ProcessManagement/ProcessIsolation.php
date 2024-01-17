@@ -23,9 +23,9 @@ class ProcessIsolation implements Arrayable
     private Automount $automount;
 
     /**
-     * @var Cgroup
+     * @var Cgroup|null
      */
-    private Cgroup $cgroup;
+    private ?Cgroup $cgroup;
 
     /**
      * @var Gidmap

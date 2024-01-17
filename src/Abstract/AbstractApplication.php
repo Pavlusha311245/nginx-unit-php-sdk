@@ -23,7 +23,7 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      *
      * @var string
      */
-    protected string $type;
+    protected string $type = "";
 
     /**
      * @var UnitRequest

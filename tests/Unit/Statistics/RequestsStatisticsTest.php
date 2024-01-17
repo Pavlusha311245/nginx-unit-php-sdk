@@ -3,28 +3,28 @@
 use UnitPhpSdk\Statistics\RequestsStatistics;
 use UnitPhpSdk\Exceptions\UnitParseException;
 
-it('checks total requests and array conversion', function () {
-    $data = ['total' => 5, 'foo' => 'bar'];
-    $stats = new RequestsStatistics($data);
-
-    // Check if getTotalRequests() returns the correct count
-    expect($stats->getTotalRequests())->toBe(5);
-
-    // Check if toArray() returns the original array
-    expect($stats->toArray())->toBe($data);
+// Existing tests
+it('tests getTotalRequests and toArray methods', function () {
+    $statistics = new RequestsStatistics(['total' => 10]);
+    $this->assertEquals(10, $statistics->getTotalRequests());
+    $this->assertEquals(['total' => 10], $statistics->toArray());
 });
 
-it('throws UnitParseException if total is not set', function () {
-    $data = ['foo' => 'bar'];
-
-    // Expect a UnitParseException when 'total' key is not set
-    new RequestsStatistics($data);
-
-})->throws(UnitParseException::class, "Key 'total' not present");
-
-it('throws UnitParseException if data array is empty', function () {
-
-    // Expect a UnitParseException when the array provided is empty
+it('tests constructor exceptions', function () {
+    $this->expectException(UnitParseException::class);
+    $this->expectExceptionMessage("Key 'total' not present");
     new RequestsStatistics([]);
+})->group('exception');
 
-})->throws(UnitParseException::class, "Key 'total' not present");
+// Additional tests
+it('tests getTotalRequests and toArray methods with zero total', function () {
+    $statistics = new RequestsStatistics(['total' => 0]);
+    $this->assertEquals(0, $statistics->getTotalRequests());
+    $this->assertEquals(['total' => 0], $statistics->toArray());
+});
+
+it('tests constructor exceptions with non-integer total', function () {
+    $this->expectException(UnitParseException::class);
+    $this->expectExceptionMessage("Key 'total' must be integer");
+    new RequestsStatistics(['total' => 'non-integer']);
+})->group('exception');

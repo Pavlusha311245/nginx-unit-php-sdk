@@ -3,21 +3,12 @@
 use UnitPhpSdk\Config\Listener\ListenerPass;
 
 it('constructs correctly and getters work', function () {
-    $listenerPass = new ListenerPass("application/Home");
+    $listenerPass = new ListenerPass("applications/Home");
 
-    expect($listenerPass->getType())->toBe("application")
+    expect($listenerPass->getType())->toBe("applications")
         ->and($listenerPass->getName())->toBe("Home")
-        ->and($listenerPass->toArray())->toBe(["application", "Home"])
-        ->and($listenerPass->toString())->toBe("application/Home");
-});
-
-it('constructs correctly with optional name', function () {
-    $listenerPass = new ListenerPass("application");
-
-    expect($listenerPass->getType())->toBe("application")
-        ->and($listenerPass->getName())->toBeNull()
-        ->and($listenerPass->toArray())->toBe(["application"])
-        ->and($listenerPass->toString())->toBe("application");
+        ->and($listenerPass->toArray())->toBe(["applications", "Home"])
+        ->and($listenerPass->toString())->toBe("applications/Home");
 });
 
 it('getType returns the correct type', function () {

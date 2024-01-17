@@ -6,7 +6,10 @@ use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Contracts\{ApplicationStatisticsInterface,
     ConnectionsStatisticsInterface,
     RequestsStatisticsInterface,
-    StatisticsInterface};
+    StatisticsInterface,
+    UnitStatisticsInterface
+};
+use UnitPhpSdk\Exceptions\UnitParseException;
 
 /**
  * This class returns statistics from Nginx Unit
@@ -14,25 +17,35 @@ use UnitPhpSdk\Contracts\{ApplicationStatisticsInterface,
  * @implements StatisticsInterface
  * @final
  */
-final class Statistics implements StatisticsInterface
+final readonly class Statistics implements StatisticsInterface
 {
     /**
+     * Connections statistics
+     *
      * @var ConnectionsStatisticsInterface
      */
     private ConnectionsStatisticsInterface $connections;
 
     /**
+     * Requests statistics
+     *
      * @var RequestsStatisticsInterface
      */
     private RequestsStatisticsInterface $requests;
 
     /**
+     * Applications statistics
+     *
      * @var array|ApplicationStatistics[]
      */
     private array $applications;
 
+    /**
+     * @throws UnitParseException
+     */
     public function __construct(array $data)
     {
+        //        $this->unitInformation = new UnitStatistics($data['unit']);
         $this->connections = new ConnectionsStatistics($data['connections']);
         $this->requests = new RequestsStatistics($data['requests']);
         $this->applications = array_map(fn ($item) => new ApplicationStatistics($item), $data['applications']);

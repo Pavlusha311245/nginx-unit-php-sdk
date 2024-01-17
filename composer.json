@@ -31,7 +31,8 @@
     "php": "^8.3",
     "friendsofphp/php-cs-fixer": "^3.46",
     "guzzlehttp/guzzle": "^7.8.1",
-    "ext-curl": "*"
+    "ext-curl": "*",
+    "nesbot/carbon": "^2.72"
   },
   "require-dev": {
     "pestphp/pest": "^2.26",

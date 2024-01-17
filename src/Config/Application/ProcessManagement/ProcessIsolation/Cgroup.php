@@ -5,10 +5,7 @@ namespace UnitPhpSdk\Config\Application\ProcessManagement\ProcessIsolation;
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Exceptions\UnitException;
 
-/**
- * @readonly Cgroup
- */
-readonly class Cgroup implements Arrayable
+class Cgroup implements Arrayable
 {
     private string $path;
 

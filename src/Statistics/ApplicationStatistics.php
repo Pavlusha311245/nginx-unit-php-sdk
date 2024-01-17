@@ -2,8 +2,8 @@
 
 namespace UnitPhpSdk\Statistics;
 
-use UnitPhpSdk\Contracts\ApplicationStatisticsInterface;
-use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Contracts\{ApplicationStatisticsInterface, Arrayable};
+use UnitPhpSdk\Exceptions\UnitParseException;
 
 /**
  * @readonly ApplicationStatistics
@@ -12,9 +12,47 @@ use UnitPhpSdk\Contracts\Arrayable;
  */
 final readonly class ApplicationStatistics implements ApplicationStatisticsInterface, Arrayable
 {
-    public function __construct(private array $data)
+    /**
+     * Active requests
+     *
+     * @var array|mixed
+     */
+    private int $activeRequests;
+
+    /**
+     * Processes
+     *
+     * @var array|mixed
+     */
+    private array $processes;
+
+    /**
+     * @throws UnitParseException
+     */
+    public function __construct(array $data)
     {
-        //
+        $this->parseFromArray($data);
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     * @throws UnitParseException
+     */
+    private function parseFromArray(array $data): void
+    {
+        if (!array_key_exists('processes', $data)
+            || !array_key_exists('requests', $data)
+            || !array_key_exists('active', $data['requests'])
+            || !array_key_exists('running', $data['processes'])
+            || !array_key_exists('starting', $data['processes'])
+            || !array_key_exists('idle', $data['processes'])
+        ) {
+            throw new UnitParseException('One or more keys are don\'t exists');
+        }
+
+        $this->activeRequests = $data['requests']['active'];
+        $this->processes = $data['processes'];
     }
 
     /**
@@ -22,7 +60,9 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function getRequests(): array
     {
-        return $this->data['requests'];
+        return [
+            'active' => $this->activeRequests
+        ];
     }
 
     /**
@@ -30,7 +70,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function getActiveRequests(): int
     {
-        return $this->data['requests']['active'];
+        return $this->activeRequests;
     }
 
     /**
@@ -38,7 +78,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function getProcesses(): array
     {
-        return $this->data['processes'];
+        return $this->processes;
     }
 
     /**
@@ -46,7 +86,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function getStartingProcesses(): int
     {
-        return $this->data['processes']['starting'];
+        return $this->processes['starting'];
     }
 
     /**
@@ -54,7 +94,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function getRunningProcesses(): int
     {
-        return $this->data['processes']['running'];
+        return $this->processes['running'];
     }
 
     /**
@@ -62,7 +102,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function getIdleProcesses(): int
     {
-        return $this->data['processes']['idle'];
+        return $this->processes['idle'];
     }
 
     /**
@@ -70,6 +110,15 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function toArray(): array
     {
-        return $this->data;
+        return [
+            'processes' => [
+                'running' => $this->getRunningProcesses(),
+                'starting' => $this->getStartingProcesses(),
+                'idle' => $this->getIdleProcesses()
+            ],
+            'requests' => [
+                'active' => $this->getActiveRequests()
+            ]
+        ];
     }
 }

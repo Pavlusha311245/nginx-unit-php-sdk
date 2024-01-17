@@ -12,17 +12,17 @@ class IdmapAbstract implements Arrayable
     /**
      * @var int
      */
-    private int $container;
+    private int $container = 0;
 
     /**
      * @var int
      */
-    private int $host;
+    private int $host = 0;
 
     /**
      * @var int
      */
-    private int $size;
+    private int $size = 0;
 
     public function __construct(array $data)
     {

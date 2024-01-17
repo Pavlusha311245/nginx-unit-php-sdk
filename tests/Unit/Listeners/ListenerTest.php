@@ -6,7 +6,7 @@ use UnitPhpSdk\Config\Listener\Tls;
 use UnitPhpSdk\Config\Listener\Forwarded;
 
 it('Initializes the Listener class and checks if it is secure', function () {
-    $pass = new ListenerPass('test');
+    $pass = new ListenerPass('applications/test');
     $tls = new Tls([]);
     $forwarded = new Forwarded(['source' => '*']);
 
@@ -20,7 +20,7 @@ it('Initializes the Listener class and checks if it is secure', function () {
 });
 
 it('Initializes the Listener class without tls and checks if it is not secure', function () {
-    $pass = new ListenerPass('test');
+    $pass = new ListenerPass('applications/test');
     $forwarded = new Forwarded(['source' => '*']);
 
     $listener = new Listener('*:8080', $pass, null, $forwarded);

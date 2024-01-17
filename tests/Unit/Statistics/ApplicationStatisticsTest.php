@@ -1,83 +1,46 @@
 <?php
 
-namespace tests\UnitPhpSdk\Statistics;
-
 use UnitPhpSdk\Statistics\ApplicationStatistics;
-use Pest\TestSuite;
+use UnitPhpSdk\Exceptions\UnitParseException;
 
-it('ApplicationStatistics getRequests method test', function () {
+it('creates ApplicationStatistics instance correctly', function () {
     $data = [
-        'requests' => ['active' => 5],
-        'processes' => ['starting' => 2, 'running' => 3, 'idle' => 1]
+        'processes' => [
+            'running' => 10,
+            'starting' => 5,
+            'idle' => 2
+        ],
+        'requests' => [
+            'active' => 100
+        ]
     ];
 
-    $applicationStatistics = new ApplicationStatistics($data);
+    $appStats = new ApplicationStatistics($data);
 
-    $this->assertEquals($data['requests'], $applicationStatistics->getRequests());
+    $this->assertEquals(100, $appStats->getActiveRequests());
+    $this->assertEquals($data['processes'], $appStats->getProcesses());
+    $this->assertEquals(10, $appStats->getRunningProcesses());
+    $this->assertEquals(5, $appStats->getStartingProcesses());
+    $this->assertEquals(2, $appStats->getIdleProcesses());
+    $this->assertEquals($data, $appStats->toArray());
 });
 
-it('ApplicationStatistics getActiveRequests method test', function () {
+it(/**
+ * @throws UnitParseException
+ */ 'throws UnitParseException when created without all necessary data', function () {
     $data = [
-        'requests' => ['active' => 5],
-        'processes' => ['starting' => 2, 'running' => 3, 'idle' => 1]
+        'processes' => [
+            'running' => 10,
+            'idle' => 2,
+        ],
+        'requests' => [
+            'active' => 100
+        ]
     ];
 
-    $applicationStatistics = new ApplicationStatistics($data);
 
-    $this->assertEquals($data['requests']['active'], $applicationStatistics->getActiveRequests());
-});
+    $this->expectException(UnitParseException::class);
+    $this->expectExceptionMessage('One or more keys are don\'t exists');
 
-it('ApplicationStatistics getProcesses method test', function () {
-    $data = [
-        'requests' => ['active' => 5],
-        'processes' => ['starting' => 2, 'running' => 3, 'idle' => 1]
-    ];
-
-    $applicationStatistics = new ApplicationStatistics($data);
-
-    $this->assertEquals($data['processes'], $applicationStatistics->getProcesses());
-});
-
-it('ApplicationStatistics getStartingProcesses method test', function () {
-    $data = [
-        'requests' => ['active' => 5],
-        'processes' => ['starting' => 2, 'running' => 3, 'idle' => 1]
-    ];
-
-    $applicationStatistics = new ApplicationStatistics($data);
-
-    $this->assertEquals($data['processes']['starting'], $applicationStatistics->getStartingProcesses());
-});
-
-it('ApplicationStatistics getRunningProcesses method test', function () {
-    $data = [
-        'requests' => ['active' => 5],
-        'processes' => ['starting' => 2, 'running' => 3, 'idle' => 1]
-    ];
-
-    $applicationStatistics = new ApplicationStatistics($data);
-
-    $this->assertEquals($data['processes']['running'], $applicationStatistics->getRunningProcesses());
-});
-
-it('ApplicationStatistics getIdleProcesses method test', function () {
-    $data = [
-        'requests' => ['active' => 5],
-        'processes' => ['starting' => 2, 'running' => 3, 'idle' => 1]
-    ];
-
-    $applicationStatistics = new ApplicationStatistics($data);
-
-    $this->assertEquals($data['processes']['idle'], $applicationStatistics->getIdleProcesses());
-});
-
-it('ApplicationStatistics toArray method test', function () {
-    $data = [
-        'requests' => ['active' => 5],
-        'processes' => ['starting' => 2, 'running' => 3, 'idle' => 1]
-    ];
-
-    $applicationStatistics = new ApplicationStatistics($data);
-
-    $this->assertEquals($data, $applicationStatistics->toArray());
+    $appStats = new ApplicationStatistics($data);
 });
