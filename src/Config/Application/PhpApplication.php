@@ -33,9 +33,9 @@ class PhpApplication extends AbstractApplication implements Arrayable
     private string $script = '';
 
     /**
-     * @var
+     * @var PhpOptions|null
      */
-    private ?PhpOptions $options;
+    private ?PhpOptions $options = null;
 
     /**
      * @return mixed
