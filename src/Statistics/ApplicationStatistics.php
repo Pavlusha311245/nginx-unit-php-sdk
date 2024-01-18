@@ -24,7 +24,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      *
      * @var array|mixed
      */
-    private array $processes;
+    private Processes $processes;
 
     /**
      * @throws UnitParseException
@@ -52,7 +52,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
         }
 
         $this->activeRequests = $data['requests']['active'];
-        $this->processes = $data['processes'];
+        $this->processes = new Processes($data['processes']);
     }
 
     /**
@@ -76,7 +76,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
     /**
      * @inheritDoc
      */
-    public function getProcesses(): array
+    public function getProcesses(): Processes
     {
         return $this->processes;
     }
@@ -86,7 +86,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function getStartingProcesses(): int
     {
-        return $this->processes['starting'];
+        return $this->processes->getStarting();
     }
 
     /**
@@ -94,7 +94,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function getRunningProcesses(): int
     {
-        return $this->processes['running'];
+        return $this->processes->getRunning();
     }
 
     /**
@@ -102,7 +102,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
      */
     public function getIdleProcesses(): int
     {
-        return $this->processes['idle'];
+        return $this->processes->getIdle();
     }
 
     /**

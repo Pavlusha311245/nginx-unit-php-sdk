@@ -2,6 +2,7 @@
 
 use UnitPhpSdk\Statistics\ApplicationStatistics;
 use UnitPhpSdk\Exceptions\UnitParseException;
+use UnitPhpSdk\Statistics\Processes;
 
 it('creates ApplicationStatistics instance correctly', function () {
     $data = [
@@ -16,9 +17,10 @@ it('creates ApplicationStatistics instance correctly', function () {
     ];
 
     $appStats = new ApplicationStatistics($data);
+    $expectedProcesses = new Processes($data['processes']);
 
     $this->assertEquals(100, $appStats->getActiveRequests());
-    $this->assertEquals($data['processes'], $appStats->getProcesses());
+    $this->assertEquals($expectedProcesses, $appStats->getProcesses());
     $this->assertEquals(10, $appStats->getRunningProcesses());
     $this->assertEquals(5, $appStats->getStartingProcesses());
     $this->assertEquals(2, $appStats->getIdleProcesses());

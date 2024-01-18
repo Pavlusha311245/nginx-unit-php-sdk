@@ -2,7 +2,7 @@
 
 namespace UnitPhpSdk;
 
-use UnitPhpSdk\Contracts\{CertificateInterface, UnitInterface};
+use UnitPhpSdk\Contracts\{CertificateInterface, UnitInterface, Uploadable};
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\FileNotFoundException;
 use UnitPhpSdk\Exceptions\UnitException;
@@ -238,5 +238,10 @@ class Unit implements UnitInterface
         }
 
         return true;
+    }
+
+    public function upload(Uploadable $object): void
+    {
+        $object->upload($this->request);
     }
 }

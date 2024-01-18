@@ -28,6 +28,9 @@ final readonly class Processes implements Arrayable
      */
     private int $idle;
 
+    /**
+     * @throws UnitParseException
+     */
     public function __construct(array $data)
     {
         $this->parseFromArray($data);

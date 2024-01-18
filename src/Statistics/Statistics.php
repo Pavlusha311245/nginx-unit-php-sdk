@@ -2,13 +2,14 @@
 
 namespace UnitPhpSdk\Statistics;
 
+use Exception;
+use InvalidArgumentException;
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Contracts\{ApplicationStatisticsInterface,
+    Arrayable,
     ConnectionsStatisticsInterface,
     RequestsStatisticsInterface,
-    StatisticsInterface,
-    UnitStatisticsInterface
-};
+    StatisticsInterface};
 use UnitPhpSdk\Exceptions\UnitParseException;
 
 /**
@@ -17,7 +18,7 @@ use UnitPhpSdk\Exceptions\UnitParseException;
  * @implements StatisticsInterface
  * @final
  */
-final readonly class Statistics implements StatisticsInterface
+final readonly class Statistics implements StatisticsInterface, Arrayable
 {
     /**
      * Connections statistics
@@ -81,9 +82,22 @@ final readonly class Statistics implements StatisticsInterface
     public function getApplicationStatistics(AbstractApplication|string $application): ApplicationStatisticsInterface
     {
         if (is_string($application)) {
+            if (!array_key_exists($application, $this->applications)) {
+                throw new InvalidArgumentException('Application with name ' . $application . ' not found');
+            }
+
             return $this->applications[$application];
         }
 
         return $this->applications[$application->getName()];
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'connections' => $this->connections->toArray(),
+            'requests' => $this->requests->toArray(),
+            'applications' => array_map(fn ($item) => $item->toArray(), $this->applications),
+        ];
     }
 }

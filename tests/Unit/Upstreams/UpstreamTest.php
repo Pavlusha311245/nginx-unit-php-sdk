@@ -40,3 +40,33 @@ it('throws an exception for invalid IP', function () {
     $upstream = new Upstream('upstream1');
     $upstream->setServer('256.256.256.256');
 })->throws(UnitException::class, "256.256.256.256 isn't a valid IP address");
+
+it('initializes class properties correctly', function () {
+    $upstream = new Upstream('upstream1', ['servers' => [['127.0.0.1', 1]]]);
+
+    // Используем ReflectionClass для доступа к private свойствам
+    $reflectionClass = new \ReflectionClass($upstream);
+    $nameProperty = $reflectionClass->getProperty('name');
+    $nameProperty->setAccessible(true);
+    $serversProperty = $reflectionClass->getProperty('servers');
+    $serversProperty->setAccessible(true);
+
+    assertSame('upstream1', $nameProperty->getValue($upstream));
+    assertEquals([['127.0.0.1', 1]], $serversProperty->getValue($upstream));
+});
+
+it('converts object\'s properties to associative array correctly', function () {
+    $upstream = new Upstream('upstream1', ['servers' => [['127.0.0.1', 1]]]);
+
+    $expectedArray = ['servers' => [['127.0.0.1', 1]]];
+
+    assertEquals($expectedArray, $upstream->toArray());
+});
+
+it('converts object\'s properties to json format correctly', function () {
+    $upstream = new Upstream('upstream1', ['servers' => [['127.0.0.1', 1]]]);
+
+    $expectedJson = json_encode(['servers' => [['127.0.0.1', 1]]]);
+
+    assertEquals($expectedJson, $upstream->toJson());
+});

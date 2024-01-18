@@ -41,7 +41,7 @@ class Automount implements Arrayable
      */
     public function getLanguageDeps(): ?bool
     {
-        return $this->language_deps;
+        return $this->language_deps ?? null;
     }
 
     /**
@@ -49,7 +49,7 @@ class Automount implements Arrayable
      */
     public function getProcfs(): ?bool
     {
-        return $this->procfs;
+        return $this->procfs ?? null;
     }
 
     /**
@@ -57,7 +57,7 @@ class Automount implements Arrayable
      */
     public function getTmpfs(): ?bool
     {
-        return $this->tmpfs;
+        return $this->tmpfs ?? null;
     }
 
     /**
