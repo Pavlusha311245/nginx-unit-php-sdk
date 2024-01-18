@@ -1,17 +1,10 @@
 <?php
 
-it('throws UnitException', function () {
-    $this->expectException(UnitPhpSdk\Exceptions\UnitException::class);
+use UnitPhpSdk\Exceptions\UnitException;
 
-    // Replace this line with the code that is expected to throw an exception
-    throw new UnitPhpSdk\Exceptions\UnitException();
-});
+it('can be constructed and correctly passes messages', function() {
+    $message = 'Test message';
+    $unitException = new UnitException($message);
 
-it('has empty message', function () {
-    try {
-        // Replace this line with the code that is expected to throw an exception
-        throw new UnitPhpSdk\Exceptions\UnitException();
-    } catch (UnitPhpSdk\Exceptions\UnitException $e) {
-        $this->assertSame('', $e->getMessage());
-    }
+    expect($unitException->getMessage())->toBe($message);
 });

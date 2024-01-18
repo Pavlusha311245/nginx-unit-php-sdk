@@ -276,7 +276,13 @@ class RouteMatch
 
         if (array_key_exists('method', $data)) {
             if (is_string($data['method'])) {
-                $this->setMethod(HttpMethodsEnum::from(strtoupper($data['method'])));
+                $httpMethod = HttpMethodsEnum::tryFrom(strtoupper($data['method']));
+
+                if (empty($httpMethod)) {
+                    throw new \InvalidArgumentException('Invalid HTTP method');
+                }
+
+                $this->setMethod($httpMethod);
             } else {
                 $this->setMethod($data['method']);
             }
@@ -288,7 +294,7 @@ class RouteMatch
 
         if (array_key_exists('scheme', $data)) {
             if (is_string($data['scheme'])) {
-                $this->setScheme(HttpSchemeEnum::from($data['scheme'])->value);
+                $this->setScheme(HttpSchemeEnum::from($data['scheme']));
             } else {
                 $this->setScheme($data['scheme']);
             }
