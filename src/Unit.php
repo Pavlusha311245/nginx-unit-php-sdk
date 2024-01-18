@@ -28,7 +28,7 @@ class Unit implements UnitInterface
      *
      * @var array
      */
-    private array $certificates;
+    private array $certificates = [];
 
     /**
      * Contains Statistics object
