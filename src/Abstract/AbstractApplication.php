@@ -368,12 +368,6 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      */
     public function parseFromArray(array $data): void
     {
-        if (!array_key_exists('type', $data)) {
-            throw new UnitException('Parse Exception');
-        }
-
-        $this->type = $data['type'];
-
         if (array_key_exists('working_directory', $data)) {
             $this->setWorkingDirectory($data['working_directory']);
         }

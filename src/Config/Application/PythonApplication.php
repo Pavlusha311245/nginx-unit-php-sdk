@@ -18,14 +18,14 @@ class PythonApplication extends AbstractApplication
     use HasThreadStackSize;
     use HasTargets;
 
-    public const TYPE = 'python';
+    public const string TYPE = 'python';
 
     /**
-     * app’s module name
+     * App’s module name
      *
      * @var string
      */
-    private string $module;
+    private string $module = '';
 
     /**
      * Name of the module-based callable that Unit runs as the app.
@@ -33,6 +33,12 @@ class PythonApplication extends AbstractApplication
      * @var string
      */
     private string $callable = 'application';
+
+    /**
+     * The path to the Python virtual environment directory.
+     *
+     * @var string
+     */
     private string $home = '';
 
     /**
@@ -46,7 +52,7 @@ class PythonApplication extends AbstractApplication
 
     /**
      * @param string $module
-     * @return PythonApplication
+     * @return $this
      */
     public function setModule(string $module): self
     {
@@ -228,6 +234,7 @@ class PythonApplication extends AbstractApplication
                 'targets' => $this->getTargets(),
                 'thread_stack_size' => $this->getThreadStackSize(),
                 'threads' => $this->getThreads(),
+                'module' => $this->getModule(),
             ]
         );
     }
