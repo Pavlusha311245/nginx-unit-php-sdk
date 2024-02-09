@@ -293,11 +293,8 @@ class RouteMatch
         }
 
         if (array_key_exists('scheme', $data)) {
-            if (is_string($data['scheme'])) {
-                $this->setScheme(HttpSchemeEnum::from($data['scheme']));
-            } else {
-                $this->setScheme($data['scheme']);
-            }
+            $this->setScheme(is_string($data['scheme']) ?
+                HttpSchemeEnum::from($data['scheme']) : $data['scheme']);
         }
 
         if (array_key_exists('source', $data)) {

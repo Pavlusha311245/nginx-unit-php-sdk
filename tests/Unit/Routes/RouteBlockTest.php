@@ -19,6 +19,10 @@ it('RouteBlock class functions correctly', function () {
         'fallback' => ['pass' => 'fallback'],
         'follow_symlinks' => true,
         'traverse_mounts' => true,
+        'response_headers' => [
+            "CDN-Cache-Control" => "max-age=600"
+        ],
+        'rewrite' => null
     ];
 
     $routeMatchData = [
@@ -49,10 +53,9 @@ it('RouteBlock class functions correctly', function () {
     $this->assertEquals($newRouteAction, $routeBlock->getAction());
     $this->assertEquals($newRouteMatch, $routeBlock->getMatch());
 
-    // TODO: fix
     // test toArray function
-    //    $toArrayResult = $routeBlock->toArray();
-    //
-    //    $this->assertEquals($routeActionData, $toArrayResult['action']);
-    //    $this->assertEquals($routeMatchData, $toArrayResult['match']);
+    $toArrayResult = $routeBlock->toArray();
+
+    $this->assertEquals($routeActionData, $toArrayResult['action']);
+    $this->assertEquals($routeMatchData, $toArrayResult['match']);
 });

@@ -9,11 +9,6 @@ use UnitPhpSdk\Config\Application\ProcessManagement\RequestLimit;
 interface ApplicationInterface
 {
     /**
-     * @return string
-     */
-    public function getType(): string;
-
-    /**
      * @return array
      */
     public function getEnvironment(): array;

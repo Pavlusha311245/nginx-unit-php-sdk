@@ -80,9 +80,9 @@ class RouteAction
     /**
      * Updated the request URI, preserving the query string.
      *
-     * @var string
+     * @var string|null
      */
-    private string $rewrite = '';
+    private ?string $rewrite = null;
 
     /**
      * @throws UnitException
@@ -167,17 +167,17 @@ class RouteAction
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getRewrite(): string
+    public function getRewrite(): ?string
     {
         return $this->rewrite;
     }
 
     /**
-     * @param string $rewrite
+     * @param string|null $rewrite
      */
-    public function setRewrite(string $rewrite): void
+    public function setRewrite(?string $rewrite): void
     {
         $this->rewrite = $rewrite;
     }
@@ -366,6 +366,10 @@ class RouteAction
 
         if (array_key_exists('traverse_mounts', $data)) {
             $this->setTraverseMounts($data['traverse_mounts']);
+        }
+
+        if (array_key_exists('response_headers', $data) && is_array($data['response_headers'])) {
+            $this->setResponseHeaders($data['response_headers']);
         }
     }
 

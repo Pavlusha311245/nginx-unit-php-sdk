@@ -153,7 +153,7 @@ class PhpApplication extends AbstractApplication implements Arrayable
                     throw new \InvalidArgumentException('target data must be an array');
                 }
 
-                if (!array_key_exists($targetData['root'])) {
+                if (!array_key_exists('root', $targetData['root'])) {
                     throw new RequiredKeyException('root');
                 }
 

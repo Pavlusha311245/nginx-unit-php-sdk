@@ -39,6 +39,30 @@ it('test RouteAction setters and getters', function () {
     assertEquals($data['traverse_mounts'], $routeAction->isTraverseMounts());
 });
 
+it(/**
+ * @throws UnitException
+ */ 'test toArray method', function () {
+    $data = [
+        'pass' => 'from_here',
+        'response_headers' => [],
+        'proxy' => 'to_there',
+        'return' => 200,
+        'location' => 'location_string',
+        'rewrite' => 'rewrite_this',
+        'share' => 'share_this',
+        'index' => 'index_this',
+        'chroot' => 'change_root',
+        'types' => ['type1', 'type2'],
+        'fallback' => ['pass' => 'anywhere', 'proxy' => 'over_here'],
+        'follow_symlinks' => true,
+        'traverse_mounts' => true,
+    ];
+
+    $routeAction = new RouteAction($data);
+
+    assertEquals($data, $routeAction->toArray());
+});
+
 it('test setReturn throws exception for value greater than 999', function () {
     $routeAction = new RouteAction();
     $routeAction->setReturn(1000);

@@ -19,13 +19,6 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
     use HasListeners;
 
     /**
-     * Application type
-     *
-     * @var string
-     */
-    protected string $type = "";
-
-    /**
      * @var UnitRequest
      */
     private UnitRequest $unitRequest;
@@ -114,16 +107,6 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
         $this->unitRequest = $unitRequest;
 
         return $this;
-    }
-
-    /**
-     * Return application type
-     *
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
     }
 
     /**
@@ -426,7 +409,6 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
     public function toArray(): array
     {
         return [
-            'type' => $this->getType(),
             'user' => $this->getUser(),
             'group' => $this->getGroup(),
             'working_directory' => $this->getWorkingDirectory(),
