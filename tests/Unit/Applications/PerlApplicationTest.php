@@ -48,32 +48,32 @@ it('should throw RequiredKeyException when try to parseFromArray with insufficie
 //    expect($app->getThreads())->toBe($data['threads']);
 //    expect($app->getThreadStackSize())->toBe($data['thread_stack_size']);
 //});
-//
-//it('should convert toArray correctly', function(){
-//    $app = new PerlApplication();
-//    $data = [
-//        'type' => 'perl',
-//        'user' => 'myUser',
-//        'group' => 'myGroup',
-//        'working_directory' => '/my/dir',
-//        'stderr' => '/my/stderr',
-//        'stdout' => '/my/stdout',
-//        'script' => 'myScript.bsgi',
-//        'threads' => 5,
-//        'thread_stack_size' => 3456,
-//    ];
-//    $app->parseFromArray($data);
-//
-//    // Assert array structure is correct
-//    expect($app->toArray())->toBeArray()->and(fn (array $appArray) =>
-//        $appArray['type'] === $data['type'] &&
-//        $appArray['user'] === $data['user'] &&
-//        $appArray['group'] === $data['group'] &&
-//        $appArray['working_directory'] === $data['working_directory'] &&
-//        $appArray['stderr'] === $data['stderr'] &&
-//        $appArray['stdout'] === $data['stdout'] &&
-//        $appArray['script'] === $data['script'] &&
-//        $appArray['threads'] === $data['threads'] &&
-//        $appArray['thread_stack_size'] === $data['thread_stack_size']
-//    );
-//});
+
+it('should convert toArray correctly', function(){
+    $app = new PerlApplication();
+    $data = [
+        'type' => 'perl',
+        'user' => 'myUser',
+        'group' => 'myGroup',
+        'working_directory' => '/my/dir',
+        'stderr' => '/my/stderr',
+        'stdout' => '/my/stdout',
+        'script' => 'myScript.bsgi',
+        'threads' => 5,
+        'thread_stack_size' => 3456,
+    ];
+    $app->parseFromArray($data);
+
+    // Assert array structure is correct
+    expect($app->toArray())->toBeArray()->and(fn (array $appArray) =>
+        $appArray['type'] === $data['type'] &&
+        $appArray['user'] === $data['user'] &&
+        $appArray['group'] === $data['group'] &&
+        $appArray['working_directory'] === $data['working_directory'] &&
+        $appArray['stderr'] === $data['stderr'] &&
+        $appArray['stdout'] === $data['stdout'] &&
+        $appArray['script'] === $data['script'] &&
+        $appArray['threads'] === $data['threads'] &&
+        $appArray['thread_stack_size'] === $data['thread_stack_size']
+    );
+});

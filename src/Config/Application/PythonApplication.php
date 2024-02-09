@@ -2,6 +2,7 @@
 
 namespace UnitPhpSdk\Config\Application;
 
+use InvalidArgumentException;
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Config\Application\Targets\PythonTarget;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
@@ -179,11 +180,16 @@ class PythonApplication extends AbstractApplication
             $this->setModule($data['module']);
         }
 
+        // TODO: add condition to skip this step if module does not exist
         if (array_key_exists('targets', $data)) {
             $targets = [];
 
             foreach ($data['targets'] as $targetName => $targetValues) {
-                $targets[$targetName] = new PythonTarget($targetValues);
+                if (!is_array($targetValues) && !is_a(PythonTarget::class, $targetValues)) {
+                    throw new InvalidArgumentException('targets must be an array or an instance of PythonTarget');
+                }
+
+                $targets[$targetName] = is_array($targetValues) ? new PythonTarget($targetValues) : $targetValues;
             }
 
             $this->setTargets($targets);

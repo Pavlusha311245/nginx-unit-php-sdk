@@ -71,34 +71,34 @@ it('should throw RequiredKeyException when try to parseFromArray with insufficie
 //        ->and($app->getThreadStackSize())->toBe($data['thread_stack_size']);
 //});
 
-//it('should convert toArray correctly', function () {
-//    $app = new JavaApplication();
-//    $data = [
-//        'type' => 'java',
-//        'user' => 'myUser',
-//        'group' => 'myGroup',
-//        'working_directory' => '/my/dir',
-//        'stderr' => '/my/stderr',
-//        'stdout' => '/my/stdout',
-//        'webapp' => 'myWebApp',
-//        'options' => ['option1' => 'value1', 'option2' => 'value2'],
-//        'classpath' => ['/path/to/app1', '/path/to/app2'],
-//        'threads' => 5,
-//        'thread_stack_size' => 3456,
-//    ];
-//    $app->parseFromArray($data);
-//
-//    // Assert array structure is correct
-//    expect($app->toArray())->toBeArray()->and(fn(array $appArray) => $appArray['type'] === $data['type'] &&
-//        $appArray['user'] === $data['user'] &&
-//        $appArray['group'] === $data['group'] &&
-//        $appArray['working_directory'] === $data['working_directory'] &&
-//        $appArray['stderr'] === $data['stderr'] &&
-//        $appArray['stdout'] === $data['stdout'] &&
-//        $appArray['webapp'] === $data['webapp'] &&
-//        $appArray['options'] === $data['options'] &&
-//        $appArray['classpath'] === $data['classpath'] &&
-//        $appArray['threads'] === $data['threads'] &&
-//        $appArray['thread_stack_size'] === $data['thread_stack_size']
-//    );
-//});
+it('should convert toArray correctly', function () {
+    $app = new JavaApplication();
+    $data = [
+        'type' => 'java',
+        'user' => 'myUser',
+        'group' => 'myGroup',
+        'working_directory' => '/my/dir',
+        'stderr' => '/my/stderr',
+        'stdout' => '/my/stdout',
+        'webapp' => 'myWebApp',
+        'options' => ['option1' => 'value1', 'option2' => 'value2'],
+        'classpath' => ['/path/to/app1', '/path/to/app2'],
+        'threads' => 5,
+        'thread_stack_size' => 3456,
+    ];
+    $app->parseFromArray($data);
+
+    // Assert array structure is correct
+    expect($app->toArray())->toBeArray()->and(fn(array $appArray) => $appArray['type'] === $data['type'] &&
+        $appArray['user'] === $data['user'] &&
+        $appArray['group'] === $data['group'] &&
+        $appArray['working_directory'] === $data['working_directory'] &&
+        $appArray['stderr'] === $data['stderr'] &&
+        $appArray['stdout'] === $data['stdout'] &&
+        $appArray['webapp'] === $data['webapp'] &&
+        $appArray['options'] === $data['options'] &&
+        $appArray['classpath'] === $data['classpath'] &&
+        $appArray['threads'] === $data['threads'] &&
+        $appArray['thread_stack_size'] === $data['thread_stack_size']
+    );
+});

@@ -1,7 +1,9 @@
 <?php
 
 use UnitPhpSdk\Config\Application\PythonApplication;
+use UnitPhpSdk\Config\Application\Targets\PythonTarget;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
+use UnitPhpSdk\Exceptions\UnitException;
 
 it('should initialize PythonApplication', function () {
     $app = new PythonApplication();
@@ -89,44 +91,46 @@ it('should throw RequiredKeyException when try to parseFromArray with insufficie
 //    expect($app->getThreads())->toBe($data['threads']);
 //    expect($app->getThreadStackSize())->toBe($data['thread_stack_size']);
 //});
-//
-//it('should convert toArray correctly', function () {
-//    $app = new PythonApplication();
-//    $data = [
-//        'type' => 'python',
-//        'path' => 'myPath',
-//        'protocol' => 'myProtocol',
-//        'home' => '/my/home',
-//        'callable' => 'myCallable',
-//        'prefix' => 'myPrefix',
-//        'targets' => ['test' => new PythonTarget(['root' => '/var/test'])],
-//        'user' => 'myUser',
-//        'group' => 'myGroup',
-//        'working_directory' => '/my/dir',
-//        'stderr' => '/my/stderr',
-//        'stdout' => '/my/stdout',
-//        'module' => 'myModule',
-//        'threads' => 5,
-//        'thread_stack_size' => 3456,
-//    ];
-//    $app->parseFromArray($data);
-//
-//    // Assert array structure is correct
-//    expect($app->toArray())->toBeArray()->and(
-//        fn(array $appArray) => $appArray['type'] === $data['type'] &&
-//            $appArray['path'] === $data['path'] &&
-//            $appArray['protocol'] === $data['protocol'] &&
-//            $appArray['home'] === $data['home'] &&
-//            $appArray['callable'] === $data['callable'] &&
-//            $appArray['prefix'] === $data['prefix'] &&
-//            $appArray['targets']['test']->getRoot() === $data['targets']['test']->getRoot() &&
-//            $appArray['user'] === $data['user'] &&
-//            $appArray['group'] === $data['group'] &&
-//            $appArray['working_directory'] === $data['working_directory'] &&
-//            $appArray['stderr'] === $data['stderr'] &&
-//            $appArray['stdout'] === $data['stdout'] &&
-//            $appArray['module'] === $data['module'] &&
-//            $appArray['threads'] === $data['threads'] &&
-//            $appArray['thread_stack_size'] === $data['thread_stack_size']
-//    );
-//});
+
+it(/**
+ * @throws UnitException
+ * @throws RequiredKeyException
+ */ 'should convert toArray correctly', function () {
+    $app = new PythonApplication();
+    $data = [
+        'type' => 'python',
+        'path' => 'myPath',
+        'protocol' => 'myProtocol',
+        'home' => '/my/home',
+        'callable' => 'myCallable',
+        'prefix' => 'myPrefix',
+        'user' => 'myUser',
+        'group' => 'myGroup',
+        'working_directory' => '/my/dir',
+        'stderr' => '/my/stderr',
+        'stdout' => '/my/stdout',
+        'module' => 'myModule',
+        'threads' => 5,
+        'thread_stack_size' => 3456,
+    ];
+    $app->parseFromArray($data);
+
+    // Assert array structure is correct
+    expect($app->toArray())->toBeArray()->and(
+        fn(array $appArray) => $appArray['type'] === $data['type'] &&
+            $appArray['path'] === $data['path'] &&
+            $appArray['protocol'] === $data['protocol'] &&
+            $appArray['home'] === $data['home'] &&
+            $appArray['callable'] === $data['callable'] &&
+            $appArray['prefix'] === $data['prefix'] &&
+            $appArray['targets']['test']->getRoot() === $data['targets']['test']->getRoot() &&
+            $appArray['user'] === $data['user'] &&
+            $appArray['group'] === $data['group'] &&
+            $appArray['working_directory'] === $data['working_directory'] &&
+            $appArray['stderr'] === $data['stderr'] &&
+            $appArray['stdout'] === $data['stdout'] &&
+            $appArray['module'] === $data['module'] &&
+            $appArray['threads'] === $data['threads'] &&
+            $appArray['thread_stack_size'] === $data['thread_stack_size']
+    );
+});

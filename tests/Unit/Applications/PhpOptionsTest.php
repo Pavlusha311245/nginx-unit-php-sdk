@@ -1,6 +1,6 @@
 <?php
 
-use UnitPhpSdk\Config\Application\PhpOptions;
+use UnitPhpSdk\Config\Application\Options\PhpOptions;
 
 it('checks that PhpOptions correctly sets and gets admin values', function () {
     $phpOptions = new PhpOptions();

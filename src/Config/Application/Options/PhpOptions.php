@@ -1,6 +1,6 @@
 <?php
 
-namespace UnitPhpSdk\Config\Application;
+namespace UnitPhpSdk\Config\Application\Options;
 
 use UnitPhpSdk\Contracts\Arrayable;
 

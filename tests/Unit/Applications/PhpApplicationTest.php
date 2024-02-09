@@ -1,7 +1,8 @@
 <?php
 
+use UnitPhpSdk\Config\Application\Options\PhpOptions;
 use UnitPhpSdk\Config\Application\PhpApplication;
-use UnitPhpSdk\Config\Application\PhpOptions;
+use UnitPhpSdk\Exceptions\UnitException;
 
 it('should initialize PhpApplication', function () {
     $app = new PhpApplication();
@@ -160,46 +161,46 @@ it('should set and get stdout on PhpApplication', function () {
 //    );
 //});
 //
-//it(/**
-// * @throws \UnitPhpSdk\Exceptions\UnitException
-// */ 'should correctly convert to JSON', function () {
-//    $app = new PhpApplication();
-//    $data = [
-//        'root' => '/var/www',
-//        'targets' => ['test' => ['root' => '/var/test']],
-//        'index' => 'myindex.php',
-//        'script' => 'myscript.php',
-//        'options' => [
-//            'admin' => [
-//                "memory_limit" => "256M",
-//                "variables_order" => "EGPCS"
-//            ],
-//            'user' => [
-//                "display_errors" => "0",
-//            ],
-//            'file' => '/tmp/file.ini',
-//        ],
-//    ];
-//    // fill properties to match expected JSON structure
-//    $app->setUser('myUser')
-//        ->setGroup('myGroup')
-//        ->setWorkingDirectory('/my/dir')
-//        ->setStdErr('/my/stderr')
-//        ->setStdOut('/my/stdout')
-//        ->parseFromArray($data);
-//
-//    // Assert JSON structure matches array
-//    expect(json_decode($app->toJson(), true))->toBeArray()->and(
-//        fn(array $appArray) => $appArray['user'] === 'myUser' &&
-//            $appArray['group'] === 'myGroup' &&
-//            $appArray['working_directory'] === '/my/dir' &&
-//            $appArray['stderr'] === '/my/stderr' &&
-//            $appArray['stdout'] === '/my/stdout' &&
-//            $appArray['root'] === $data['root'] &&
-//            $appArray['index'] === $data['index'] &&
-//            $appArray['script'] === $data['script'] &&
-//            $appArray['options']['admin'] === $data['options']['admin'] &&
-//            $appArray['options']['user'] === $data['options']['user'] &&
-//            $appArray['options']['file'] === $data['options']['file']
-//    );
-//});
+it(/**
+ * @throws UnitException
+ */ 'should correctly convert to JSON', function () {
+    $app = new PhpApplication();
+    $data = [
+        'root' => '/var/www',
+        'targets' => ['test' => ['root' => '/var/test']],
+        'index' => 'myindex.php',
+        'script' => 'myscript.php',
+        'options' => [
+            'admin' => [
+                "memory_limit" => "256M",
+                "variables_order" => "EGPCS"
+            ],
+            'user' => [
+                "display_errors" => "0",
+            ],
+            'file' => '/tmp/file.ini',
+        ],
+    ];
+    // fill properties to match expected JSON structure
+    $app->setUser('myUser')
+        ->setGroup('myGroup')
+        ->setWorkingDirectory('/my/dir')
+        ->setStdErr('/my/stderr')
+        ->setStdOut('/my/stdout')
+        ->parseFromArray($data);
+
+    // Assert JSON structure matches array
+    expect(json_decode($app->toJson(), true))->toBeArray()->and(
+        fn(array $appArray) => $appArray['user'] === 'myUser' &&
+            $appArray['group'] === 'myGroup' &&
+            $appArray['working_directory'] === '/my/dir' &&
+            $appArray['stderr'] === '/my/stderr' &&
+            $appArray['stdout'] === '/my/stdout' &&
+            $appArray['root'] === $data['root'] &&
+            $appArray['index'] === $data['index'] &&
+            $appArray['script'] === $data['script'] &&
+            $appArray['options']['admin'] === $data['options']['admin'] &&
+            $appArray['options']['user'] === $data['options']['user'] &&
+            $appArray['options']['file'] === $data['options']['file']
+    );
+});

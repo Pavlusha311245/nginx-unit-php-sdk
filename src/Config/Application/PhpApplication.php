@@ -3,6 +3,7 @@
 namespace UnitPhpSdk\Config\Application;
 
 use UnitPhpSdk\Abstract\AbstractApplication;
+use UnitPhpSdk\Config\Application\Options\PhpOptions;
 use UnitPhpSdk\Config\Application\Targets\PhpTarget;
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
@@ -153,7 +154,7 @@ class PhpApplication extends AbstractApplication implements Arrayable
                     throw new \InvalidArgumentException('target data must be an array');
                 }
 
-                if (!array_key_exists('root', $targetData['root'])) {
+                if (!array_key_exists('root', $targetData)) {
                     throw new RequiredKeyException('root');
                 }
 
