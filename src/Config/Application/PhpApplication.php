@@ -135,10 +135,6 @@ class PhpApplication extends AbstractApplication implements Arrayable
     {
         parent::parseFromArray($data);
 
-        if (!array_key_exists('root', $data) || !array_key_exists('targets', $data)) {
-            throw new RequiredKeyException('root', 'targets');
-        }
-
         if (!is_string($data['root'])) {
             throw new \InvalidArgumentException('root must be a string');
         }
