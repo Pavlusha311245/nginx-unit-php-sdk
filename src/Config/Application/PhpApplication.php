@@ -181,6 +181,7 @@ class PhpApplication extends AbstractApplication implements Arrayable
         return array_merge(
             parent::toArray(),
             [
+                'type' => self::TYPE,
                 'root' => $this->getRoot(),
                 'index' => $this->getIndex(),
                 'script' => $this->getScript(),

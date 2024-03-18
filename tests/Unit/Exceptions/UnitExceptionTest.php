@@ -2,7 +2,7 @@
 
 use UnitPhpSdk\Exceptions\UnitException;
 
-it('can be constructed and correctly passes messages', function() {
+it('can be constructed and correctly passes messages', function () {
     $message = 'Test message';
     $unitException = new UnitException($message);
 

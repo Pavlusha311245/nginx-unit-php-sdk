@@ -1,5 +1,7 @@
 <?php
+
 use UnitPhpSdk\Exceptions\FileNotFoundException;
+
 use function PHPUnit\Framework\assertEquals;
 
 it('should throw FileNotFoundException', function () {

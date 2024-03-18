@@ -191,7 +191,7 @@ it(/**
 
     // Assert JSON structure matches array
     expect(json_decode($app->toJson(), true))->toBeArray()->and(
-        fn(array $appArray) => $appArray['user'] === 'myUser' &&
+        fn (array $appArray) => $appArray['user'] === 'myUser' &&
             $appArray['group'] === 'myGroup' &&
             $appArray['working_directory'] === '/my/dir' &&
             $appArray['stderr'] === '/my/stderr' &&

@@ -324,6 +324,7 @@ class WebAssemblyApplication extends AbstractApplication
         return array_merge(
             parent::toArray(),
             [
+                'type' => self::TYPE,
                 'module' => $this->getModule(),
                 'request_handler' => $this->getRequestHandler(),
                 'malloc_handler' => $this->getMallocHandler(),

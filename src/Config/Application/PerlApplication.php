@@ -75,6 +75,7 @@ class PerlApplication extends AbstractApplication
         return array_merge(
             parent::toArray(),
             [
+                'type' => self::TYPE,
                 'script' => $this->getScript(),
                 'thread_stack_size' => $this->getThreadStackSize(),
                 'threads' => $this->getThreads(),

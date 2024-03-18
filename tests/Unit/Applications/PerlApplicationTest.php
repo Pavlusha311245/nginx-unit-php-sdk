@@ -3,18 +3,18 @@
 use UnitPhpSdk\Config\Application\PerlApplication;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 
-it('should initialize PerlApplication', function(){
+it('should initialize PerlApplication', function () {
     $app = new PerlApplication();
     expect($app)->toBeInstanceOf(PerlApplication::class);
 });
 
-it('should set and get script', function(){
+it('should set and get script', function () {
     $app = new PerlApplication();
     $app->setScript('myScript');
     expect($app->getScript())->toBe('myScript');
 });
 
-it('should throw RequiredKeyException when try to parseFromArray with insufficient data', function(){
+it('should throw RequiredKeyException when try to parseFromArray with insufficient data', function () {
     $app = new PerlApplication();
     $data = ['user' => 'myUser', 'group' => 'myGroup'];
     $app->parseFromArray($data);
@@ -49,7 +49,7 @@ it('should throw RequiredKeyException when try to parseFromArray with insufficie
 //    expect($app->getThreadStackSize())->toBe($data['thread_stack_size']);
 //});
 
-it('should convert toArray correctly', function(){
+it('should convert toArray correctly', function () {
     $app = new PerlApplication();
     $data = [
         'type' => 'perl',
@@ -65,7 +65,8 @@ it('should convert toArray correctly', function(){
     $app->parseFromArray($data);
 
     // Assert array structure is correct
-    expect($app->toArray())->toBeArray()->and(fn (array $appArray) =>
+    expect($app->toArray())->toBeArray()->and(
+        fn (array $appArray) =>
         $appArray['type'] === $data['type'] &&
         $appArray['user'] === $data['user'] &&
         $appArray['group'] === $data['group'] &&

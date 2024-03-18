@@ -130,6 +130,7 @@ class JavaApplication extends AbstractApplication
         return array_merge(
             parent::toArray(),
             [
+                'type' => self::TYPE,
                 'webapp' => $this->getWebApp(),
                 'options' => $this->getOptions(),
                 'classpath' => $this->getClassPath(),

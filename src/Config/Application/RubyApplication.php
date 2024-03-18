@@ -93,6 +93,7 @@ class RubyApplication extends AbstractApplication
         return array_merge(
             parent::toArray(),
             [
+                'type' => self::TYPE,
                 'script' => $this->getScript(),
                 'hooks' => $this->getHooks(),
                 'threads' => $this->getThreads()

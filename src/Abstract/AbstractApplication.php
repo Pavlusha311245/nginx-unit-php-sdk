@@ -8,13 +8,13 @@ use UnitPhpSdk\Config\Application\{ProcessManagement\ApplicationProcess,
 };
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Http\UnitRequest;
-use UnitPhpSdk\Contracts\{ApplicationControlInterface, ApplicationInterface, Arrayable};
+use UnitPhpSdk\Contracts\{ApplicationControlInterface, ApplicationInterface, Arrayable, Uploadable};
 use UnitPhpSdk\Traits\HasListeners;
 
 /**
  * @implements ApplicationInterface, ApplicationControlInterface, Arrayable
  */
-abstract class AbstractApplication implements ApplicationInterface, ApplicationControlInterface, Arrayable
+abstract class AbstractApplication implements ApplicationInterface, ApplicationControlInterface, Arrayable, Uploadable
 {
     use HasListeners;
 
@@ -426,6 +426,19 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      */
     public function toJson(): string|false
     {
-        return json_encode(array_filter(static::toArray(), fn ($item) => !empty($item)));
+        return json_encode(array_filter(static::toArray(), fn ($item) => !empty($item)), JSON_UNESCAPED_SLASHES);
+    }
+
+    /**
+     * @param UnitRequest $request
+     * @return void
+     * @throws UnitException
+     */
+    public function upload(UnitRequest $request): void
+    {
+        $request->setMethod('PUT')
+            ->send("/config/applications/{$this->getName()}", true, [
+                'json' => array_filter($this->toArray(), fn ($item) => !empty($item))
+            ]);
     }
 }

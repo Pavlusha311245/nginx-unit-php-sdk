@@ -18,7 +18,8 @@ it('should set and get options', function () {
     $app = new JavaApplication();
     $options = ['option1' => 'value1', 'option2' => 'value2'];
     $app->setOptions($options);
-    expect($app->getOptions())->toBeArray()->and(fn($opts) => $opts['option1'] === 'value1' && $opts['option2'] === 'value2'
+    expect($app->getOptions())->toBeArray()->and(
+        fn ($opts) => $opts['option1'] === 'value1' && $opts['option2'] === 'value2'
     );
 });
 
@@ -26,7 +27,8 @@ it('should set and get classPath', function () {
     $app = new JavaApplication();
     $classPath = ['/path/to/app1', '/path/to/app2'];
     $app->setClassPath($classPath);
-    expect($app->getClassPath())->toBeArray()->and(fn($cp) => $cp[0] === '/path/to/app1' && $cp[1] === '/path/to/app2'
+    expect($app->getClassPath())->toBeArray()->and(
+        fn ($cp) => $cp[0] === '/path/to/app1' && $cp[1] === '/path/to/app2'
     );
 });
 
@@ -89,7 +91,8 @@ it('should convert toArray correctly', function () {
     $app->parseFromArray($data);
 
     // Assert array structure is correct
-    expect($app->toArray())->toBeArray()->and(fn(array $appArray) => $appArray['type'] === $data['type'] &&
+    expect($app->toArray())->toBeArray()->and(
+        fn (array $appArray) => $appArray['type'] === $data['type'] &&
         $appArray['user'] === $data['user'] &&
         $appArray['group'] === $data['group'] &&
         $appArray['working_directory'] === $data['working_directory'] &&

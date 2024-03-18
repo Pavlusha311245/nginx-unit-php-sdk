@@ -117,7 +117,7 @@ it(/**
 
     // Assert array structure is correct
     expect($app->toArray())->toBeArray()->and(
-        fn(array $appArray) => $appArray['type'] === $data['type'] &&
+        fn (array $appArray) => $appArray['type'] === $data['type'] &&
             $appArray['path'] === $data['path'] &&
             $appArray['protocol'] === $data['protocol'] &&
             $appArray['home'] === $data['home'] &&

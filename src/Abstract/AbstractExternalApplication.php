@@ -95,6 +95,7 @@ class AbstractExternalApplication extends AbstractApplication
         return array_merge(
             parent::toArray(),
             [
+                'type' => self::TYPE,
                 'executable' => $this->getExecutable(),
                 'arguments' => $this->getArguments()
             ]

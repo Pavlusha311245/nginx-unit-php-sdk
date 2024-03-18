@@ -232,6 +232,7 @@ class PythonApplication extends AbstractApplication
         return array_merge(
             parent::toArray(),
             [
+                'type' => self::TYPE,
                 'callable' => $this->getCallable(),
                 'home' => $this->getHome(),
                 'path' => $this->getPath(),
