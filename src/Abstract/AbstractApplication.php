@@ -437,8 +437,16 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
     public function upload(UnitRequest $request): void
     {
         $request->setMethod('PUT')
-            ->send("/config/applications/{$this->getName()}", true, [
-                'json' => array_filter($this->toArray(), fn ($item) => !empty($item))
-            ]);
+            ->send($this->getApiEndpoint(), true, ['json' => array_filter($this->toArray(), fn ($item) => !empty($item))]);
+    }
+
+    public function remove(UnitRequest $request): void
+    {
+        $request->setMethod('DELETE')->send($this->getApiEndpoint());
+    }
+
+    public function getApiEndpoint(): string
+    {
+        return "/config/applications/{$this->getName()}";
     }
 }

@@ -135,11 +135,11 @@ class PhpApplication extends AbstractApplication implements Arrayable
     {
         parent::parseFromArray($data);
 
-        if (!is_string($data['root'])) {
-            throw new \InvalidArgumentException('root must be a string');
-        }
-
         if (array_key_exists('root', $data)) {
+            if (!is_string($data['root'])) {
+                throw new \InvalidArgumentException('root must be a string');
+            }
+
             $this->setRoot($data['root']);
         }
 

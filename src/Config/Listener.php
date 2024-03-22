@@ -229,9 +229,19 @@ class Listener implements Uploadable
 
     #[\Override] public function upload(UnitRequest $request): void
     {
-        $request->setMethod('PUT')
-            ->send("/config/listeners/{$this->getListener()}", true, [
-                'body' => $this->toJson()
-            ]);
+        $request->setMethod('PUT')->send($this->getApiEndpoint(), true, ['json' => $this->toArray()]);
+    }
+
+    /**
+     * @throws UnitException
+     */
+    public function remove(UnitRequest $request): void
+    {
+        $request->setMethod('DELETE')->send($this->getApiEndpoint());
+    }
+
+    private function getApiEndpoint(): string
+    {
+        return "/config/listeners/{$this->getListener()}";
     }
 }

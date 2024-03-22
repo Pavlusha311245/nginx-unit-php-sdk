@@ -240,8 +240,25 @@ class Unit implements UnitInterface
         return true;
     }
 
+    /**
+     * Uploads the specified Uploadable object.
+     *
+     * @param Uploadable $object
+     */
     public function upload(Uploadable $object): void
     {
         $object->upload($this->request);
+    }
+
+    /**
+     * Removes an Uploadable object.
+     *
+     * @param Uploadable $object The Uploadable object to be removed.
+     *
+     * @return void
+     */
+    public function remove(Uploadable $object): void
+    {
+        $object->remove($this->request);
     }
 }
