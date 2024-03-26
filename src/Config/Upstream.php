@@ -54,17 +54,23 @@ class Upstream implements UpstreamInterface
      * @return void
      * @throws UnitException
      */
-    public function setServer(string $ip, int $weight = 1): void
+    public function setServer(string $pass, int $weight = 1): void
     {
         if ($weight < 0 || $weight > 1000000) {
             throw new OutOfRangeException('Weight should be between 0 and 1000000');
         }
 
-        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
-            throw new UnitException("$ip isn't a valid IP address");
+        $parts = parse_url($pass);
+
+        if (!filter_var($parts['host'], FILTER_VALIDATE_IP)) {
+            throw new UnitException($parts['host'] . " isn't a valid IP address");
         }
 
-        $this->servers[$ip] = [
+        if ((int)$parts['port'] < 1 || (int)$parts['port'] > 65535) {
+            throw new UnitException($parts['port'] . " isn't a valid port number (allowed range is 1 to 65535)");
+        }
+
+        $this->servers[$parts['host']] = [
             'weight' => $weight
         ];
     }

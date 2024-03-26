@@ -434,6 +434,15 @@ class Config implements ConfigInterface, Arrayable, Jsonable
     }
 
     /**
+     * @param $name
+     * @return Upstream
+     */
+    public function getUpstream($name): Upstream
+    {
+        return $this->upstreams[$name];
+    }
+
+    /**
      * @inheritDoc
      * @throws UnitException
      */
