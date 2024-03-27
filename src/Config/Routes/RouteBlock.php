@@ -83,6 +83,16 @@ class RouteBlock implements Arrayable
         return $this->action;
     }
 
+    /**
+     * Retrieves the action type of the current route action.
+     *
+     * @return string The action type of the current route action.
+     */
+    public function getActionType(): string
+    {
+        return $this->action->getActionType();
+    }
+
     public function toArray(): array
     {
         return [

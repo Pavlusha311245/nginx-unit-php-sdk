@@ -107,14 +107,12 @@ class Upstream implements UpstreamInterface, Uploadable
      * @param UnitRequest $request
      * @return bool
      */
-    #[\Override] public function upload(UnitRequest $request)
+    public function upload(UnitRequest $request)
     {
-        $name = $this->getName();
-
         try {
             $request
                 ->setMethod(HttpMethodsEnum::PUT->value)
-                ->send("/config/upstreams/$name", requestOptions: [
+                ->send($this->getApiEndpoint(), requestOptions: [
                     'json' => $this->toArray()
                 ]);
         } catch (UnitException) {
@@ -132,16 +130,19 @@ class Upstream implements UpstreamInterface, Uploadable
      * @return bool Returns true if the upstream configuration was successfully removed,
      *              otherwise false if an exception occurred.
      */
-    #[\Override] public function remove(UnitRequest $request)
+    public function remove(UnitRequest $request)
     {
-        $name = $this->getName();
-
         try {
-            $request->setMethod(HttpMethodsEnum::DELETE->value)->send("/config/upstreams/$name");
+            $request->setMethod(HttpMethodsEnum::DELETE->value)->send($this->getApiEndpoint());
         } catch (UnitException) {
             return false;
         }
 
         return true;
+    }
+
+    public function getApiEndpoint(): string
+    {
+        return "/config/upstreams/{$this->getName()}";
     }
 }

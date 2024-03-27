@@ -131,6 +131,8 @@ class RouteAction
         }
 
         $this->return = $return;
+
+        $this->setActionType('return');
     }
 
     /**
@@ -139,6 +141,8 @@ class RouteAction
     public function setPass(string $pass): void
     {
         $this->pass = $pass;
+
+        $this->setActionType('pass');
     }
 
     /**
@@ -155,6 +159,8 @@ class RouteAction
     public function setProxy(string $proxy): void
     {
         $this->proxy = $proxy;
+
+        $this->setActionType('proxy');
     }
 
     /**
@@ -203,6 +209,8 @@ class RouteAction
     public function setShare(array|string $share): void
     {
         $this->share = $share;
+
+        $this->setActionType('share');
     }
 
     /**
@@ -341,6 +349,14 @@ class RouteAction
     }
 
     /**
+     * @param string $actionType
+     */
+    public function setActionType(string $actionType): void
+    {
+        $this->actionType = $actionType;
+    }
+
+    /**
      * @throws UnitException
      */
     public function parseFromArray(array $data): void
@@ -349,14 +365,17 @@ class RouteAction
 
         if (array_key_exists('pass', $data)) {
             $this->setPass($data['pass']);
+            $this->setActionType('pass');
         }
 
         if (array_key_exists('proxy', $data)) {
             $this->setProxy($data['proxy']);
+            $this->setActionType('proxy');
         }
 
         if (array_key_exists('return', $data)) {
             $this->setReturn($data['return']);
+            $this->setActionType('return');
 
             // Data for the return action type
 
@@ -367,6 +386,7 @@ class RouteAction
 
         if (array_key_exists('share', $data)) {
             $this->setShare($data['share']);
+            $this->setActionType('share');
 
             // Data for the share action type
 
