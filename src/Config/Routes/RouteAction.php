@@ -8,6 +8,13 @@ use UnitPhpSdk\Exceptions\UnitException;
 class RouteAction
 {
     /**
+     * Possible action types pass, proxy, return, share
+     *
+     * @var string The type of action to be performed.
+     */
+    private string $actionType = '';
+
+    /**
      * Destination for the request, identical to a listener’s pass option.
      *
      * @var string
@@ -316,10 +323,30 @@ class RouteAction
     }
 
     /**
+     * Return true if action is static
+     *
+     * @return bool
+     */
+    public function isStatic(): bool
+    {
+        return !empty($this->getShare());
+    }
+
+    /**
+     * @return string
+     */
+    public function getActionType(): string
+    {
+        return $this->actionType;
+    }
+
+    /**
      * @throws UnitException
      */
     public function parseFromArray(array $data): void
     {
+        // Action types
+
         if (array_key_exists('pass', $data)) {
             $this->setPass($data['pass']);
         }
@@ -330,42 +357,48 @@ class RouteAction
 
         if (array_key_exists('return', $data)) {
             $this->setReturn($data['return']);
-        }
 
-        if (array_key_exists('location', $data)) {
-            $this->setLocation($data['location']);
-        }
+            // Data for the return action type
 
-        if (array_key_exists('rewrite', $data)) {
-            $this->setRewrite($data['rewrite']);
+            if (array_key_exists('location', $data)) {
+                $this->setLocation($data['location']);
+            }
         }
 
         if (array_key_exists('share', $data)) {
             $this->setShare($data['share']);
+
+            // Data for the share action type
+
+            if (array_key_exists('index', $data)) {
+                $this->setIndex($data['index']);
+            }
+
+            if (array_key_exists('fallback', $data)) {
+                $this->setFallback($data['fallback']);
+            }
+
+            if (array_key_exists('chroot', $data)) {
+                $this->setChroot($data['chroot']);
+            }
+
+            if (array_key_exists('types', $data)) {
+                $this->setTypes($data['types']);
+            }
+
+            if (array_key_exists('follow_symlinks', $data)) {
+                $this->setFollowSymlinks($data['follow_symlinks']);
+            }
+
+            if (array_key_exists('traverse_mounts', $data)) {
+                $this->setTraverseMounts($data['traverse_mounts']);
+            }
         }
 
-        if (array_key_exists('index', $data)) {
-            $this->setIndex($data['index']);
-        }
+        // Additional options for any action type
 
-        if (array_key_exists('chroot', $data)) {
-            $this->setChroot($data['chroot']);
-        }
-
-        if (array_key_exists('types', $data)) {
-            $this->setTypes($data['types']);
-        }
-
-        if (array_key_exists('fallback', $data)) {
-            $this->setFallback($data['fallback']);
-        }
-
-        if (array_key_exists('follow_symlinks', $data)) {
-            $this->setFollowSymlinks($data['follow_symlinks']);
-        }
-
-        if (array_key_exists('traverse_mounts', $data)) {
-            $this->setTraverseMounts($data['traverse_mounts']);
+        if (array_key_exists('rewrite', $data)) {
+            $this->setRewrite($data['rewrite']);
         }
 
         if (array_key_exists('response_headers', $data) && is_array($data['response_headers'])) {

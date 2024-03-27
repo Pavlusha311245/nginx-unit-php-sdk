@@ -3,7 +3,7 @@
 namespace UnitPhpSdk;
 
 use UnitPhpSdk\Abstract\AbstractApplication;
-use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Upstream};
+use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Upstream, Upstream\Server};
 use UnitPhpSdk\Exceptions\{FileNotFoundException, UnitException};
 use UnitPhpSdk\Contracts\{Arrayable, ConfigInterface, Jsonable};
 use UnitPhpSdk\Http\UnitRequest;
@@ -182,7 +182,17 @@ class Config implements ConfigInterface, Arrayable, Jsonable
     {
         if (array_key_exists('upstreams', $data)) {
             foreach ($data['upstreams'] as $upstreamName => $upstreamData) {
-                $this->upstreams[$upstreamName] = new Upstream($upstreamName, $upstreamData);
+                if (!array_key_exists('servers', $upstreamData)) {
+                    throw new UnitException('Servers key not found in upstream data');
+                }
+
+                $servers = array_map(
+                    fn ($v, $k) => new Server($v, $k['weight'] ?? 1),
+                    array_keys($upstreamData['servers']),
+                    array_values($upstreamData['servers'])
+                );
+
+                $this->upstreams[$upstreamName] = new Upstream($upstreamName, $servers);
             }
         }
     }
@@ -458,7 +468,7 @@ class Config implements ConfigInterface, Arrayable, Jsonable
             $this->unitRequest
                 ->setMethod(HttpMethodsEnum::PUT->value)
                 ->send("/config/upstreams/$upstreamName", requestOptions: [
-                    'json' => $upstream->toJson()
+                    'json' => $upstream->toArray()
                 ]);
         } catch (UnitException) {
             return false;

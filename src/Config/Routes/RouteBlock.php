@@ -55,6 +55,14 @@ class RouteBlock implements Arrayable
     }
 
     /**
+     * @return bool
+     */
+    public function hasMatch(): bool
+    {
+        return $this->match !== null;
+    }
+
+    /**
      * @param RouteAction|null $action
      * @return RouteBlock
      */

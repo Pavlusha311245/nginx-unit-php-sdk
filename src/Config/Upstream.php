@@ -3,14 +3,18 @@
 namespace UnitPhpSdk\Config;
 
 use OutOfRangeException;
+use UnitPhpSdk\Config\Upstream\Server;
+use UnitPhpSdk\Contracts\Uploadable;
 use UnitPhpSdk\Contracts\UpstreamInterface;
+use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Http\UnitRequest;
 use UnitPhpSdk\Traits\HasListeners;
 
 /**
  * @implements UpstreamInterface
  */
-class Upstream implements UpstreamInterface
+class Upstream implements UpstreamInterface, Uploadable
 {
     use HasListeners;
 
@@ -26,8 +30,8 @@ class Upstream implements UpstreamInterface
         array                   $data = []
     ) {
         if (!empty($data)) {
-            if (array_key_exists('servers', $data)) {
-                $this->setServers($data['servers']);
+            foreach ($data as $server) {
+                $this->servers[] = $server instanceof Server ? $server : new Server($server);
             }
         }
     }
@@ -41,15 +45,7 @@ class Upstream implements UpstreamInterface
     }
 
     /**
-     * @param array $servers
-     */
-    private function setServers(array $servers): void
-    {
-        $this->servers = $servers;
-    }
-
-    /**
-     * @param string $ip
+     * @param string $pass
      * @param int $weight
      * @return void
      * @throws UnitException
@@ -80,7 +76,12 @@ class Upstream implements UpstreamInterface
      */
     public function getServers(): array
     {
-        return $this->servers;
+        $serverArr = [];
+        foreach ($this->servers as $server) {
+            $serverArr += $server->toArray();
+        }
+
+        return $serverArr;
     }
 
     /**
@@ -88,6 +89,7 @@ class Upstream implements UpstreamInterface
      */
     public function toArray(): array
     {
+
         return [
             'servers' => $this->getServers()
         ];
@@ -99,5 +101,47 @@ class Upstream implements UpstreamInterface
     public function toJson(): string|false
     {
         return json_encode($this->toArray());
+    }
+
+    /**
+     * @param UnitRequest $request
+     * @return bool
+     */
+    #[\Override] public function upload(UnitRequest $request)
+    {
+        $name = $this->getName();
+
+        try {
+            $request
+                ->setMethod(HttpMethodsEnum::PUT->value)
+                ->send("/config/upstreams/$name", requestOptions: [
+                    'json' => $this->toArray()
+                ]);
+        } catch (UnitException) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Removes the upstream configuration for this unit.
+     *
+     * @param UnitRequest $request The unit request object.
+     *
+     * @return bool Returns true if the upstream configuration was successfully removed,
+     *              otherwise false if an exception occurred.
+     */
+    #[\Override] public function remove(UnitRequest $request)
+    {
+        $name = $this->getName();
+
+        try {
+            $request->setMethod(HttpMethodsEnum::DELETE->value)->send("/config/upstreams/$name");
+        } catch (UnitException) {
+            return false;
+        }
+
+        return true;
     }
 }
