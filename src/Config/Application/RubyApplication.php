@@ -13,6 +13,8 @@ class RubyApplication extends AbstractApplication
 {
     use HasThreads;
 
+    public const array REQUIRED_KEYS = ['script'];
+
     public const string TYPE = 'ruby';
 
     /**
@@ -24,6 +26,11 @@ class RubyApplication extends AbstractApplication
      * @var string
      */
     private string $hooks;
+
+    public function getRequiredKeys(): array
+    {
+        return self::REQUIRED_KEYS;
+    }
 
     /**
      * @param string $script

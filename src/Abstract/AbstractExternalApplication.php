@@ -10,6 +10,8 @@ use UnitPhpSdk\Exceptions\UnitException;
  */
 class AbstractExternalApplication extends AbstractApplication
 {
+    public const array REQUIRED_KEYS = ['executable'];
+
     public const string TYPE = 'external';
 
     /**
@@ -25,6 +27,14 @@ class AbstractExternalApplication extends AbstractApplication
      * @var array|string
      */
     private array|string $arguments = [];
+
+    /**
+     * @return array|string[]
+     */
+    public function getRequiredKeys(): array
+    {
+        return self::REQUIRED_KEYS;
+    }
 
     /**
      * @return string

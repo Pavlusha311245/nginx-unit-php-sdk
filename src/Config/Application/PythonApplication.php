@@ -19,6 +19,8 @@ class PythonApplication extends AbstractApplication
     use HasThreadStackSize;
     use HasTargets;
 
+    public const array REQUIRED_KEYS = ['module'];
+
     public const string TYPE = 'python';
 
     /**
@@ -48,8 +50,24 @@ class PythonApplication extends AbstractApplication
      * @var string|array
      */
     private string|array $path = '';
+
+    /**
+     * @var string
+     */
     private string $prefix = '';
+
+    /**
+     * @var string
+     */
     private string $protocol = '';
+
+    /**
+     * @return array|string[]
+     */
+    public function getRequiredKeys(): array
+    {
+        return self::REQUIRED_KEYS;
+    }
 
     /**
      * @param string $module

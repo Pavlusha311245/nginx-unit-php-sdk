@@ -15,6 +15,8 @@ class JavaApplication extends AbstractApplication
     use HasThreads;
     use HasThreadStackSize;
 
+    public const array REQUIRED_KEYS = ['webapp'];
+
     public const string TYPE = 'java';
 
     /**
@@ -37,6 +39,14 @@ class JavaApplication extends AbstractApplication
      * @var array
      */
     private array $classPath = [];
+
+    /**
+     * @return array|string[]
+     */
+    public function getRequiredKeys(): array
+    {
+        return self::REQUIRED_KEYS;
+    }
 
     /**
      * @return string

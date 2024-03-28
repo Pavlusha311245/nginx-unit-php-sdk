@@ -10,6 +10,8 @@ use UnitPhpSdk\Exceptions\RequiredKeyException;
  */
 class WebAssemblyApplication extends AbstractApplication
 {
+    public const array REQUIRED_KEYS = ['module', 'request_handler', 'malloc_handler', 'free_handler'];
+
     public const string TYPE = 'wasm';
 
     /**
@@ -79,6 +81,14 @@ class WebAssemblyApplication extends AbstractApplication
      * @var string
      */
     private string $response_end_handler = '';
+
+    /**
+     * @return array
+     */
+    public function getRequiredKeys(): array
+    {
+        return self::REQUIRED_KEYS;
+    }
 
     /**
      * @param string $module

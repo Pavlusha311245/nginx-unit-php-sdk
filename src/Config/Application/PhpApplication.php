@@ -16,6 +16,11 @@ class PhpApplication extends AbstractApplication implements Arrayable
 {
     use HasTargets;
 
+    /**
+     * @var array
+     */
+    public const array REQUIRED_KEYS = ['root'];
+
     public const string TYPE = 'php';
 
     /**
@@ -37,6 +42,14 @@ class PhpApplication extends AbstractApplication implements Arrayable
      * @var PhpOptions|null
      */
     private ?PhpOptions $options = null;
+
+    /**
+     * @return array|string[]
+     */
+    public function getRequiredKeys(): array
+    {
+        return self::REQUIRED_KEYS;
+    }
 
     /**
      * @return mixed

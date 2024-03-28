@@ -17,6 +17,8 @@ class PerlApplication extends AbstractApplication
     use HasThreads;
     use HasThreadStackSize;
 
+    public const array REQUIRED_KEYS = ['script'];
+
     public const string TYPE = 'perl';
 
     /**
@@ -25,6 +27,14 @@ class PerlApplication extends AbstractApplication
      * @var string
      */
     private string $script;
+
+    /**
+     * @return array
+     */
+    public function getRequiredKeys(): array
+    {
+        return self::REQUIRED_KEYS;
+    }
 
     /**
      * @return string
