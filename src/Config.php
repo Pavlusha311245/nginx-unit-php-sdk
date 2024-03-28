@@ -3,7 +3,7 @@
 namespace UnitPhpSdk;
 
 use UnitPhpSdk\Abstract\AbstractApplication;
-use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Upstream, Upstream\Server};
+use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Settings, Upstream, Upstream\Server};
 use UnitPhpSdk\Exceptions\{FileNotFoundException, UnitException};
 use UnitPhpSdk\Contracts\{Arrayable, ConfigInterface, Jsonable};
 use UnitPhpSdk\Http\UnitRequest;
@@ -45,6 +45,11 @@ class Config implements ConfigInterface, Arrayable, Jsonable
      */
     private array $upstreams = [];
 
+    /**
+     * @var Settings
+     */
+    private Settings $settings;
+
     private ?UnitRequest $unitRequest;
 
     /**
@@ -74,6 +79,14 @@ class Config implements ConfigInterface, Arrayable, Jsonable
         $this->loadApplications($jsonData);
         $this->loadUpstreams($jsonData);
         $this->loadListeners($jsonData);
+        $this->loadSettings($jsonData);
+    }
+
+    private function loadSettings($jsonData): void
+    {
+        if (array_key_exists('settings', $jsonData)) {
+            $this->settings = new Settings($jsonData['settings']);
+        }
     }
 
     /**
@@ -187,7 +200,7 @@ class Config implements ConfigInterface, Arrayable, Jsonable
                 }
 
                 $servers = array_map(
-                    fn ($v, $k) => new Server($v, $k['weight'] ?? 1),
+                    fn($v, $k) => new Server($v, $k['weight'] ?? 1),
                     array_keys($upstreamData['servers']),
                     array_values($upstreamData['servers'])
                 );
@@ -570,6 +583,22 @@ class Config implements ConfigInterface, Arrayable, Jsonable
         }
 
         return $array;
+    }
+
+    /**
+     * @return Settings
+     */
+    public function getSettings(): Settings
+    {
+        return $this->settings;
+    }
+
+    /**
+     * @param Settings $settings
+     */
+    public function setSettings(Settings $settings): void
+    {
+        $this->settings = $settings;
     }
 
     /**

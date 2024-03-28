@@ -3,12 +3,7 @@
 namespace UnitPhpSdk\Contracts;
 
 use UnitPhpSdk\Abstract\AbstractApplication;
-use UnitPhpSdk\Config\{
-    AccessLog,
-    Listener,
-    Route,
-    Upstream
-};
+use UnitPhpSdk\Config\{AccessLog, Listener, Route, Settings, Upstream};
 
 interface ConfigInterface
 {
@@ -155,6 +150,17 @@ interface ConfigInterface
      * @return bool
      */
     public function removeAccessLog(): bool;
+
+    /**
+     * @return Settings
+     */
+    public function getSettings(): Settings;
+
+    /**
+     * @param Settings $settings
+     * @return void
+     */
+    public function setSettings(Settings $settings): void;
 
     /**
      * @return array

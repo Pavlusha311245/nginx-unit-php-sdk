@@ -37,6 +37,11 @@ class Unit implements UnitInterface
      */
     private Statistics $statistics;
 
+    /**
+     * @var array $js_modules List of JavaScript modules
+     */
+    private array $js_modules = [];
+
     private UnitRequest $request;
 
     /**
@@ -45,7 +50,8 @@ class Unit implements UnitInterface
     public function __construct(
         private readonly string  $address,
         private readonly ?string $socket = null
-    ) {
+    )
+    {
         $this->request = new UnitRequest(
             address: $this->address,
             socket: $this->socket
@@ -165,6 +171,33 @@ class Unit implements UnitInterface
         $this->loadStatistics();
 
         return $this->statistics;
+    }
+
+    /**
+     * @return array
+     */
+    public function getJsModules(): array
+    {
+        $this->loadJsModules();
+
+        return $this->js_modules;
+    }
+
+    /**
+     * @param array $js_modules
+     */
+    public function setJsModules(array $js_modules): void
+    {
+        $this->js_modules = $js_modules;
+    }
+
+    private function loadJsModules(): void
+    {
+        $result = $this->request->send('/js_modules');
+
+        foreach ($result as $key => $value) {
+            $this->js_modules[$key] = new JsModule($key, $value);
+        }
     }
 
     /**

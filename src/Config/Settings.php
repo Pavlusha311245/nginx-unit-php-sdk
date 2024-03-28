@@ -16,21 +16,50 @@ class Settings
     /**
      * @var string|array
      */
-    private string|array $jsmodules;
+    private string|array $js_module;
+
+    public function __construct($data)
+    {
+        if (array_key_exists('http', $data)) {
+            $this->parseHttp($data['http']);
+        }
+
+        if (array_key_exists('js_module', $data)) {
+            $this->parseJsModule($data['js_module']);
+        }
+    }
+
+    /**
+     * @return Http
+     */
+    public function getHttp(): Http
+    {
+        return $this->http;
+    }
+
+    private function parseHttp(array $data): void
+    {
+        $this->http = new Http($data);
+    }
+
+    private function parseJsModule(array|string $data): void
+    {
+        $this->js_module = $data;
+    }
 
     /**
      * @return array|string
      */
-    public function getJsmodules(): array|string
+    public function getJsModule(): array|string
     {
-        return $this->jsmodules;
+        return $this->js_module;
     }
 
     /**
-     * @param array|string $jsmodules
+     * @param array|string $js_module
      */
-    public function setJsmodules(array|string $jsmodules): void
+    public function setJsModule(array|string $js_module): void
     {
-        $this->jsmodules = $jsmodules;
+        $this->js_module = $js_module;
     }
 }

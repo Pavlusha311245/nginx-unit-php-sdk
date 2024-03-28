@@ -2,7 +2,10 @@
 
 namespace UnitPhpSdk\Config\Settings;
 
-class Http
+use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Contracts\Jsonable;
+
+class Http implements Arrayable, Jsonable
 {
     /**
      *
@@ -76,6 +79,22 @@ class Http
      */
     private mixed $static = null;
 
+    public function __construct(array $data = [])
+    {
+        $this->parseData($data);
+    }
+
+    private function parseData(array $data): void
+    {
+        $keys = ['body_read_timeout', 'discard_unsafe_fields', 'header_read_timeout', 'idle_timeout', 'log_route', 'max_body_size', 'send_timeout', 'server_version', 'static'];
+
+        foreach ($keys as $key) {
+            if (isset($data[$key])) {
+                $this->{$key} = $data[$key];
+            }
+        }
+    }
+
     /**
      * @return int
      */
@@ -121,7 +140,7 @@ class Http
     /**
      * @return mixed
      */
-    public function getStatic()
+    public function getStatic(): mixed
     {
         return $this->static;
     }
@@ -148,5 +167,36 @@ class Http
     public function isServerVersion(): bool
     {
         return $this->server_version;
+    }
+
+    /**
+     * Returns an array representation of the object.
+     *
+     * @return array An associative array containing the properties of the object.
+     */
+    public function toArray(): array
+    {
+        return [
+            'body_read_timeout' => $this->body_read_timeout,
+            'discard_unsafe_fields' => $this->discard_unsafe_fields,
+            'header_read_timeout' => $this->header_read_timeout,
+            'idle_timeout' => $this->idle_timeout,
+            'log_route' => $this->log_route,
+            'max_body_size' => $this->max_body_size,
+            'send_timeout' => $this->send_timeout,
+            'server_version' => $this->server_version,
+            'static' => $this->static,
+        ];
+    }
+
+    /**
+     * Converts the object to JSON string.
+     *
+     * @param int $options The encoding options. Default is 0.
+     * @return string Returns the JSON encoded string.
+     */
+    public function toJson(int $options = 0): string
+    {
+        return json_encode($this->toArray(), $options);
     }
 }
