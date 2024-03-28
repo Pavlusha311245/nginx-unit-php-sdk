@@ -21,6 +21,19 @@ class PythonApplication extends AbstractApplication
 
     public const array REQUIRED_KEYS = ['module'];
 
+    public const array OPTIONAL_KEYS = [
+        'callable',
+        'home',
+        'path',
+        'prefix',
+        'protocol',
+        'targets',
+        'thread_stack_size',
+        'threads',
+    ];
+
+    public const array ALL_KEYS = self::REQUIRED_KEYS + self::OPTIONAL_KEYS;
+
     public const string TYPE = 'python';
 
     /**

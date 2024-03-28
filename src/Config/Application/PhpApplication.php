@@ -21,6 +21,10 @@ class PhpApplication extends AbstractApplication implements Arrayable
      */
     public const array REQUIRED_KEYS = ['root'];
 
+    public const array OPTIONAL_KEYS = ['index', 'script', 'options', 'targets'];
+
+    public const array ALL_KEYS = self::REQUIRED_KEYS + self::OPTIONAL_KEYS;
+
     public const string TYPE = 'php';
 
     /**

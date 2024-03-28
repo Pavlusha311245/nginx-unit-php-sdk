@@ -17,6 +17,10 @@ class JavaApplication extends AbstractApplication
 
     public const array REQUIRED_KEYS = ['webapp'];
 
+    public const array OPTIONAL_KEYS = ['options', 'classpath'];
+
+    public const array ALL_KEYS = self::REQUIRED_KEYS + self::OPTIONAL_KEYS;
+
     public const string TYPE = 'java';
 
     /**

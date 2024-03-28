@@ -12,6 +12,10 @@ class AbstractExternalApplication extends AbstractApplication
 {
     public const array REQUIRED_KEYS = ['executable'];
 
+    public const array OPTIONAL_KEYS = ['arguments'];
+
+    public const array ALL_KEYS = ['executable', 'arguments'];
+
     public const string TYPE = 'external';
 
     /**

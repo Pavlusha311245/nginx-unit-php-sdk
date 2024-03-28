@@ -19,6 +19,10 @@ class PerlApplication extends AbstractApplication
 
     public const array REQUIRED_KEYS = ['script'];
 
+    public const array OPTIONAL_KEYS = ['thread_stack_size', 'threads'];
+
+    public const array ALL_KEYS = self::REQUIRED_KEYS + self::OPTIONAL_KEYS;
+
     public const string TYPE = 'perl';
 
     /**

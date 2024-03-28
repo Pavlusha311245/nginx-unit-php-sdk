@@ -12,6 +12,17 @@ class WebAssemblyApplication extends AbstractApplication
 {
     public const array REQUIRED_KEYS = ['module', 'request_handler', 'malloc_handler', 'free_handler'];
 
+    public const array OPTIONAL_KEYS = [
+        'access',
+        'module_init_handler',
+        'module_end_handler',
+        'request_init_handler',
+        'request_end_handler',
+        'response_end_handler'
+    ];
+
+    public const array ALL_KEYS = self::REQUIRED_KEYS + self::OPTIONAL_KEYS;
+
     public const string TYPE = 'wasm';
 
     /**

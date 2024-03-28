@@ -15,6 +15,10 @@ class RubyApplication extends AbstractApplication
 
     public const array REQUIRED_KEYS = ['script'];
 
+    public const array OPTIONAL_KEYS = ['hooks', 'threads'];
+
+    public const array ALL_KEYS = self::REQUIRED_KEYS + self::OPTIONAL_KEYS;
+
     public const string TYPE = 'ruby';
 
     /**
