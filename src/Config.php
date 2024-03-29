@@ -134,7 +134,10 @@ class Config implements ConfigInterface, Arrayable, Jsonable
                     'python' => new Application\PythonApplication($appData),
                     'wasm' => new Application\WebAssemblyApplication($appData),
                     'ruby' => new Application\RubyApplication($appData),
-                    'external' => $this->isNodeJsApplication($appData) ? new Application\NodeJsExternalApplication($appData) : new Application\GoExternalApplication($appData),
+                    'wasm-wasi-component' => new Application\WebAssemblyComponentApplication($appData),
+                    'external' => $this->isNodeJsApplication($appData) ?
+                        new Application\NodeJsExternalApplication($appData) :
+                        new Application\GoExternalApplication($appData),
                 })
                     ->setName($appName)
                     ->setUnitRequest($this->unitRequest);
