@@ -24,12 +24,12 @@ class RubyApplication extends AbstractApplication
     /**
      * @var string
      */
-    private string $script;
+    private string $script = '';
 
     /**
      * @var string
      */
-    private string $hooks;
+    private string $hooks = '';
 
     public function getRequiredKeys(): array
     {
