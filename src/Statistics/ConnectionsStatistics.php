@@ -104,7 +104,7 @@ final readonly class ConnectionsStatistics implements ConnectionsStatisticsInter
     /**
      * @inheritDoc
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'accepted' => $this->getAcceptedConnections(),

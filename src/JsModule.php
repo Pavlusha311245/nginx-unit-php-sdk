@@ -46,7 +46,7 @@ class JsModule implements Arrayable, Jsonable
         $this->content = $content;
     }
 
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             $this->name => $this->content,

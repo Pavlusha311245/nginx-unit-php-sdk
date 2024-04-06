@@ -105,7 +105,7 @@ class IdmapAbstract implements Arrayable
     /**
      * @return array
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'container' => $this->getContainer(),

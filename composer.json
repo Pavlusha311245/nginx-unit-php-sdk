@@ -19,8 +19,8 @@
   ],
   "scripts": {
     "test": [
-      "./vendor/bin/pest",
-      "./vendor/bin/phpstan analyse -c phpstan.neon"
+      "composer test:unit",
+      "composer test:phpstan"
     ],
     "test:unit": "./vendor/bin/pest",
     "test:coverage": "./vendor/bin/pest --coverage --coverage-clover coverage.xml",

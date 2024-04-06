@@ -99,7 +99,7 @@ class RubyApplication extends AbstractApplication
     /**
      * @inheritDoc
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return array_merge(
             parent::toArray(),

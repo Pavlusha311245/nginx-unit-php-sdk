@@ -67,7 +67,7 @@ class Namespaces implements Arrayable
         }
     }
 
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'cgroup' => $this->isCgroup(),

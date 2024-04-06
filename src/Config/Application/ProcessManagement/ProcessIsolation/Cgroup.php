@@ -37,7 +37,7 @@ class Cgroup implements Arrayable
     /**
      * @inheritDoc
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'path' => $this->getPath()

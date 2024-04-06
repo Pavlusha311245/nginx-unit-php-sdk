@@ -2,10 +2,11 @@
 
 namespace UnitPhpSdk\Config\Listener;
 
+use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 
-class Forwarded
+class Forwarded implements Arrayable
 {
     /**
      * Defines address-based patterns for trusted addresses.
@@ -137,7 +138,7 @@ class Forwarded
     /**
      * @return array[]|string[]
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         $data = [
             'source' => $this->source,

@@ -108,7 +108,7 @@ final readonly class ApplicationStatistics implements ApplicationStatisticsInter
     /**
      * @inheritDoc
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'processes' => [

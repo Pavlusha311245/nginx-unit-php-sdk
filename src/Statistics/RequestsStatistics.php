@@ -55,7 +55,7 @@ final readonly class RequestsStatistics implements RequestsStatisticsInterface, 
     /**
      * @inheritDoc
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'total' => $this->getTotalRequests()

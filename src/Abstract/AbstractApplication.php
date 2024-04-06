@@ -406,7 +406,7 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
     /**
      * @return array
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'user' => $this->getUser(),
@@ -434,13 +434,13 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      * @return void
      * @throws UnitException
      */
-    public function upload(UnitRequest $request): void
+    #[\Override] public function upload(UnitRequest $request): void
     {
         $request->setMethod('PUT')
             ->send($this->getApiEndpoint(), true, ['json' => array_filter($this->toArray(), fn ($item) => !empty($item))]);
     }
 
-    public function remove(UnitRequest $request): void
+    #[\Override] public function remove(UnitRequest $request): void
     {
         $request->setMethod('DELETE')->send($this->getApiEndpoint());
     }

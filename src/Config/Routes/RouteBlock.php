@@ -93,7 +93,7 @@ class RouteBlock implements Arrayable
         return $this->action->getActionType();
     }
 
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'action' => $this->getAction()->toArray(),

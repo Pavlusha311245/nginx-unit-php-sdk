@@ -76,7 +76,7 @@ final readonly class Processes implements Arrayable
     /**
      * @inheritDoc
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'running' => $this->running,

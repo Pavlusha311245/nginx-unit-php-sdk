@@ -2,10 +2,11 @@
 
 namespace UnitPhpSdk\Config\Routes;
 
+use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Enums\HttpSchemeEnum;
 
-class RouteMatch
+class RouteMatch implements Arrayable
 {
     /**
      * Host header field, converted to lower case and normalized by removing the port number and the trailing period (if any).
@@ -309,7 +310,7 @@ class RouteMatch
     /**
      * @return array
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'host' => $this->getHost(),

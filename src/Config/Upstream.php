@@ -4,6 +4,7 @@ namespace UnitPhpSdk\Config;
 
 use OutOfRangeException;
 use UnitPhpSdk\Config\Upstream\Server;
+use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\Uploadable;
 use UnitPhpSdk\Contracts\UpstreamInterface;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
@@ -14,7 +15,7 @@ use UnitPhpSdk\Traits\HasListeners;
 /**
  * @implements UpstreamInterface
  */
-class Upstream implements UpstreamInterface, Uploadable
+class Upstream implements UpstreamInterface, Uploadable, Arrayable
 {
     use HasListeners;
 
@@ -87,7 +88,7 @@ class Upstream implements UpstreamInterface, Uploadable
     /**
      * @return array[]
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
 
         return [
@@ -107,7 +108,7 @@ class Upstream implements UpstreamInterface, Uploadable
      * @param UnitRequest $request
      * @return bool
      */
-    public function upload(UnitRequest $request)
+    #[\Override] public function upload(UnitRequest $request)
     {
         try {
             $request
@@ -130,7 +131,7 @@ class Upstream implements UpstreamInterface, Uploadable
      * @return bool Returns true if the upstream configuration was successfully removed,
      *              otherwise false if an exception occurred.
      */
-    public function remove(UnitRequest $request)
+    #[\Override] public function remove(UnitRequest $request)
     {
         try {
             $request->setMethod(HttpMethodsEnum::DELETE->value)->send($this->getApiEndpoint());

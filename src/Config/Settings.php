@@ -3,8 +3,13 @@
 namespace UnitPhpSdk\Config;
 
 use UnitPhpSdk\Config\Settings\Http;
+use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Contracts\Uploadable;
+use UnitPhpSdk\Enums\HttpMethodsEnum;
+use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Http\UnitRequest;
 
-class Settings
+class Settings implements Uploadable, Arrayable
 {
     /**
      * Fine-tunes handling of HTTP requests from the clients
@@ -61,5 +66,41 @@ class Settings
     public function setJsModule(array|string $js_module): void
     {
         $this->js_module = $js_module;
+    }
+
+    /**
+     * @param UnitRequest $request
+     * @return void
+     * @throws UnitException
+     */
+    #[\Override] public function upload(UnitRequest $request)
+    {
+        $request->setMethod(HttpMethodsEnum::PUT)->send($this->getEndpoint(), $this->toArray());
+    }
+
+    /**
+     * Removes a record from the server based on the provided request.
+     *
+     * @param UnitRequest $request The request object containing the necessary information for removal.
+     *                            This should be an instance of the UnitRequest class.
+     * @return void
+     * @throws UnitException Throws an exception if an error occurs during removal.
+     */
+    #[\Override] public function remove(UnitRequest $request)
+    {
+        $request->setMethod(HttpMethodsEnum::DELETE)->send($this->getEndpoint());
+    }
+
+    private function getEndpoint()
+    {
+        return '/config/settings';
+    }
+
+    #[\Override] public function toArray(): array
+    {
+        return [
+            'http' => $this->getHttp()->toArray(),
+            'js_module' => $this->getJsModule()
+        ];
     }
 }

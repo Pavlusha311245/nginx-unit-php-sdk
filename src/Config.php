@@ -575,7 +575,7 @@ class Config implements ConfigInterface, Arrayable, Jsonable
      *
      * @return array
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         $array = [];
 

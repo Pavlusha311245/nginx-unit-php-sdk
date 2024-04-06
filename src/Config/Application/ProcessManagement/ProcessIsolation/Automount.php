@@ -92,7 +92,7 @@ class Automount implements Arrayable
         return $this->data;
     }
 
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'language_deps' => $this->getLanguageDeps(),

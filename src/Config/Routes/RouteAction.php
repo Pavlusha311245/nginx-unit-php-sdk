@@ -3,9 +3,10 @@
 namespace UnitPhpSdk\Config\Routes;
 
 use OutOfRangeException;
+use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Exceptions\UnitException;
 
-class RouteAction
+class RouteAction implements Arrayable
 {
     /**
      * Possible action types pass, proxy, return, share
@@ -429,7 +430,7 @@ class RouteAction
     /**
      * @return array
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'pass' => $this->getPass(),

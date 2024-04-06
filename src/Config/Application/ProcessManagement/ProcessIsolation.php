@@ -188,7 +188,7 @@ class ProcessIsolation implements Arrayable
     /**
      * @return array
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'automount' => $this->getAutomount(),

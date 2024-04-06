@@ -92,7 +92,7 @@ final readonly class Statistics implements StatisticsInterface, Arrayable
         return $this->applications[$application->getName()];
     }
 
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'connections' => $this->connections->toArray(),

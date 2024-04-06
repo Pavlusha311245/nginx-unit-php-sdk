@@ -63,7 +63,7 @@ class WebAssemblyComponentApplication extends AbstractApplication
         $this->access = $access;
     }
 
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return array_merge(parent::toArray(), [
             'type' => self::TYPE,

@@ -7,6 +7,7 @@ use UnitPhpSdk\Config\Listener\{
     ListenerPass,
     Tls
 };
+use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\Uploadable;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\UnitException;
@@ -15,7 +16,7 @@ use UnitPhpSdk\Http\UnitRequest;
 /**
  * This class presents "listeners" section from config
  */
-class Listener implements Uploadable
+class Listener implements Uploadable, Arrayable
 {
     /**
      * @var ListenerPass
@@ -32,8 +33,7 @@ class Listener implements Uploadable
         string|ListenerPass     $pass,
         private ?Tls            $tls = null,
         private ?Forwarded      $forwarded = null,
-    )
-    {
+    ) {
         $this->parsePort();
         $this->parsePass($pass);
     }
@@ -179,7 +179,7 @@ class Listener implements Uploadable
      *
      * @return array
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         $listenerArray = [
             'pass' => $this->pass->toString(),
@@ -237,16 +237,19 @@ class Listener implements Uploadable
     /**
      * @throws UnitException
      */
-    public function upload(UnitRequest $request): void
+    #[\Override] public function upload(UnitRequest $request): void
     {
-        $request->setMethod(HttpMethodsEnum::PUT->value)->send($this->getApiEndpoint(), true,
-            ['json' => $this->toArray()]);
+        $request->setMethod(HttpMethodsEnum::PUT->value)->send(
+            $this->getApiEndpoint(),
+            true,
+            ['json' => $this->toArray()]
+        );
     }
 
     /**
      * @throws UnitException
      */
-    public function remove(UnitRequest $request): void
+    #[\Override] public function remove(UnitRequest $request): void
     {
         $request->setMethod(HttpMethodsEnum::DELETE->value)->send($this->getApiEndpoint());
     }

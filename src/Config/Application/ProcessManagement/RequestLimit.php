@@ -34,7 +34,7 @@ class RequestLimit implements Arrayable
         }
     }
 
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'timeout' => $this->getTimeout(),

@@ -83,7 +83,7 @@ readonly class ListenerPass implements Arrayable, Jsonable
      *
      * @return array
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return explode('/', $this->data);
     }
