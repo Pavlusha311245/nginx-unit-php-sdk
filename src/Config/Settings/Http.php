@@ -174,7 +174,7 @@ class Http implements Arrayable, Jsonable
      *
      * @return array An associative array containing the properties of the object.
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'body_read_timeout' => $this->body_read_timeout,
