@@ -203,7 +203,7 @@ class Config implements ConfigInterface, Arrayable, Jsonable
                 }
 
                 $servers = array_map(
-                    fn($v, $k) => new Server($v, $k['weight'] ?? 1),
+                    fn ($v, $k) => new Server($v, $k['weight'] ?? 1),
                     array_keys($upstreamData['servers']),
                     array_values($upstreamData['servers'])
                 );

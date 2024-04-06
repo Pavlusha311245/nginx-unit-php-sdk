@@ -4,6 +4,7 @@ namespace UnitPhpSdk\Http;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\UnitException;
 
 /**
@@ -60,9 +61,9 @@ class UnitRequest
      *
      * @param mixed $method
      */
-    public function setMethod(string $method): self
+    public function setMethod(string|HttpMethodsEnum $method): self
     {
-        $this->method = mb_strtoupper($method);
+        $this->method = is_string($method) ? mb_strtoupper($method) : $method->value;
 
         return $this;
     }

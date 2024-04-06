@@ -50,8 +50,7 @@ class Unit implements UnitInterface
     public function __construct(
         private readonly string  $address,
         private readonly ?string $socket = null
-    )
-    {
+    ) {
         $this->request = new UnitRequest(
             address: $this->address,
             socket: $this->socket

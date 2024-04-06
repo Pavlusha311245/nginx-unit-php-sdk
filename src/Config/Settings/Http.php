@@ -4,8 +4,11 @@ namespace UnitPhpSdk\Config\Settings;
 
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\Jsonable;
+use UnitPhpSdk\Contracts\Uploadable;
+use UnitPhpSdk\Enums\HttpMethodsEnum;
+use UnitPhpSdk\Http\UnitRequest;
 
-class Http implements Arrayable, Jsonable
+class Http implements Arrayable, Jsonable, Uploadable
 {
     /**
      *
@@ -198,5 +201,22 @@ class Http implements Arrayable, Jsonable
     public function toJson(int $options = 0): string
     {
         return json_encode($this->toArray(), $options);
+    }
+
+    #[\Override] public function upload(UnitRequest $request)
+    {
+        $request->setMethod(HttpMethodsEnum::PUT)->send($this->getEndpoint(), true, [
+            'json' => array_filter($this->toArray(), fn ($value) => $value !== null)
+        ]);
+    }
+
+    #[\Override] public function remove(UnitRequest $request)
+    {
+        $request->setMethod(HttpMethodsEnum::DELETE)->send($this->getEndpoint());
+    }
+
+    private function getEndpoint(): string
+    {
+        return '/config/settings/http';
     }
 }

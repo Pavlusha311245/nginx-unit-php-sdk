@@ -91,7 +91,7 @@ class Settings implements Uploadable, Arrayable
         $request->setMethod(HttpMethodsEnum::DELETE)->send($this->getEndpoint());
     }
 
-    private function getEndpoint()
+    private function getEndpoint(): string
     {
         return '/config/settings';
     }
