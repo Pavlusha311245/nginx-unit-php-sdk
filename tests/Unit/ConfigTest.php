@@ -2,14 +2,9 @@
 
 namespace Tests\Unit;
 
-use UnitPhpSdk\Unit;
+use UnitPhpSdk\Config;
 
-$unit = new Unit(
-    socket: '/usr/local/var/run/unit/control.sock',
-    address: 'http://localhost'
-);
-
-$config = $unit->getConfig();
+$config = new Config();
 
 test('Can receive listeners', function () use ($config) {
     expect($config->getListeners())->toBeArray();

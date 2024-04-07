@@ -2,45 +2,61 @@
 
 namespace UnitPhpSdk\Config\Application;
 
-use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
-use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\{
     HasThreads,
     HasThreadStackSize
 };
 
 /**
- * @extends ApplicationAbstract
+ * @extends AbstractApplication
  */
-class PerlApplication extends ApplicationAbstract
+class PerlApplication extends AbstractApplication
 {
     use HasThreads;
     use HasThreadStackSize;
 
-    protected string $_type = 'perl';
+    public const array REQUIRED_KEYS = ['script'];
+
+    public const array OPTIONAL_KEYS = ['thread_stack_size', 'threads'];
+
+    public const array ALL_KEYS = self::REQUIRED_KEYS + self::OPTIONAL_KEYS;
+
+    public const string TYPE = 'perl';
 
     /**
      * PSGI script path
      *
      * @var string
      */
-    private string $_script;
+    private string $script;
+
+    /**
+     * @return array
+     */
+    public function getRequiredKeys(): array
+    {
+        return self::REQUIRED_KEYS;
+    }
 
     /**
      * @return string
      */
     public function getScript(): string
     {
-        return $this->_script;
+        return $this->script;
     }
 
     /**
      * @param string $script
+     * @return PerlApplication
      */
-    public function setScript(string $script): void
+    public function setScript(string $script): self
     {
-        $this->_script = $script;
+        $this->script = $script;
+
+        return $this;
     }
 
     /**
@@ -65,11 +81,15 @@ class PerlApplication extends ApplicationAbstract
         }
     }
 
-    public function toArray(): array
+    /**
+     * @inheritDoc
+     */
+    #[\Override] public function toArray(): array
     {
         return array_merge(
             parent::toArray(),
             [
+                'type' => self::TYPE,
                 'script' => $this->getScript(),
                 'thread_stack_size' => $this->getThreadStackSize(),
                 'threads' => $this->getThreads(),

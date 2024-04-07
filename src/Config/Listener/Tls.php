@@ -2,9 +2,6 @@
 
 namespace UnitPhpSdk\Config\Listener;
 
-use UnitPhpSdk\Certificate;
-use UnitPhpSdk\Exceptions\UnitException;
-
 class Tls
 {
     /**
@@ -12,21 +9,21 @@ class Tls
      *
      * @var string|array
      */
-    private string|array $_certificate;
+    private string|array $certificate;
 
     /**
      * Defines the OpenSSL configuration commands to be set for the listener.
      *
      * @var array
      */
-    private array $_conf_commands = [];
+    private array $conf_commands = [];
 
     /**
      * Configures the TLS session cache and tickets for the listener.
      *
      * @var array
      */
-    private array $_session = [];
+    private array $session = [];
 
     public function __construct(array $data = [])
     {
@@ -38,10 +35,6 @@ class Tls
      */
     private function parseFromArray(array $data): void
     {
-        //        if (empty($data['certificate'])) {
-        //            throw new UnitException("Missing required 'source' array key");
-        //        }
-
         if (array_key_exists('certificate', $data)) {
             $this->setCertificate($data['certificate']);
         }
@@ -60,7 +53,7 @@ class Tls
      */
     public function setCertificate(string|array $certificate): void
     {
-        $this->_certificate = $certificate;
+        $this->certificate = $certificate;
     }
 
     /**
@@ -68,7 +61,7 @@ class Tls
      */
     public function getCertificate(): string|array
     {
-        return $this->_certificate;
+        return $this->certificate;
     }
 
     /**
@@ -76,7 +69,7 @@ class Tls
      */
     public function setSession(array $session): void
     {
-        $this->_session = $session;
+        $this->session = $session;
     }
 
     /**
@@ -84,7 +77,7 @@ class Tls
      */
     public function getSession(): array
     {
-        return $this->_session;
+        return $this->session;
     }
 
     /**
@@ -92,7 +85,7 @@ class Tls
      */
     public function setConfCommands(array $conf_commands): void
     {
-        $this->_conf_commands = $conf_commands;
+        $this->conf_commands = $conf_commands;
     }
 
     /**
@@ -100,7 +93,7 @@ class Tls
      */
     public function getConfCommands(): array
     {
-        return $this->_conf_commands;
+        return $this->conf_commands;
     }
 
     /**
@@ -109,15 +102,15 @@ class Tls
     public function toArray(): array
     {
         $data = [
-            'certificate' => $this->_certificate
+            'certificate' => $this->certificate
         ];
-
-        if (!empty($this->getSession())) {
-            $data['session'] = $this->getSession();
-        }
 
         if (!empty($this->getConfCommands())) {
             $data['conf_commands'] = $this->getConfCommands();
+        }
+
+        if (!empty($this->getSession())) {
+            $data['session'] = $this->getSession();
         }
 
         return $data;

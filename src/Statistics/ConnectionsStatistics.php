@@ -4,6 +4,7 @@ namespace UnitPhpSdk\Statistics;
 
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\ConnectionsStatisticsInterface;
+use UnitPhpSdk\Exceptions\UnitParseException;
 
 /**
  * @readonly ConnectionsStatistics
@@ -12,9 +13,60 @@ use UnitPhpSdk\Contracts\ConnectionsStatisticsInterface;
  */
 final readonly class ConnectionsStatistics implements ConnectionsStatisticsInterface, Arrayable
 {
-    public function __construct(private array $_data)
+    /**
+     * Accepted connections
+     *
+     * @var int
+     */
+    private int $accepted;
+
+    /**
+     * Active connections
+     *
+     * @var int
+     */
+    private int $active;
+
+    /**
+     * Idle connections
+     *
+     * @var int
+     */
+    private int $idle;
+
+    /**
+     * Closed connections
+     *
+     * @var int
+     */
+    private int $closed;
+
+    /**
+     * @throws UnitParseException
+     */
+    public function __construct(array $data)
     {
-        //
+        $this->parseFromArray($data);
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     * @throws UnitParseException
+     */
+    private function parseFromArray(array $data): void
+    {
+        if (!array_key_exists('idle', $data)
+            || !array_key_exists('active', $data)
+            || !array_key_exists('accepted', $data)
+            || !array_key_exists('closed', $data)) {
+            throw new UnitParseException('One or more keys are don\'t exists');
+        }
+
+        $this->accepted = $data['accepted'];
+        $this->active = $data['active'];
+        $this->idle = $data['idle'];
+        $this->closed = $data['closed'];
     }
 
     /**
@@ -22,7 +74,7 @@ final readonly class ConnectionsStatistics implements ConnectionsStatisticsInter
      */
     public function getIdleConnections(): int
     {
-        return $this->_data['idle'];
+        return $this->idle;
     }
 
     /**
@@ -30,7 +82,7 @@ final readonly class ConnectionsStatistics implements ConnectionsStatisticsInter
      */
     public function getActiveConnections(): int
     {
-        return $this->_data['active'];
+        return $this->active;
     }
 
     /**
@@ -38,7 +90,7 @@ final readonly class ConnectionsStatistics implements ConnectionsStatisticsInter
      */
     public function getAcceptedConnections(): int
     {
-        return $this->_data['accepted'];
+        return $this->accepted;
     }
 
     /**
@@ -46,14 +98,19 @@ final readonly class ConnectionsStatistics implements ConnectionsStatisticsInter
      */
     public function getClosedConnections(): int
     {
-        return $this->_data['closed'];
+        return $this->closed;
     }
 
     /**
      * @inheritDoc
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
-        return $this->_data;
+        return [
+            'accepted' => $this->getAcceptedConnections(),
+            'active' => $this->getActiveConnections(),
+            'idle' => $this->getIdleConnections(),
+            'closed' => $this->getClosedConnections(),
+        ];
     }
 }

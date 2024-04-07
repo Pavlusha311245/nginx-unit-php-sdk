@@ -2,42 +2,40 @@
 
 namespace UnitPhpSdk;
 
-use UnitPhpSdk\Abstract\ApplicationAbstract;
-use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Upstream};
-use UnitPhpSdk\Enums\HttpMethodsEnum;
-use UnitPhpSdk\Exceptions\FileNotFoundException;
-use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Abstract\AbstractApplication;
+use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Settings, Upstream, Upstream\Server};
+use UnitPhpSdk\Exceptions\{FileNotFoundException, UnitException};
+use UnitPhpSdk\Contracts\{Arrayable, ConfigInterface, Jsonable};
 use UnitPhpSdk\Http\UnitRequest;
-use UnitPhpSdk\Contracts\Arrayable;
-use UnitPhpSdk\Contracts\ConfigInterface;
+use UnitPhpSdk\Enums\HttpMethodsEnum;
 
 /**
  * This class contains Nginx Unit config data
  *
  * @implements ConfigInterface
  */
-class Config implements ConfigInterface, Arrayable
+class Config implements ConfigInterface, Arrayable, Jsonable
 {
     /**
      * Listeners that accept requests
      *
      * @var array
      */
-    private array $_listeners;
+    private array $listeners;
 
     /**
      * Route entities defines internal request routing.
      *
      * @var array
      */
-    private array $_routes = [];
+    private array $routes = [];
 
     /**
      * Each app that Unit runs is defined as an object
      *
      * @var array
      */
-    private array $_applications = [];
+    private array $applications = [];
 
     /**
      * An upstream is a group of servers that comprise a single logical entity and
@@ -45,14 +43,34 @@ class Config implements ConfigInterface, Arrayable
      *
      * @var array|mixed
      */
-    private array $_upstreams = [];
+    private array $upstreams = [];
+
+    /**
+     * @var Settings
+     */
+    private Settings $settings;
+
+    private ?UnitRequest $unitRequest;
 
     /**
      * Constructor
      *
+     * @param object|null $data
      * @throws UnitException
      */
-    public function __construct(object $data, private readonly UnitRequest $_unitRequest)
+    public function __construct(object $data = null, UnitRequest $unitRequest = null)
+    {
+        $this->unitRequest = $unitRequest;
+
+        if (!empty($data) && !empty($this->unitRequest)) {
+            $this->parseUnitObject($data);
+        }
+    }
+
+    /**
+     * @throws UnitException
+     */
+    private function parseUnitObject(object $data): void
     {
         $rawData = $data;
         $jsonData = json_decode(json_encode($data), true);
@@ -61,6 +79,14 @@ class Config implements ConfigInterface, Arrayable
         $this->loadApplications($jsonData);
         $this->loadUpstreams($jsonData);
         $this->loadListeners($jsonData);
+        $this->loadSettings($jsonData);
+    }
+
+    private function loadSettings($jsonData): void
+    {
+        if (array_key_exists('settings', $jsonData)) {
+            $this->settings = new Settings($jsonData['settings']);
+        }
     }
 
     /**
@@ -75,16 +101,16 @@ class Config implements ConfigInterface, Arrayable
         if (array_key_exists('listeners', $data)) {
             foreach ($data['listeners'] as $listener => $listenerData) {
                 $listener = (new Listener(
-                    _listener: $listener,
+                    listener: $listener,
                     pass: $listenerData['pass']
                 ))->parseFromArray($listenerData);
 
                 $typePath = $listener->getPass()->getType();
-                $typePathName = $listener->getPass()->toArray()[1] ?? null;
+                $typePathName = $listener->getPass()->getName();
 
-                ($this->{"_{$typePath}"}[$typePathName ?? 'default'])?->setListener($listener);
+                ($this->{"$typePath"}[$typePathName ?? 'default'])?->setListener($listener);
 
-                $this->_listeners[] = $listener;
+                $this->listeners[] = $listener;
             }
         }
     }
@@ -101,23 +127,26 @@ class Config implements ConfigInterface, Arrayable
     {
         if (array_key_exists('applications', $data)) {
             foreach ($data['applications'] as $appName => $appData) {
-                $this->_applications[$appName] = match ($appData['type']) {
+                $this->applications[$appName] = (match ($appData['type']) {
                     'php' => new Application\PhpApplication($appData),
                     'java' => new Application\JavaApplication($appData),
                     'perl' => new Application\PerlApplication($appData),
                     'python' => new Application\PythonApplication($appData),
                     'wasm' => new Application\WebAssemblyApplication($appData),
                     'ruby' => new Application\RubyApplication($appData),
-                    'external' => $this->isNodeJsApplication($appData) ? new Application\NodeJsApplication($appData) : new Application\GoApplication($appData),
-                };
-                $this->_applications[$appName]->setName($appName);
-                $this->_applications[$appName]->setUnitRequest($this->_unitRequest);
+                    'wasm-wasi-component' => new Application\WebAssemblyComponentApplication($appData),
+                    'external' => $this->isNodeJsApplication($appData) ?
+                        new Application\NodeJsExternalApplication($appData) :
+                        new Application\GoExternalApplication($appData),
+                })
+                    ->setName($appName)
+                    ->setUnitRequest($this->unitRequest);
             }
         }
     }
 
     /**
-     * Detect if NodeJsApplication
+     * Detect if NodeJsExternalApplication
      *
      * @param $appData
      * @return bool
@@ -151,10 +180,10 @@ class Config implements ConfigInterface, Arrayable
             $jsonRoutes = json_decode(json_encode($rawData), true)['routes'];
             if (!is_array($rawData->routes)) {
                 foreach ($jsonRoutes as $routeName => $routeData) {
-                    $this->_routes[$routeName] = new Route($routeName, $routeData);
+                    $this->routes[$routeName] = new Route($routeName, $routeData);
                 }
             } else {
-                $this->_routes['default'] = new Route('default', $jsonRoutes[0], true);
+                $this->routes['default'] = new Route('default', $jsonRoutes[0], true);
             }
         }
     }
@@ -169,7 +198,17 @@ class Config implements ConfigInterface, Arrayable
     {
         if (array_key_exists('upstreams', $data)) {
             foreach ($data['upstreams'] as $upstreamName => $upstreamData) {
-                $this->_upstreams[$upstreamName] = new Upstream($upstreamName, $upstreamData);
+                if (!array_key_exists('servers', $upstreamData)) {
+                    throw new UnitException('Servers key not found in upstream data');
+                }
+
+                $servers = array_map(
+                    fn ($v, $k) => new Server($v, $k['weight'] ?? 1),
+                    array_keys($upstreamData['servers']),
+                    array_values($upstreamData['servers'])
+                );
+
+                $this->upstreams[$upstreamName] = new Upstream($upstreamName, $servers);
             }
         }
     }
@@ -180,7 +219,7 @@ class Config implements ConfigInterface, Arrayable
      */
     public function getListener(string $listener): ?Listener
     {
-        return $this->_listeners[$listener] ?? null;
+        return $this->listeners[$listener] ?? null;
     }
 
     /**
@@ -191,7 +230,7 @@ class Config implements ConfigInterface, Arrayable
      */
     public function getListenerByPort(int $port): Listener|null
     {
-        foreach ($this->_listeners as $listener) {
+        foreach ($this->listeners as $listener) {
             if ($listener->getPort() == $port) {
                 return $listener;
             }
@@ -206,10 +245,12 @@ class Config implements ConfigInterface, Arrayable
     public function uploadListener(Listener $listener): bool
     {
         try {
-            $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
-            $this->_unitRequest->setData($listener->toJson());
-            $this->_unitRequest->send("/config/listeners/{$listener->getListener()}");
-        } catch (UnitException $exception) {
+            $this->unitRequest->setMethod(HttpMethodsEnum::PUT->value)
+                ->send("/config/listeners/{$listener->getListener()}", requestOptions: [
+                    'json' => $listener->toArray()
+                ]);
+        } catch (UnitException $e) {
+            print_r($e->getMessage());
             return false;
         }
 
@@ -227,14 +268,15 @@ class Config implements ConfigInterface, Arrayable
             throw new FileNotFoundException();
         }
 
-        if (empty(json_decode($fileContent, true))) {
+        if (!json_validate($fileContent)) {
             throw new UnitException('It\'s not a JSON file');
         }
 
         try {
-            $this->_unitRequest->setMethod('PUT');
-            $this->_unitRequest->setData($fileContent);
-            $result = $this->_unitRequest->send("/config/listeners/{$listener}");
+            $this->unitRequest->setMethod('PUT')
+                ->send("/config/listeners/$listener", requestOptions: [
+                    'body' => $fileContent
+                ]);
         } catch (UnitException) {
             return false;
         }
@@ -249,10 +291,10 @@ class Config implements ConfigInterface, Arrayable
      */
     public function removeListener(Listener $listener): bool
     {
-        $this->_unitRequest->setMethod(HttpMethodsEnum::DELETE->value);
-
         $listenerId = $listener->getListener();
-        $this->_unitRequest->send("/config/listeners/{$listenerId}");
+        $this->unitRequest
+            ->setMethod(HttpMethodsEnum::DELETE->value)
+            ->send("/config/listeners/$listenerId");
 
         return true;
     }
@@ -262,7 +304,7 @@ class Config implements ConfigInterface, Arrayable
      */
     public function getListeners(): array
     {
-        return $this->_listeners ?? [];
+        return $this->listeners ?? [];
     }
 
     /**
@@ -272,21 +314,24 @@ class Config implements ConfigInterface, Arrayable
      */
     public function getApplications(): array
     {
-        return $this->_applications;
+        return $this->applications;
     }
 
     /**
      * Get application from config by name
      *
      * @param $applicationName
-     * @return ApplicationAbstract|null
+     * @return AbstractApplication|null
      */
-    public function getApplication($applicationName): ?ApplicationAbstract
+    public function getApplication($applicationName): ?AbstractApplication
     {
-        return $this->_applications[$applicationName] ?? null;
+        return $this->applications[$applicationName] ?? null;
     }
 
-    public function uploadApplication(ApplicationAbstract $application, string $name = ''): bool
+    /**
+     * @throws UnitException
+     */
+    public function uploadApplication(AbstractApplication $application, string $name = ''): bool
     {
         if (empty($application->getName()) && empty($name)) {
             throw new UnitException('Application name not specified');
@@ -295,10 +340,12 @@ class Config implements ConfigInterface, Arrayable
         $appName = empty($application->getName()) ? $name : $application->getName();
 
         try {
-            $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
-            $this->_unitRequest->setData($application->toJson());
-            $response = $this->_unitRequest->send("/config/applications/{$appName}");
-        } catch (UnitException $exception) {
+            $this->unitRequest
+                ->setMethod(HttpMethodsEnum::PUT->value)
+                ->send("/config/applications/$appName", requestOptions: [
+                    'json' => $application->toJson()
+                ]);
+        } catch (UnitException) {
             return false;
         }
 
@@ -318,15 +365,17 @@ class Config implements ConfigInterface, Arrayable
             throw new FileNotFoundException();
         }
 
-        if (empty(json_decode($fileContent, true))) {
+        if (!json_validate($fileContent)) {
             throw new UnitException('It\'s not a JSON file');
         }
 
         try {
-            $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
-            $this->_unitRequest->setData($fileContent);
-            $this->_unitRequest->send("/config/applications/{$name}");
-        } catch (UnitException $exception) {
+            $this->unitRequest
+                ->setMethod(HttpMethodsEnum::PUT->value)
+                ->send("/config/applications/$name", requestOptions: [
+                    'body' => $fileContent
+                ]);
+        } catch (UnitException) {
             return false;
         }
 
@@ -339,12 +388,12 @@ class Config implements ConfigInterface, Arrayable
      *
      * @throws UnitException
      */
-    public function removeApplication(ApplicationAbstract|string $application): bool
+    public function removeApplication(AbstractApplication|string $application): bool
     {
-        $this->_unitRequest->setMethod(HttpMethodsEnum::DELETE->value);
-
         $applicationName = is_string($application) ? $application : $application->getName();
-        $this->_unitRequest->send("/config/applications/{$applicationName}");
+        $this->unitRequest
+            ->setMethod(HttpMethodsEnum::DELETE->value)
+            ->send("/config/applications/$applicationName");
 
         return true;
     }
@@ -356,7 +405,7 @@ class Config implements ConfigInterface, Arrayable
      */
     public function getRoutes(): array
     {
-        return $this->_routes;
+        return $this->routes;
     }
 
     /**
@@ -367,7 +416,7 @@ class Config implements ConfigInterface, Arrayable
      */
     public function getRoute(string $routeName): Route|null
     {
-        return $this->_routes[$routeName] ?? null;
+        return $this->routes[$routeName] ?? null;
     }
 
     /**
@@ -384,9 +433,9 @@ class Config implements ConfigInterface, Arrayable
         }
 
         try {
-            $this->_unitRequest->setMethod(HttpMethodsEnum::DELETE->value);
-            $this->_unitRequest->send('/config/routes');
-        } catch (UnitException $exception) {
+            $this->unitRequest->setMethod(HttpMethodsEnum::DELETE->value)
+                ->send('/config/routes');
+        } catch (UnitException) {
             return false;
         }
 
@@ -407,7 +456,16 @@ class Config implements ConfigInterface, Arrayable
      */
     public function getUpstreams(): array
     {
-        return $this->_upstreams;
+        return $this->upstreams;
+    }
+
+    /**
+     * @param $name
+     * @return Upstream
+     */
+    public function getUpstream($name): Upstream
+    {
+        return $this->upstreams[$name];
     }
 
     /**
@@ -423,17 +481,22 @@ class Config implements ConfigInterface, Arrayable
         $upstreamName = empty($upstream->getName()) ? $name : $upstream->getName();
 
         try {
-            $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
-            $this->_unitRequest->setData(json_encode($upstream->toJson()));
-            $this->_unitRequest->send("/config/upstreams/{$upstreamName}");
-        } catch (UnitException $exception) {
-            print_r($exception->getMessage());
+            $this->unitRequest
+                ->setMethod(HttpMethodsEnum::PUT->value)
+                ->send("/config/upstreams/$upstreamName", requestOptions: [
+                    'json' => $upstream->toArray()
+                ]);
+        } catch (UnitException) {
             return false;
         }
 
         return true;
     }
 
+    /**
+     * @throws UnitException
+     * @throws FileNotFoundException
+     */
     public function uploadUpstreamsFromFile(string $path): bool
     {
         $fileContent = file_get_contents($path);
@@ -442,14 +505,16 @@ class Config implements ConfigInterface, Arrayable
             throw new FileNotFoundException();
         }
 
-        if (empty(json_decode($fileContent, true))) {
+        if (!json_validate($fileContent)) {
             throw new UnitException('It\'s not a JSON file');
         }
 
         try {
-            $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
-            $this->_unitRequest->setData(json_encode($fileContent));
-            $this->_unitRequest->send('/config/upstreams');
+            $this->unitRequest
+                ->setMethod(HttpMethodsEnum::PUT->value)
+                ->send('/config/upstreams', requestOptions: [
+                    'body' => $fileContent
+                ]);
         } catch (UnitException $exception) {
             print_r($exception->getMessage());
             return false;
@@ -470,10 +535,11 @@ class Config implements ConfigInterface, Arrayable
         }
 
         try {
-            $this->_unitRequest->setMethod(HttpMethodsEnum::PUT->value);
-            $this->_unitRequest->setData(json_encode($data));
-            $this->_unitRequest->send('/config/access_log');
-        } catch (UnitException $exception) {
+            $this->unitRequest->setMethod(HttpMethodsEnum::PUT->value)
+                ->send('/config/access_log', requestOptions: [
+                    'json' => json_encode($data)
+                ]);
+        } catch (UnitException) {
             return false;
         }
 
@@ -482,7 +548,11 @@ class Config implements ConfigInterface, Arrayable
 
     public function getAccessLog(): ?AccessLog
     {
-        $result = $this->_unitRequest->send('/config/access_log');
+        try {
+            $result = $this->unitRequest->send('/config/access_log');
+        } catch (UnitException) {
+            return null;
+        }
 
         return new AccessLog($result);
     }
@@ -490,9 +560,10 @@ class Config implements ConfigInterface, Arrayable
     public function removeAccessLog(): bool
     {
         try {
-            $this->_unitRequest->setMethod(HttpMethodsEnum::DELETE->value);
-            $this->_unitRequest->send('/config/access_log');
-        } catch (UnitException $exception) {
+            $this->unitRequest
+                ->setMethod(HttpMethodsEnum::DELETE->value)
+                ->send('/config/access_log');
+        } catch (UnitException) {
             return false;
         }
 
@@ -504,7 +575,7 @@ class Config implements ConfigInterface, Arrayable
      *
      * @return array
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         $array = [];
 
@@ -515,5 +586,30 @@ class Config implements ConfigInterface, Arrayable
         }
 
         return $array;
+    }
+
+    /**
+     * @return Settings
+     */
+    public function getSettings(): Settings
+    {
+        return $this->settings;
+    }
+
+    /**
+     * @param Settings $settings
+     */
+    public function setSettings(Settings $settings): void
+    {
+        $this->settings = $settings;
+    }
+
+    /**
+     * @param int $options
+     * @return string
+     */
+    public function toJson(int $options = 0): string
+    {
+        return json_encode($this->toJson());
     }
 }

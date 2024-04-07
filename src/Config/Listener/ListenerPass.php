@@ -2,18 +2,41 @@
 
 namespace UnitPhpSdk\Config\Listener;
 
-readonly class ListenerPass
+use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Contracts\Jsonable;
+
+readonly class ListenerPass implements Arrayable, Jsonable
 {
     /**
+     * Listener type (application, routes, route, upstreams)
+     *
      * @var string
      */
-    private string $_type;
+    private string $type;
 
-    public function __construct(private string $_data)
+    /**
+     * Listener name
+     *
+     * @var string|null
+     */
+    private ?string $name;
+
+    /**
+     * Listener target
+     *
+     * @var string|null
+     */
+    private ?string $target;
+
+
+    public function __construct(private string $data)
     {
-        $this->_type = explode('/', $_data)[0];
-    }
+        parse_listener_pass($data);
 
+        $this->type = explode('/', $data)[0];
+        $this->name = explode('/', $data)[1] ?? null;
+        $this->target = explode('/', $data)[2] ?? null;
+    }
 
     /**
      * Return pass type (application, routes, route, upstreams)
@@ -22,7 +45,27 @@ readonly class ListenerPass
      */
     public function getType(): string
     {
-        return $this->_type;
+        return $this->type;
+    }
+
+    /**
+     * Get pass name
+     *
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Get pass target
+     *
+     * @return string|null
+     */
+    public function getTarget(): ?string
+    {
+        return $this->target;
     }
 
     /**
@@ -32,7 +75,7 @@ readonly class ListenerPass
      */
     public function toString(): string
     {
-        return $this->_data;
+        return $this->data;
     }
 
     /**
@@ -40,8 +83,16 @@ readonly class ListenerPass
      *
      * @return array
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
-        return explode('/', $this->_data);
+        return explode('/', $this->data);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toJson(int $options = 0): string
+    {
+        return json_encode($this->toArray(), $options);
     }
 }

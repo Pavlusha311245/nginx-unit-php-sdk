@@ -14,14 +14,14 @@ class RequestLimit implements Arrayable
      *
      * @var int
      */
-    private int $_requests;
+    private int $requests;
 
     /**
      * Request timeout in seconds.
      *
      * @var int
      */
-    private int $_timeout;
+    private int $timeout;
 
     public function __construct(array $data = [])
     {
@@ -34,7 +34,7 @@ class RequestLimit implements Arrayable
         }
     }
 
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'timeout' => $this->getTimeout(),
@@ -47,7 +47,7 @@ class RequestLimit implements Arrayable
      */
     public function getRequests(): int
     {
-        return $this->_requests;
+        return $this->requests;
     }
 
     /**
@@ -55,7 +55,7 @@ class RequestLimit implements Arrayable
      */
     public function setRequests(int $requests): void
     {
-        $this->_requests = $requests;
+        $this->requests = $requests;
     }
 
     /**
@@ -63,7 +63,7 @@ class RequestLimit implements Arrayable
      */
     public function getTimeout(): int
     {
-        return $this->_timeout;
+        return $this->timeout;
     }
 
     /**
@@ -71,6 +71,6 @@ class RequestLimit implements Arrayable
      */
     public function setTimeout(int $timeout): void
     {
-        $this->_timeout = $timeout;
+        $this->timeout = $timeout;
     }
 }

@@ -6,7 +6,12 @@ use UnitPhpSdk\Config\Listener;
 
 trait HasListeners
 {
-    private array $_listeners = [];
+    /**
+     * Array of listeners
+     *
+     * @var array
+     */
+    private array $listeners = [];
 
     /**
      * Setup new listener
@@ -16,7 +21,7 @@ trait HasListeners
      */
     public function setListener(Listener $listener): void
     {
-        $this->_listeners[$listener->getListener()] = $listener;
+        $this->listeners[$listener->getListener()] = $listener;
     }
 
     /**
@@ -26,7 +31,7 @@ trait HasListeners
      */
     public function getListeners(): array
     {
-        return $this->_listeners;
+        return $this->listeners;
     }
 
     /**
@@ -36,6 +41,6 @@ trait HasListeners
      */
     public function hasListeners(): bool
     {
-        return !empty($this->_listeners);
+        return !empty($this->listeners);
     }
 }

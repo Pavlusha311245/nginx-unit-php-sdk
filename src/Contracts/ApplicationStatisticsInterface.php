@@ -2,6 +2,8 @@
 
 namespace UnitPhpSdk\Contracts;
 
+use UnitPhpSdk\Statistics\Processes;
+
 interface ApplicationStatisticsInterface
 {
     /**
@@ -21,9 +23,9 @@ interface ApplicationStatisticsInterface
     /**
      * Return all statistics by processes
      *
-     * @return array
+     * @return Processes
      */
-    public function getProcesses(): array;
+    public function getProcesses(): Processes;
 
     /**
      * Get count of starting application processes

@@ -2,54 +2,76 @@
 
 namespace UnitPhpSdk\Config\Application;
 
-use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Abstract\AbstractApplication;
+use UnitPhpSdk\Config\Application\Options\PhpOptions;
 use UnitPhpSdk\Config\Application\Targets\PhpTarget;
+use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Traits\HasTargets;
 
 /**
- * @extends ApplicationAbstract
+ * @extends AbstractApplication
  */
-class PhpApplication extends ApplicationAbstract
+class PhpApplication extends AbstractApplication implements Arrayable
 {
     use HasTargets;
 
-    protected string $_type = 'php';
+    /**
+     * @var array
+     */
+    public const array REQUIRED_KEYS = ['root'];
+
+    public const array OPTIONAL_KEYS = ['index', 'script', 'options', 'targets'];
+
+    public const array ALL_KEYS = self::REQUIRED_KEYS + self::OPTIONAL_KEYS;
+
+    public const string TYPE = 'php';
 
     /**
      * @var string
      */
-    private string $_root = '';
+    private string $root = '';
 
     /**
      * @var string
      */
-    private string $_index = '';
+    private string $index = '';
 
     /**
      * @var string
      */
-    private string $_script = '';
+    private string $script = '';
 
     /**
-     * @var
+     * @var PhpOptions|null
      */
-    private $_options;
+    private ?PhpOptions $options = null;
+
+    /**
+     * @return array|string[]
+     */
+    public function getRequiredKeys(): array
+    {
+        return self::REQUIRED_KEYS;
+    }
 
     /**
      * @return mixed
      */
     public function getRoot(): string
     {
-        return $this->_root;
+        return $this->root;
     }
 
     /**
-     * @param mixed $root
+     * @param string $root
+     * @return PhpApplication
      */
-    public function setRoot(string $root): void
+    public function setRoot(string $root): self
     {
-        $this->_root = $root;
+        $this->root = $root;
+
+        return $this;
     }
 
     /**
@@ -57,15 +79,18 @@ class PhpApplication extends ApplicationAbstract
      */
     public function getIndex(): string
     {
-        return $this->_index;
+        return $this->index;
     }
 
     /**
      * @param string $index
+     * @return PhpApplication
      */
-    public function setIndex(string $index): void
+    public function setIndex(string $index = 'index.php'): self
     {
-        $this->_index = $index;
+        $this->index = $index;
+
+        return $this;
     }
 
     /**
@@ -73,31 +98,51 @@ class PhpApplication extends ApplicationAbstract
      */
     public function getScript(): string
     {
-        return $this->_script;
+        return $this->script;
     }
 
     /**
      * @param string $script
+     * @return PhpApplication
      */
-    public function setScript(string $script = 'index.php'): void
+    public function setScript(string $script = 'index.php'): self
     {
-        $this->_script = $script;
+        $this->script = $script;
+
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return PhpOptions|null
      */
-    public function getOptions()
+    public function getOptions(): ?PhpOptions
     {
-        return $this->_options;
+        return $this->options;
     }
 
     /**
-     * @param mixed $options
+     * @param array $optionsData
+     * @return PhpApplication
      */
-    public function setOptions($options): void
+    public function setOptions(array $optionsData): self
     {
-        $this->_options = $options;
+        $options = new PhpOptions();
+
+        if (array_key_exists('admin', $optionsData)) {
+            $options->setAdmin($optionsData['admin']);
+        }
+
+        if (array_key_exists('user', $optionsData)) {
+            $options->setUser($optionsData['user']);
+        }
+
+        if (array_key_exists('file', $optionsData) && is_string($optionsData['file'])) {
+            $options->setFile($optionsData['file']);
+        }
+
+        $this->options = $options;
+
+        return $this;
     }
 
     /**
@@ -107,17 +152,25 @@ class PhpApplication extends ApplicationAbstract
     {
         parent::parseFromArray($data);
 
-        if (!array_key_exists('root', $data) && !array_key_exists('targets', $data)) {
-            throw new RequiredKeyException('root', 'targets');
-        }
-
         if (array_key_exists('root', $data)) {
+            if (!is_string($data['root'])) {
+                throw new \InvalidArgumentException('root must be a string');
+            }
+
             $this->setRoot($data['root']);
         }
 
         if (array_key_exists('targets', $data)) {
             $targets = [];
             foreach ($data['targets'] as $targetName => $targetData) {
+                if (!is_array($targetData)) {
+                    throw new \InvalidArgumentException('target data must be an array');
+                }
+
+                if (!array_key_exists('root', $targetData)) {
+                    throw new RequiredKeyException('root');
+                }
+
                 $targets[$targetName] = new PhpTarget($targetData);
             }
 
@@ -137,11 +190,15 @@ class PhpApplication extends ApplicationAbstract
         }
     }
 
-    public function toArray(): array
+    /**
+     * @inheritDoc
+     */
+    #[\Override] public function toArray(): array
     {
         return array_merge(
             parent::toArray(),
             [
+                'type' => self::TYPE,
                 'root' => $this->getRoot(),
                 'index' => $this->getIndex(),
                 'script' => $this->getScript(),

@@ -2,22 +2,27 @@
 
 namespace UnitPhpSdk\Abstract;
 
-class IdmapAbstract
+use UnitPhpSdk\Contracts\Arrayable;
+
+/**
+ * IDmap Abstract class
+ */
+class IdmapAbstract implements Arrayable
 {
     /**
      * @var int
      */
-    private int $_container;
+    private int $container = 0;
 
     /**
      * @var int
      */
-    private int $_host;
+    private int $host = 0;
 
     /**
      * @var int
      */
-    private int $_size;
+    private int $size = 0;
 
     public function __construct(array $data)
     {
@@ -31,7 +36,7 @@ class IdmapAbstract
      */
     public function getContainer(): int
     {
-        return $this->_container;
+        return $this->container;
     }
 
     /**
@@ -41,7 +46,7 @@ class IdmapAbstract
      */
     public function getHost(): int
     {
-        return $this->_host;
+        return $this->host;
     }
 
     /**
@@ -51,7 +56,7 @@ class IdmapAbstract
      */
     public function getSize(): int
     {
-        return $this->_size;
+        return $this->size;
     }
 
     /**
@@ -59,7 +64,7 @@ class IdmapAbstract
      */
     public function setContainer(int $container): void
     {
-        $this->_container = $container;
+        $this->container = $container;
     }
 
     /**
@@ -67,7 +72,7 @@ class IdmapAbstract
      */
     public function setSize(int $size): void
     {
-        $this->_size = $size;
+        $this->size = $size;
     }
 
     /**
@@ -75,9 +80,13 @@ class IdmapAbstract
      */
     public function setHost(int $host): void
     {
-        $this->_host = $host;
+        $this->host = $host;
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
     public function parseFromArray(array $data): void
     {
         if (array_key_exists('container', $data)) {
@@ -93,7 +102,10 @@ class IdmapAbstract
         }
     }
 
-    public function toArray()
+    /**
+     * @return array
+     */
+    #[\Override] public function toArray(): array
     {
         return [
             'container' => $this->getContainer(),

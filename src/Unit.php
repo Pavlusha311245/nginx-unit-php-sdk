@@ -2,7 +2,7 @@
 
 namespace UnitPhpSdk;
 
-use UnitPhpSdk\Contracts\{CertificateInterface, UnitInterface};
+use UnitPhpSdk\Contracts\{CertificateInterface, UnitInterface, Uploadable};
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\FileNotFoundException;
 use UnitPhpSdk\Exceptions\UnitException;
@@ -21,29 +21,41 @@ class Unit implements UnitInterface
      *
      * @var Config
      */
-    private Config $_config;
+    private Config $config;
 
     /**
      * Contains array of Certificate objects
      *
      * @var array
      */
-    private array $_certificates;
+    private array $certificates = [];
 
     /**
      * Contains Statistics object
      *
      * @var Statistics
      */
-    private Statistics $_statistics;
+    private Statistics $statistics;
+
+    /**
+     * @var array $js_modules List of JavaScript modules
+     */
+    private array $js_modules = [];
+
+    private UnitRequest $request;
 
     /**
      * @throws UnitException
      */
     public function __construct(
-        private readonly string $socket,
-        private readonly string $address
+        private readonly string  $address,
+        private readonly ?string $socket = null
     ) {
+        $this->request = new UnitRequest(
+            address: $this->address,
+            socket: $this->socket
+        );
+
         $this->loadConfig();
     }
 
@@ -55,7 +67,7 @@ class Unit implements UnitInterface
     {
         $this->loadConfig();
 
-        return $this->_config;
+        return $this->config;
     }
 
     /**
@@ -66,20 +78,19 @@ class Unit implements UnitInterface
      */
     private function loadConfig(): void
     {
-        $request = new UnitRequest($this->socket, $this->address);
-        $result = $request->send('/config', false);
-        $this->_config = new Config($result, new UnitRequest($this->socket, $this->address));
+        $result = $this->request->send('/config', false);
+        $this->config = new Config($result, $this->request);
     }
 
     /**
      * @inheritDoc
-     *
+     * @throws UnitException
      */
     public function getCertificates(): array
     {
         $this->loadCertificates();
 
-        return $this->_certificates;
+        return $this->certificates;
     }
 
     /**
@@ -95,11 +106,12 @@ class Unit implements UnitInterface
         }
 
         try {
-            $request = new UnitRequest($this->socket, $this->address);
-            $request->setMethod('PUT');
-            $request->setData($fileContent);
-            $result = $request->send("/certificates/{$certificateName}");
+            $this->request->setMethod('PUT')
+                ->send("/certificates/$certificateName", requestOptions: [
+                    'body' => $fileContent
+                ]);
         } catch (UnitException $exception) {
+            print_r($exception->getMessage());
             return false;
         }
 
@@ -113,22 +125,24 @@ class Unit implements UnitInterface
     {
         // TODO: need to review
         try {
-            $request = new UnitRequest($this->socket, $this->address);
-            $request->setMethod('DELETE');
-            $result = $request->send("/certificates/{$certificateName}");
-        } catch (UnitException $exception) {
+            $this->request
+                ->setMethod('DELETE')
+                ->send("/certificates/$certificateName");
+        } catch (UnitException) {
             return false;
         }
 
         return true;
     }
 
+    /**
+     * @throws UnitException
+     */
     private function loadCertificates(): void
     {
-        $request = new UnitRequest($this->socket, $this->address);
-        $result = $request->send('/certificates');
+        $result = $this->request->send('/certificates');
         foreach ($result as $key => $value) {
-            $this->_certificates[$key] = new Certificate($value, $key);
+            $this->certificates[$key] = new Certificate($value, $key);
         }
     }
 
@@ -155,23 +169,59 @@ class Unit implements UnitInterface
     {
         $this->loadStatistics();
 
-        return $this->_statistics;
+        return $this->statistics;
     }
 
+    /**
+     * @return array
+     */
+    public function getJsModules(): array
+    {
+        $this->loadJsModules();
+
+        return $this->js_modules;
+    }
+
+    /**
+     * @param array $js_modules
+     */
+    public function setJsModules(array $js_modules): void
+    {
+        $this->js_modules = $js_modules;
+    }
+
+    private function loadJsModules(): void
+    {
+        $result = $this->request->send('/js_modules');
+
+        foreach ($result as $key => $value) {
+            $this->js_modules[$key] = new JsModule($key, $value);
+        }
+    }
+
+    /**
+     * @throws UnitException
+     */
     private function loadStatistics(): void
     {
-        $result = (new UnitRequest($this->socket, $this->address))->send('/status');
-        $this->_statistics = new Statistics($result);
+        $result = (new UnitRequest($this->address, $this->socket))->send('/status');
+        $this->statistics = new Statistics($result);
     }
 
     /**
      * @inheritDoc
+     * @throws UnitException
      */
     public function getCertificate(string $certificateName): ?CertificateInterface
     {
         $this->loadCertificates();
 
-        return $this->_certificates[$certificateName] ?? null;
+        return $this->certificates[$certificateName] ?? null;
+    }
+
+    public function uploadConfig(Config $config): bool
+    {
+        return true;
     }
 
     /**
@@ -186,15 +236,18 @@ class Unit implements UnitInterface
             throw new FileNotFoundException();
         }
 
-        if (!json_decode($fileContent, true)) {
+        $data = json_decode($fileContent, true);
+
+        if (!$data) {
             throw new UnitException('File is not JSON format');
         }
 
         try {
-            $request = new UnitRequest($this->socket, $this->address);
-            $request->setMethod('PUT');
-            $request->setData($fileContent);
-            $result = $request->send("/config");
+            $this->request
+                ->setMethod('PUT')
+                ->send(uri: "/config", requestOptions: [
+                    'form_params' => $data
+                ]);
         } catch (UnitException $exception) {
             print_r($exception->getMessage());
             return false;
@@ -209,13 +262,35 @@ class Unit implements UnitInterface
     public function removeConfig(): bool
     {
         try {
-            $request = new UnitRequest($this->socket, $this->address);
-            $request->setMethod(HttpMethodsEnum::DELETE->value);
-            $request->send('/config');
-        } catch (UnitException $exception) {
+            $this->request
+                ->setMethod(HttpMethodsEnum::DELETE->value)
+                ->send('/config');
+        } catch (UnitException) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Uploads the specified Uploadable object.
+     *
+     * @param Uploadable $object
+     */
+    public function upload(Uploadable $object): void
+    {
+        $object->upload($this->request);
+    }
+
+    /**
+     * Removes an Uploadable object.
+     *
+     * @param Uploadable $object The Uploadable object to be removed.
+     *
+     * @return void
+     */
+    public function remove(Uploadable $object): void
+    {
+        $object->remove($this->request);
     }
 }

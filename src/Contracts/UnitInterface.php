@@ -2,7 +2,7 @@
 
 namespace UnitPhpSdk\Contracts;
 
-use UnitPhpSdk\Certificate;
+use UnitPhpSdk\Config;
 use UnitPhpSdk\Exceptions\UnitException;
 
 interface UnitInterface
@@ -62,6 +62,12 @@ interface UnitInterface
     public function getConfig(): ConfigInterface;
 
     /**
+     * @param Config $config
+     * @return bool
+     */
+    public function uploadConfig(Config $config): bool;
+
+    /**
      * Upload full file config
      *
      * @param string $path
@@ -84,4 +90,21 @@ interface UnitInterface
      * @return bool
      */
     public function removeConfig(): bool;
+
+    /**
+     * Retrieve the list of JavaScript modules.
+     *
+     * This method returns an array containing the names of all available JavaScript modules.
+     *
+     * @return array An array containing the names of JavaScript modules.
+     */
+    public function getJsModules(): array;
+
+    /**
+     * Sets the JavaScript modules in the system.
+     *
+     * @param array $js_modules An array of JavaScript modules to be set.
+     * @return void
+     */
+    public function setJsModules(array $js_modules): void;
 }

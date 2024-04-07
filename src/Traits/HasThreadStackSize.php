@@ -9,14 +9,14 @@ trait HasThreadStackSize
      *
      * @var int|null
      */
-    private int|null $_thread_stack_size;
+    private int|null $thread_stack_size;
 
     /**
      * @return int|null
      */
     public function getThreadStackSize(): int|null
     {
-        return $this->_thread_stack_size ?? null;
+        return $this->thread_stack_size ?? null;
     }
 
     /**
@@ -24,6 +24,6 @@ trait HasThreadStackSize
      */
     public function setThreadStackSize(int $thread_stack_size): void
     {
-        $this->_thread_stack_size = $thread_stack_size;
+        $this->thread_stack_size = $thread_stack_size;
     }
 }

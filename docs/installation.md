@@ -8,11 +8,7 @@ description: This page wants help you to start using package
 
 | PHP version   | Nginx Unit version | Package Version |
 | ------------- | ------------------ | --------------- |
-| 8.2 or higher | 1.30.0 or higher   | 0.5.0           |
-
-{% hint style="info" %}
-The project uses curl requests, make sure the appropriate PHP extension is installed
-{% endhint %}
+| 8.2 or higher | 1.30.0 or higher   | 0.6.0           |
 
 ## Install via composer
 
@@ -27,7 +23,7 @@ composer require pavlusha311245/unit-php-sdk
 ```php
 <?php
 
-use Pavlusha311245\UnitPhpSdk\Unit;
+use UnitPhpSdk\Unit;
 
 require '../vendor/autoload.php';
 

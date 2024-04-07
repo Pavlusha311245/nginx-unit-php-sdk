@@ -4,6 +4,7 @@ namespace UnitPhpSdk\Statistics;
 
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\RequestsStatisticsInterface;
+use UnitPhpSdk\Exceptions\UnitParseException;
 
 /**
  * @readonly RequestsStatistics
@@ -12,9 +13,35 @@ use UnitPhpSdk\Contracts\RequestsStatisticsInterface;
  */
 final readonly class RequestsStatistics implements RequestsStatisticsInterface, Arrayable
 {
-    public function __construct(private array $_data)
+    /**
+     * @throws UnitParseException
+     */
+    private int $total;
+
+    /**
+     * @throws UnitParseException
+     */
+    public function __construct(array $data)
     {
-        //
+        $this->parseFromArray($data);
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     * @throws UnitParseException
+     */
+    private function parseFromArray(array $data): void
+    {
+        if (!array_key_exists('total', $data)) {
+            throw new UnitParseException("Key 'total' not present");
+        }
+
+        if (!is_int($data['total'])) {
+            throw new UnitParseException("Key 'total' must be integer");
+        }
+
+        $this->total = $data['total'];
     }
 
     /**
@@ -22,14 +49,16 @@ final readonly class RequestsStatistics implements RequestsStatisticsInterface, 
      */
     public function getTotalRequests(): int
     {
-        return $this->_data['total'];
+        return $this->total;
     }
 
     /**
      * @inheritDoc
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
-        return $this->_data;
+        return [
+            'total' => $this->getTotalRequests()
+        ];
     }
 }

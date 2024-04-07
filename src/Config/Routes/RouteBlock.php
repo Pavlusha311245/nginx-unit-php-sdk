@@ -2,7 +2,10 @@
 
 namespace UnitPhpSdk\Config\Routes;
 
+use Override;
 use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Enums\RouteActionTypeEnum;
+use UnitPhpSdk\Exceptions\UnitException;
 
 /**
  * @implements Arrayable
@@ -12,29 +15,35 @@ class RouteBlock implements Arrayable
     /**
      * @var RouteAction|null
      */
-    private ?RouteAction $_action = null;
+    private ?RouteAction $action = null;
 
     /**
      * @var RouteMatch|null
      */
-    private ?RouteMatch $_match = null;
+    private ?RouteMatch $match = null;
 
+    /**
+     * @throws UnitException
+     */
     public function __construct(array $data = [])
     {
         if (!empty($data)) {
-            $this->_action = new RouteAction($data['action']);
+            $this->action = new RouteAction($data['action']);
             if (isset($data['match'])) {
-                $this->_match = new RouteMatch($data['match']);
+                $this->match = new RouteMatch($data['match']);
             }
         }
     }
 
     /**
      * @param RouteMatch|null $match
+     * @return RouteBlock
      */
-    public function setMatch(?RouteMatch $match): void
+    public function setMatch(?RouteMatch $match): self
     {
-        $this->_match = $match;
+        $this->match = $match;
+
+        return $this;
     }
 
     /**
@@ -44,15 +53,26 @@ class RouteBlock implements Arrayable
      */
     public function getMatch(): RouteMatch|null
     {
-        return $this->_match;
+        return $this->match;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasMatch(): bool
+    {
+        return $this->match !== null;
     }
 
     /**
      * @param RouteAction|null $action
+     * @return RouteBlock
      */
-    public function setAction(?RouteAction $action): void
+    public function setAction(?RouteAction $action): self
     {
-        $this->_action = $action;
+        $this->action = $action;
+
+        return $this;
     }
 
     /**
@@ -62,14 +82,24 @@ class RouteBlock implements Arrayable
      */
     public function getAction(): RouteAction
     {
-        return $this->_action;
+        return $this->action;
     }
 
-    public function toArray(): array
+    /**
+     * Retrieves the action type of the current route action.
+     *
+     * @return RouteActionTypeEnum The action type of the current route action.
+     */
+    public function getActionType(): RouteActionTypeEnum
+    {
+        return $this->action->getActionType();
+    }
+
+    #[Override] public function toArray(): array
     {
         return [
-            'match' => $this->getMatch()?->toArray(),
             'action' => $this->getAction()->toArray(),
+            'match' => $this->getMatch()?->toArray(),
         ];
     }
 }

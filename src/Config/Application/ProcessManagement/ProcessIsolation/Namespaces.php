@@ -8,14 +8,37 @@ use UnitPhpSdk\Contracts\Arrayable;
  * @readonly Namespaces
  * @implements Arrayable
  */
-readonly class Namespaces implements Arrayable
+class Namespaces implements Arrayable
 {
-    private bool $_cgroup;
-    private bool $_credential;
-    private bool $_mount;
-    private bool $_network;
-    private bool $_pid;
-    private bool $_uname;
+    /**
+     * @var bool
+     */
+    private bool $cgroup = false;
+
+    /**
+     * @var bool
+     */
+    private bool $credential = false;
+
+    /**
+     * @var bool
+     */
+    private bool $mount = false;
+
+    /**
+     * @var bool
+     */
+    private bool $network = false;
+
+    /**
+     * @var bool
+     */
+    private bool $pid = false;
+
+    /**
+     * @var bool
+     */
+    private bool $uname = false;
 
     public function __construct(array $data)
     {
@@ -44,7 +67,7 @@ readonly class Namespaces implements Arrayable
         }
     }
 
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return [
             'cgroup' => $this->isCgroup(),
@@ -62,7 +85,7 @@ readonly class Namespaces implements Arrayable
      */
     public function setUname(bool $uname): void
     {
-        $this->_uname = $uname;
+        $this->uname = $uname;
     }
 
     /**
@@ -70,7 +93,7 @@ readonly class Namespaces implements Arrayable
      */
     public function setPid(bool $pid): void
     {
-        $this->_pid = $pid;
+        $this->pid = $pid;
     }
 
     /**
@@ -78,7 +101,7 @@ readonly class Namespaces implements Arrayable
      */
     public function setNetwork(bool $network): void
     {
-        $this->_network = $network;
+        $this->network = $network;
     }
 
     /**
@@ -86,7 +109,7 @@ readonly class Namespaces implements Arrayable
      */
     public function setMount(bool $mount): void
     {
-        $this->_mount = $mount;
+        $this->mount = $mount;
     }
 
     /**
@@ -94,7 +117,7 @@ readonly class Namespaces implements Arrayable
      */
     public function setCredential(bool $credential): void
     {
-        $this->_credential = $credential;
+        $this->credential = $credential;
     }
 
     /**
@@ -102,7 +125,7 @@ readonly class Namespaces implements Arrayable
      */
     public function setCgroup(bool $cgroup): void
     {
-        $this->_cgroup = $cgroup;
+        $this->cgroup = $cgroup;
     }
 
     /**
@@ -110,7 +133,7 @@ readonly class Namespaces implements Arrayable
      */
     public function isCgroup(): bool
     {
-        return $this->_cgroup;
+        return $this->cgroup;
     }
 
     /**
@@ -118,7 +141,7 @@ readonly class Namespaces implements Arrayable
      */
     public function isCredential(): bool
     {
-        return $this->_credential;
+        return $this->credential;
     }
 
     /**
@@ -126,7 +149,7 @@ readonly class Namespaces implements Arrayable
      */
     public function isMount(): bool
     {
-        return $this->_mount;
+        return $this->mount;
     }
 
     /**
@@ -134,7 +157,7 @@ readonly class Namespaces implements Arrayable
      */
     public function isNetwork(): bool
     {
-        return $this->_network;
+        return $this->network;
     }
 
     /**
@@ -142,7 +165,7 @@ readonly class Namespaces implements Arrayable
      */
     public function isPid(): bool
     {
-        return $this->_pid;
+        return $this->pid;
     }
 
     /**
@@ -150,6 +173,6 @@ readonly class Namespaces implements Arrayable
      */
     public function isUname(): bool
     {
-        return $this->_uname;
+        return $this->uname;
     }
 }

@@ -7,61 +7,81 @@ use UnitPhpSdk\Config\Listener\{
     ListenerPass,
     Tls
 };
+use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Contracts\Uploadable;
+use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Http\UnitRequest;
 
 /**
  * This class presents "listeners" section from config
  */
-class Listener
+class Listener implements Uploadable, Arrayable
 {
-    /**
-     * @var string
-     */
-    private string $_link;
-
     /**
      * @var ListenerPass
      */
-    private ListenerPass $_pass;
+    private ListenerPass $pass;
 
     /**
      * @var int
      */
-    private int $_port;
+    private int $port;
 
     public function __construct(
-        private readonly string $_listener,
-        string                  $pass,
-        private ?Tls            $_tls = null,
-        private ?Forwarded      $_forwarded = null,
+        private readonly string $listener,
+        string|ListenerPass     $pass,
+        private ?Tls            $tls = null,
+        private ?Forwarded      $forwarded = null,
     ) {
         $this->parsePort();
-        $this->generateLink();
+        $this->parsePass($pass);
+    }
 
-        $this->_pass = new ListenerPass($pass);
+    private function parsePass($pass): void
+    {
+        if (is_string($pass)) {
+            parse_listener_pass($pass);
+        }
+
+        $this->pass = $pass instanceof ListenerPass ? $pass : new ListenerPass($pass);
     }
 
     /**
      * Get link
      *
+     * @param string $host
      * @return string
      */
-    public function getLink(): string
+    public function getLink(string $host = '127.0.0.1'): string
     {
-        return $this->_link;
+        return $this->generateLink($host);
     }
 
     /**
      * Generate link from listener
      *
-     * @return void
+     * @param string $host
+     * @return string
      */
-    private function generateLink()
+    private function generateLink(string $host = '127.0.0.1'): string
     {
-        $separatedListener = explode(':', $this->_listener);
+        $separatedListener = explode(':', $this->listener);
 
-        $this->_link = $separatedListener[0] == '*' ?
-            "0.0.0.0:{$separatedListener[1]}" : $this->_listener;
+        $host = $separatedListener[0] == '*' ? "$host:$separatedListener[1]" : $this->listener;
+        $secure = $this->isSecure() ? 'https' : 'http';
+
+        return "$secure://$host";
+    }
+
+    /**
+     * Check if listener has certificate
+     *
+     * @return bool
+     */
+    public function isSecure(): bool
+    {
+        return !empty($this->tls);
     }
 
     /**
@@ -71,7 +91,7 @@ class Listener
      */
     private function parsePort(): void
     {
-        $this->_port = explode(':', $this->_listener)[1];
+        $this->port = explode(':', $this->listener)[1];
     }
 
     /**
@@ -81,17 +101,17 @@ class Listener
      */
     public function getPort(): int
     {
-        return $this->_port;
+        return $this->port;
     }
 
     /**
      * Get forwarded
      *
-     * @return array
+     * @return Forwarded
      */
-    public function getForwarded(): array
+    public function getForwarded(): Forwarded
     {
-        return $this->_forwarded;
+        return $this->forwarded;
     }
 
     /**
@@ -101,27 +121,35 @@ class Listener
      */
     public function getPass(): ListenerPass
     {
-        return $this->_pass;
+        return $this->pass;
+    }
+
+    /**
+     * @param ListenerPass $pass
+     */
+    public function setPass(ListenerPass $pass): void
+    {
+        $this->pass = $pass;
     }
 
     /**
      * Get tls section
      *
-     * @return array
+     * @return Tls
      */
-    public function getTls(): array
+    public function getTls(): Tls
     {
-        return $this->_tls;
+        return $this->tls;
     }
 
     /**
      * Get listener
      *
-     * @return mixed
+     * @return string
      */
-    public function getListener()
+    public function getListener(): string
     {
-        return $this->_listener;
+        return $this->listener;
     }
 
     /**
@@ -136,11 +164,11 @@ class Listener
         }
 
         if (array_key_exists('forwarded', $data)) {
-            $this->_forwarded = new Forwarded($data['forwarded']);
+            $this->forwarded = new Forwarded($data['forwarded']);
         }
 
         if (array_key_exists('tls', $data)) {
-            $this->_tls = new Tls($data['tls']);
+            $this->tls = new Tls($data['tls']);
         }
 
         return $this;
@@ -151,18 +179,18 @@ class Listener
      *
      * @return array
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         $listenerArray = [
-            'pass' => $this->_pass->toString(),
+            'pass' => $this->pass->toString(),
         ];
 
-        if (!empty($this->_tls)) {
-            $listenerArray['tls'] = $this->_tls->toArray();
+        if (!empty($this->tls)) {
+            $listenerArray['tls'] = $this->tls->toArray();
         }
 
-        if (!empty($this->_forwarded)) {
-            $listenerArray['forwarded'] = $this->_forwarded->toArray();
+        if (!empty($this->forwarded)) {
+            $listenerArray['forwarded'] = $this->forwarded->toArray();
         }
 
         return $listenerArray;
@@ -173,7 +201,7 @@ class Listener
      */
     public function setTls(?Tls $tls): void
     {
-        $this->_tls = $tls;
+        $this->tls = $tls;
     }
 
     /**
@@ -181,7 +209,7 @@ class Listener
      */
     public function setForwarded(?Forwarded $forwarded): void
     {
-        $this->_forwarded = $forwarded;
+        $this->forwarded = $forwarded;
     }
 
     /**
@@ -192,5 +220,47 @@ class Listener
     public function toJson(): string|false
     {
         return json_encode($this->toArray());
+    }
+
+    public function toUnitArray()
+    {
+        return [
+            $this->getListener() => $this->toArray()
+        ];
+    }
+
+    public function getTarget()
+    {
+        return $this->getPass();
+    }
+
+    /**
+     * @throws UnitException
+     */
+    #[\Override] public function upload(UnitRequest $request): void
+    {
+        $request->setMethod(HttpMethodsEnum::PUT->value)->send(
+            $this->getApiEndpoint(),
+            true,
+            ['json' => $this->toArray()]
+        );
+    }
+
+    /**
+     * @throws UnitException
+     */
+    #[\Override] public function remove(UnitRequest $request): void
+    {
+        $request->setMethod(HttpMethodsEnum::DELETE->value)->send($this->getApiEndpoint());
+    }
+
+    /**
+     * Returns the API endpoint for the current listener.
+     *
+     * @return string The API endpoint for the current listener.
+     */
+    private function getApiEndpoint(): string
+    {
+        return "/config/listeners/{$this->getListener()}";
     }
 }

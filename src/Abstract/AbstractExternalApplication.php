@@ -2,45 +2,61 @@
 
 namespace UnitPhpSdk\Abstract;
 
-use UnitPhpSdk\Abstract\ApplicationAbstract;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 
 /**
- * @implements ApplicationAbstract
+ * @extends  AbstractApplication
  */
-class ExternalApplicationAbstract extends ApplicationAbstract
+class AbstractExternalApplication extends AbstractApplication
 {
-    protected string $_type = 'external';
+    public const array REQUIRED_KEYS = ['executable'];
+
+    public const array OPTIONAL_KEYS = ['arguments'];
+
+    public const array ALL_KEYS = ['executable', 'arguments'];
+
+    public const string TYPE = 'external';
 
     /**
      * Pathname of the app, absolute or relative to working_directory
      *
      * @var string
      */
-    private string $_executable;
+    private string $executable;
 
     /**
      * Command-line arguments to be passed to the app
      *
      * @var array|string
      */
-    private array|string $_arguments = [];
+    private array|string $arguments = [];
+
+    /**
+     * @return array|string[]
+     */
+    public function getRequiredKeys(): array
+    {
+        return self::REQUIRED_KEYS;
+    }
 
     /**
      * @return string
      */
     public function getExecutable(): string
     {
-        return $this->_executable;
+        return $this->executable;
     }
 
     /**
      * @param string $executable
+     * @return AbstractExternalApplication
      */
-    public function setExecutable(string $executable): void
+    public function setExecutable(string $executable): self
     {
-        $this->_executable = $executable;
+        $this->executable = $executable;
+
+        return $this;
     }
 
     /**
@@ -48,17 +64,28 @@ class ExternalApplicationAbstract extends ApplicationAbstract
      */
     public function getArguments(): array|string
     {
-        return $this->_arguments;
+        return $this->arguments;
     }
 
     /**
      * @param array|string $arguments
+     * @return AbstractExternalApplication
      */
-    public function setArguments(array|string $arguments): void
+    public function setArguments(array|string $arguments): self
     {
-        $this->_arguments = $arguments;
+        $this->arguments = $arguments;
+
+        return $this;
     }
 
+    /**
+     * Parse data from array
+     *
+     * @param array $data
+     * @return void
+     * @throws RequiredKeyException
+     * @throws UnitException
+     */
     final public function parseFromArray(array $data): void
     {
         parent::parseFromArray($data);
@@ -75,13 +102,14 @@ class ExternalApplicationAbstract extends ApplicationAbstract
     }
 
     /**
-     * @return array
+     * @inheritDoc
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
         return array_merge(
             parent::toArray(),
             [
+                'type' => self::TYPE,
                 'executable' => $this->getExecutable(),
                 'arguments' => $this->getArguments()
             ]

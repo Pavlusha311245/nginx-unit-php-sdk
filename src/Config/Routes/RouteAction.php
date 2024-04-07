@@ -2,78 +2,67 @@
 
 namespace UnitPhpSdk\Config\Routes;
 
+use OutOfRangeException;
+use UnitPhpSdk\Config\Routes\ActionType\PassAction;
+use UnitPhpSdk\Config\Routes\ActionType\ProxyAction;
+use UnitPhpSdk\Config\Routes\ActionType\ReturnAction;
+use UnitPhpSdk\Config\Routes\ActionType\ShareAction;
+use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Enums\RouteActionTypeEnum;
 use UnitPhpSdk\Exceptions\UnitException;
 
-class RouteAction
+class RouteAction implements Arrayable
 {
+    /**
+     * Possible action types pass, proxy, return, share
+     *
+     * @var RouteActionTypeEnum|null The type of action to be performed.
+     */
+    private RouteActionTypeEnum|null $actionType = null;
+
     /**
      * Destination for the request, identical to a listener’s pass option.
      *
-     * @var string
+     * @var PassAction|null
      */
-    private string $_pass = '';
+    private ?PassAction $pass = null;
 
     /**
      * Socket address of an HTTP server to where the request is proxied.
      *
-     * @var string
+     * @var ProxyAction|null
      */
-    private string $_proxy = '';
+    private ?ProxyAction $proxy = null;
 
     /**
-     * HTTP status code with a context-dependent redirect location.
-     * Integer (000–999); defines the HTTP response status code to be returned.
+     * @var ReturnAction|null
+     */
+    private ?ReturnAction $return = null;
+
+    /**
+     * Share a directory or a file.
      *
-     * @var int|null
+     * @var ShareAction|null
      */
-    private ?int $_return = null;
+    private ?ShareAction $share = null;
 
     /**
-     * String URI; used if the return value implies redirection.
+     * Updates the header fields of the upcoming response.
      *
-     * @var string
-     */
-    private string $_location = '';
-
-    /**
-     * Lists file paths that are tried until a file is found.
-     *
-     * @var array|string
-     */
-    private array|string $_share = '';
-
-    private string $_index = '';
-
-    /**
      * @var array
      */
-    private array $_fallback = [];
+    private array $response_headers = [];
 
     /**
-     * @var array
+     * Updated the request URI, preserving the query string.
+     *
+     * @var string|null
      */
-    private array $_types = [];
+    private ?string $rewrite = null;
 
     /**
-     * @var string
+     * @throws UnitException
      */
-    private string $_chroot = '';
-
-    /**
-     * @var bool
-     */
-    protected bool $_follow_symlinks = true;
-
-    /**
-     * @var bool
-     */
-    protected bool $_traverse_mounts = true;
-
-    /**
-     * @var string
-     */
-    private string $_rewrite = '';
-
     public function __construct($data = null)
     {
         if (!empty($data)) {
@@ -84,19 +73,19 @@ class RouteAction
     /**
      * Receive return key
      *
-     * @return int|null
+     * @return ReturnAction|null
      */
-    public function getReturn(): ?int
+    public function getReturn(): ?ReturnAction
     {
-        return $this->_return;
+        return $this->return;
     }
 
     /**
-     * @return string
+     * @return PassAction|null
      */
-    public function getPass(): string
+    public function getPass(): ?PassAction
     {
-        return $this->_pass;
+        return $this->pass;
     }
 
     /**
@@ -104,256 +93,180 @@ class RouteAction
      *
      * @param mixed $return
      */
-    public function setReturn(int $return): void
+    public function setReturn(ReturnAction $return): void
     {
-        if ($return > 999 && $return < 0) {
-            throw new \OutOfRangeException();
-        }
+        $this->return = $return;
 
-        $this->_return = $return;
+        $this->setActionType(RouteActionTypeEnum::RETURN);
     }
 
     /**
-     * @param string $pass
+     * @param PassAction $pass
      */
-    public function setPass(string $pass): void
+    public function setPass(PassAction $pass): void
     {
-        $this->_pass = $pass;
+        $this->pass = $pass;
+
+        $this->setActionType(RouteActionTypeEnum::PASS);
     }
 
     /**
-     * @return string
+     * @return ProxyAction
      */
-    public function getProxy(): string
+    public function getProxy(): ?ProxyAction
     {
-        return $this->_proxy;
+        return $this->proxy;
     }
 
     /**
-     * @param string $proxy
+     * @param ProxyAction $proxy
      */
-    public function setProxy(string $proxy): void
+    public function setProxy(ProxyAction $proxy): void
     {
-        $this->_proxy = $proxy;
+        $this->proxy = $proxy;
+
+        $this->setActionType(RouteActionTypeEnum::PROXY);
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLocation(): string
+    public function getRewrite(): ?string
     {
-        return $this->_location;
+        return $this->rewrite;
     }
 
     /**
-     * @param string $location
+     * @param string|null $rewrite
      */
-    public function setLocation(string $location): void
+    public function setRewrite(?string $rewrite): void
     {
-        $this->_location = $location;
+        $this->rewrite = $rewrite;
     }
 
     /**
-     * @return string
+     * @return ShareAction|null
      */
-    public function getRewrite(): string
+    public function getShare(): ?ShareAction
     {
-        return $this->_rewrite;
+        return $this->share;
     }
 
     /**
-     * @param string $rewrite
+     * @param ShareAction $share
      */
-    public function setRewrite(string $rewrite): void
+    public function setShare(ShareAction $share): void
     {
-        $this->_rewrite = $rewrite;
-    }
+        $this->share = $share;
 
-    /**
-     * @return array|string
-     */
-    public function getShare(): array|string
-    {
-        return $this->_share;
-    }
-
-    /**
-     * @param array|string $share
-     */
-    public function setShare(array|string $share): void
-    {
-        $this->_share = $share;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIndex(): string
-    {
-        return $this->_index;
-    }
-
-    /**
-     * @param string $index
-     */
-    public function setIndex(string $index): void
-    {
-        $this->_index = $index;
-    }
-
-    /**
-     * @return string
-     */
-    public function getChroot(): string
-    {
-        return $this->_chroot;
-    }
-
-    /**
-     * @param string $chroot
-     */
-    public function setChroot(string $chroot): void
-    {
-        $this->_chroot = $chroot;
+        $this->setActionType(RouteActionTypeEnum::SHARE);
     }
 
     /**
      * @return array
      */
-    public function getTypes(): array
+    public function getResponseHeaders(): array
     {
-        return $this->_types;
+        return $this->response_headers;
     }
 
     /**
-     * @param array $types
+     * @param array $response_headers
      */
-    public function setTypes(array $types): void
+    public function setResponseHeaders(array $response_headers): void
     {
-        $this->_types = $types;
+        $this->response_headers = $response_headers;
     }
 
     /**
-     * @return array
+     * Return true if action is static
+     *
+     * @return bool
      */
-    public function getFallback(): array
+    public function isStatic(): bool
     {
-        return $this->_fallback;
+        return !empty($this->getShare());
     }
 
     /**
-     * @param array $fallback
+     * @return RouteActionTypeEnum
      */
-    public function setFallback(array $fallback): void
+    public function getActionType(): RouteActionTypeEnum
     {
-        if (!array_key_exists('pass', $fallback) && !array_key_exists('proxy', $fallback)) {
-            throw new UnitException('Parse Exception');
-        }
-
-        $this->_fallback = $fallback;
+        return $this->actionType;
     }
 
     /**
-     * @param bool $follow_symlinks
+     * @param RouteActionTypeEnum $actionType
      */
-    public function setFollowSymlinks(bool $follow_symlinks): void
+    public function setActionType(RouteActionTypeEnum $actionType): void
     {
-        $this->_follow_symlinks = $follow_symlinks;
+        $this->actionType = $actionType;
     }
 
     /**
-     * @param bool $traverse_mounts
+     * @param array $data
      */
-    public function setTraverseMounts(bool $traverse_mounts): void
+    public function parseFromArray(array $data): void
     {
-        $this->_traverse_mounts = $traverse_mounts;
-    }
-
-    public function parseFromArray(array $data)
-    {
+        // Action types
         if (array_key_exists('pass', $data)) {
-            $this->setPass($data['pass']);
+            $this->setPass(new PassAction($data['pass']));
         }
 
         if (array_key_exists('proxy', $data)) {
-            $this->setProxy($data['proxy']);
+            $this->setProxy(new ProxyAction($data['proxy']));
         }
 
         if (array_key_exists('return', $data)) {
-            $this->setReturn($data['return']);
+            $returnAction = array_key_exists('location', $data) ?
+                new ReturnAction($data['return'], $data['location']) :
+                new ReturnAction($data['return']);
+
+            $this->setReturn($returnAction);
         }
 
-        if (array_key_exists('location', $data)) {
-            $this->setLocation($data['location']);
+        if (array_key_exists('share', $data)) {
+            $this->setShare(new ShareAction($data['share'], $data));
         }
+
+        // Additional options for any action type
 
         if (array_key_exists('rewrite', $data)) {
             $this->setRewrite($data['rewrite']);
         }
 
-        if (array_key_exists('share', $data)) {
-            $this->setShare($data['share']);
+        if (array_key_exists('response_headers', $data) && is_array($data['response_headers'])) {
+            $this->setResponseHeaders($data['response_headers']);
         }
-
-        if (array_key_exists('index', $data)) {
-            $this->setIndex($data['index']);
-        }
-
-        if (array_key_exists('chroot', $data)) {
-            $this->setChroot($data['chroot']);
-        }
-
-        if (array_key_exists('types', $data)) {
-            $this->setTypes($data['types']);
-        }
-
-        if (array_key_exists('fallback', $data)) {
-            $this->setFallback($data['fallback']);
-        }
-
-        if (array_key_exists('follow_symlinks', $data)) {
-            $this->setFollowSymlinks($data['follow_symlinks']);
-        }
-
-        if (array_key_exists('traverse_mounts', $data)) {
-            $this->setTraverseMounts($data['traverse_mounts']);
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFollowSymlinks(): bool
-    {
-        return $this->_follow_symlinks;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isTraverseMounts(): bool
-    {
-        return $this->_traverse_mounts;
     }
 
     /**
      * @return array
      */
-    public function toArray(): array
+    #[\Override] public function toArray(): array
     {
-        return [
-            'pass' => $this->getPass(),
-            'proxy' => $this->getProxy(),
-            'return' => $this->getReturn(),
-            'location' => $this->getLocation(),
+        $data = [
+            'response_headers' => $this->getResponseHeaders(),
             'rewrite' => $this->getRewrite(),
-            'share' => $this->getShare(),
-            'index' => $this->getIndex(),
-            'chroot' => $this->getChroot(),
-            'types' => $this->getTypes(),
-            'fallback' => $this->getFallback(),
-            'follow_symlinks' => $this->isFollowSymlinks(),
-            'traverse_mounts' => $this->isTraverseMounts()
         ];
+
+        if ($this->getPass() !== null) {
+            return array_merge($data, $this->getPass()->toArray());
+        }
+
+        if ($this->getReturn() !== null) {
+            return array_merge($data, $this->getReturn()->toArray());
+        }
+
+        if ($this->getShare() !== null) {
+            return array_merge($data, $this->getShare()->toArray());
+        }
+
+        if ($this->getProxy() !== null) {
+            return array_merge($data, $this->getProxy()->toArray());
+        }
+
+        return $data;
     }
 }

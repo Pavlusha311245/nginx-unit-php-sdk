@@ -2,23 +2,24 @@
 
 namespace UnitPhpSdk\Config\Application\Targets;
 
+use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 
-class PythonTarget
+class PythonTarget implements Arrayable
 {
     /**
      * App’s module nam
      *
      * @var string
      */
-    private string $_module;
+    private string $module;
 
     /**
      * Name of the module-based callable that Unit runs as the app.
      *
      * @var string
      */
-    private string $_callable = 'application';
+    private string $callable = 'application';
 
     /**
      * @throws RequiredKeyException
@@ -41,7 +42,7 @@ class PythonTarget
      */
     public function setModule(string $module): void
     {
-        $this->_module = $module;
+        $this->module = $module;
     }
 
     /**
@@ -49,7 +50,7 @@ class PythonTarget
      */
     public function getModule(): string
     {
-        return $this->_module;
+        return $this->module;
     }
 
     /**
@@ -57,7 +58,7 @@ class PythonTarget
      */
     public function setCallable(string $callable): void
     {
-        $this->_callable = $callable;
+        $this->callable = $callable;
     }
 
     /**
@@ -65,6 +66,17 @@ class PythonTarget
      */
     public function getCallable(): string
     {
-        return $this->_callable;
+        return $this->callable;
+    }
+
+    /**
+     * @return array
+     */
+    #[\Override] public function toArray(): array
+    {
+        return [
+            'module' => $this->getModule(),
+            'callable' => $this->getCallable()
+        ];
     }
 }

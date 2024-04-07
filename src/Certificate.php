@@ -2,6 +2,8 @@
 
 namespace UnitPhpSdk;
 
+use UnitPhpSdk\Certificate\ChainItem;
+use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\CertificateInterface;
 
 /**
@@ -9,13 +11,34 @@ use UnitPhpSdk\Contracts\CertificateInterface;
  *
  * @implements CertificateInterface
  */
-readonly class Certificate implements CertificateInterface
+readonly class Certificate implements CertificateInterface, Arrayable
 {
+    /**
+     * @var array $chain
+     */
+    private array $chain;
+
+    /**
+     * @var string|mixed $key
+     */
+    private string $key;
+
     public function __construct(
-        private array           $_data,
-        private readonly string $_name
+        array          $data,
+        private string $name
     ) {
-        //
+        if (!isset($data['key']) || !isset($data['chain'])) {
+            throw new \InvalidArgumentException('Certificate data should contain key and chain');
+        }
+
+        $chainItems = [];
+        foreach ($data['chain'] as $item) {
+            $chainItems[] = new ChainItem($item);
+        }
+
+        $this->chain = $chainItems;
+
+        $this->key = $data['key'];
     }
 
     /**
@@ -25,7 +48,7 @@ readonly class Certificate implements CertificateInterface
      */
     public function getName(): string
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -33,7 +56,7 @@ readonly class Certificate implements CertificateInterface
      */
     public function getKey(): string
     {
-        return $this->_data['key'];
+        return $this->key;
     }
 
     /**
@@ -41,16 +64,14 @@ readonly class Certificate implements CertificateInterface
      */
     public function getChain(): array
     {
-        return $this->_data['chain'];
+        return $this->chain;
     }
 
-    /**
-     * Return all certificate data as array
-     *
-     * @return array
-     */
-    public function getData(): array
+    #[\Override] public function toArray(): array
     {
-        return $this->_data;
+        return [
+            'key' => $this->getKey(),
+            'chain' => $this->getChain(),
+        ];
     }
 }

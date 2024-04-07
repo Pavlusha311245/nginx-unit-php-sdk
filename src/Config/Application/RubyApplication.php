@@ -2,26 +2,49 @@
 
 namespace UnitPhpSdk\Config\Application;
 
-use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Traits\HasThreads;
 
 /**
- * @extends ApplicationAbstract
+ * @extends AbstractApplication
  */
-class RubyApplication extends ApplicationAbstract
+class RubyApplication extends AbstractApplication
 {
     use HasThreads;
 
-    private string $_script;
-    private string $_hooks;
+    public const array REQUIRED_KEYS = ['script'];
+
+    public const array OPTIONAL_KEYS = ['hooks', 'threads'];
+
+    public const array ALL_KEYS = self::REQUIRED_KEYS + self::OPTIONAL_KEYS;
+
+    public const string TYPE = 'ruby';
+
+    /**
+     * @var string
+     */
+    private string $script = '';
+
+    /**
+     * @var string
+     */
+    private string $hooks = '';
+
+    public function getRequiredKeys(): array
+    {
+        return self::REQUIRED_KEYS;
+    }
 
     /**
      * @param string $script
+     * @return RubyApplication
      */
-    public function setScript(string $script): void
+    public function setScript(string $script): self
     {
-        $this->_script = $script;
+        $this->script = $script;
+
+        return $this;
     }
 
     /**
@@ -29,15 +52,18 @@ class RubyApplication extends ApplicationAbstract
      */
     public function getScript(): string
     {
-        return $this->_script;
+        return $this->script;
     }
 
     /**
      * @param string $hooks
+     * @return RubyApplication
      */
-    public function setHooks(string $hooks): void
+    public function setHooks(string $hooks): self
     {
-        $this->_hooks = $hooks;
+        $this->hooks = $hooks;
+
+        return $this;
     }
 
     /**
@@ -45,7 +71,7 @@ class RubyApplication extends ApplicationAbstract
      */
     public function getHooks(): string
     {
-        return $this->_hooks;
+        return $this->hooks;
     }
 
     /**
@@ -68,5 +94,21 @@ class RubyApplication extends ApplicationAbstract
         if (array_key_exists('threads', $data)) {
             $this->setThreads($data['threads']);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[\Override] public function toArray(): array
+    {
+        return array_merge(
+            parent::toArray(),
+            [
+                'type' => self::TYPE,
+                'script' => $this->getScript(),
+                'hooks' => $this->getHooks(),
+                'threads' => $this->getThreads()
+            ]
+        );
     }
 }

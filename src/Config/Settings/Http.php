@@ -2,7 +2,13 @@
 
 namespace UnitPhpSdk\Config\Settings;
 
-class Http
+use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Contracts\Jsonable;
+use UnitPhpSdk\Contracts\Uploadable;
+use UnitPhpSdk\Enums\HttpMethodsEnum;
+use UnitPhpSdk\Http\UnitRequest;
+
+class Http implements Arrayable, Jsonable, Uploadable
 {
     /**
      *
@@ -12,7 +18,7 @@ class Http
      *
      * @var int
      */
-    private int $_body_read_timeout = 30;
+    private int $body_read_timeout = 30;
 
     /**
      * Controls header field name parsing.
@@ -21,7 +27,7 @@ class Http
      *
      * @var bool
      */
-    private bool $_discard_unsafe_fields = true;
+    private bool $discard_unsafe_fields = true;
 
     /**
      * Maximum number of seconds to read the header of a client’s request.
@@ -29,7 +35,7 @@ class Http
      *
      * @var int
      */
-    private int $_header_read_timeout = 30;
+    private int $header_read_timeout = 30;
 
     /**
      * Maximum number of seconds between requests in a keep-alive connection.
@@ -37,14 +43,14 @@ class Http
      *
      * @var int
      */
-    private int $_idle_timeout = 180;
+    private int $idle_timeout = 180;
 
     /**
      * Enables or disables router logging.
      *
      * @var bool
      */
-    private bool $_log_route = false;
+    private bool $log_route = false;
 
     /**
      * Maximum number of bytes in the body of a client’s request.
@@ -52,7 +58,7 @@ class Http
      *
      * @var int
      */
-    private int $_max_body_size = 8388608;
+    private int $max_body_size = 8388608;
 
     /**
      *
@@ -62,17 +68,155 @@ class Http
      *
      * @var int
      */
-    private int $_send_timeout = 30;
+    private int $send_timeout = 30;
 
     /**
      * If set to false, Unit omits version information in its Server response header fields.
      *
      * @var bool
      */
-    private bool $_server_version = true;
+    private bool $server_version = true;
 
     /**
      * @var
      */
-    private $_static;
+    private mixed $static = null;
+
+    public function __construct(array $data = [])
+    {
+        $this->parseData($data);
+    }
+
+    private function parseData(array $data): void
+    {
+        $keys = ['body_read_timeout', 'discard_unsafe_fields', 'header_read_timeout', 'idle_timeout', 'log_route', 'max_body_size', 'send_timeout', 'server_version', 'static'];
+
+        foreach ($keys as $key) {
+            if (isset($data[$key])) {
+                $this->{$key} = $data[$key];
+            }
+        }
+    }
+
+    /**
+     * @return int
+     */
+    public function getBodyReadTimeout(): int
+    {
+        return $this->body_read_timeout;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHeaderReadTimeout(): int
+    {
+        return $this->header_read_timeout;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdleTimeout(): int
+    {
+        return $this->idle_timeout;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxBodySize(): int
+    {
+        return $this->max_body_size;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getSendTimeout(): int
+    {
+        return $this->send_timeout;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getStatic(): mixed
+    {
+        return $this->static;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDiscardUnsafeFields(): bool
+    {
+        return $this->discard_unsafe_fields;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLogRoute(): bool
+    {
+        return $this->log_route;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isServerVersion(): bool
+    {
+        return $this->server_version;
+    }
+
+    /**
+     * Returns an array representation of the object.
+     *
+     * @return array An associative array containing the properties of the object.
+     */
+    #[\Override] public function toArray(): array
+    {
+        return [
+            'body_read_timeout' => $this->body_read_timeout,
+            'discard_unsafe_fields' => $this->discard_unsafe_fields,
+            'header_read_timeout' => $this->header_read_timeout,
+            'idle_timeout' => $this->idle_timeout,
+            'log_route' => $this->log_route,
+            'max_body_size' => $this->max_body_size,
+            'send_timeout' => $this->send_timeout,
+            'server_version' => $this->server_version,
+            'static' => $this->static,
+        ];
+    }
+
+    /**
+     * Converts the object to JSON string.
+     *
+     * @param int $options The encoding options. Default is 0.
+     * @return string Returns the JSON encoded string.
+     */
+    public function toJson(int $options = 0): string
+    {
+        return json_encode($this->toArray(), $options);
+    }
+
+    #[\Override] public function upload(UnitRequest $request)
+    {
+        $request->setMethod(HttpMethodsEnum::PUT)->send($this->getEndpoint(), true, [
+            'json' => array_filter($this->toArray(), fn ($value) => $value !== null)
+        ]);
+    }
+
+    #[\Override] public function remove(UnitRequest $request)
+    {
+        $request->setMethod(HttpMethodsEnum::DELETE)->send($this->getEndpoint());
+    }
+
+    private function getEndpoint(): string
+    {
+        return '/config/settings/http';
+    }
 }

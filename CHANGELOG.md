@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## v0.7.0 - [2024/04/07]
+
+- Now SDK support connection via only address.
+- All private fields renamed from `_pattern` to `pattern`
+- Some classes become a builders
+- Updated PhpTarget class
+- Added PhpOptions class
+- Update Unit tests
+- Added more classes for better support of PHP applications
+- Added more classes information
+
 ## v0.6.0 - [2023/09/13] _Release on Programmer's Day. Happy holiday everyone :)_
 
 - Rename method in ListenerPass getPassType() to getType()

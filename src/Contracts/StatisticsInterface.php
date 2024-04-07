@@ -2,7 +2,7 @@
 
 namespace UnitPhpSdk\Contracts;
 
-use UnitPhpSdk\Abstract\ApplicationAbstract;
+use UnitPhpSdk\Abstract\AbstractApplication;
 
 interface StatisticsInterface
 {
@@ -30,8 +30,8 @@ interface StatisticsInterface
     /**
      * Get application statistics
      *
-     * @param ApplicationAbstract|string $application
+     * @param AbstractApplication|string $application
      * @return ApplicationStatisticsInterface
      */
-    public function getApplicationStatistics(ApplicationAbstract|string $application): ApplicationStatisticsInterface;
+    public function getApplicationStatistics(AbstractApplication|string $application): ApplicationStatisticsInterface;
 }
