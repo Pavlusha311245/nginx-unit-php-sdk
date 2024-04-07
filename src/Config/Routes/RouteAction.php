@@ -3,7 +3,12 @@
 namespace UnitPhpSdk\Config\Routes;
 
 use OutOfRangeException;
+use UnitPhpSdk\Config\Routes\ActionType\PassAction;
+use UnitPhpSdk\Config\Routes\ActionType\ProxyAction;
+use UnitPhpSdk\Config\Routes\ActionType\ReturnAction;
+use UnitPhpSdk\Config\Routes\ActionType\ShareAction;
 use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Enums\RouteActionTypeEnum;
 use UnitPhpSdk\Exceptions\UnitException;
 
 class RouteAction implements Arrayable
@@ -11,72 +16,35 @@ class RouteAction implements Arrayable
     /**
      * Possible action types pass, proxy, return, share
      *
-     * @var string The type of action to be performed.
+     * @var RouteActionTypeEnum|null The type of action to be performed.
      */
-    private string $actionType = '';
+    private RouteActionTypeEnum|null $actionType = null;
 
     /**
      * Destination for the request, identical to a listener’s pass option.
      *
-     * @var string
+     * @var PassAction|null
      */
-    private string $pass = '';
+    private ?PassAction $pass = null;
 
     /**
      * Socket address of an HTTP server to where the request is proxied.
      *
-     * @var string
+     * @var ProxyAction|null
      */
-    private string $proxy = '';
+    private ?ProxyAction $proxy = null;
 
     /**
-     * HTTP status code with a context-dependent redirect location.
-     * Integer (000–999); defines the HTTP response status code to be returned.
+     * @var ReturnAction|null
+     */
+    private ?ReturnAction $return = null;
+
+    /**
+     * Share a directory or a file.
      *
-     * @var int|null
+     * @var ShareAction|null
      */
-    private ?int $return = null;
-
-    /**
-     * String URI; used if the return value implies redirection.
-     *
-     * @var string
-     */
-    private string $location = '';
-
-    /**
-     * Lists file paths that are tried until a file is found.
-     *
-     * @var array|string
-     */
-    private array|string $share = '';
-
-    private string $index = '';
-
-    /**
-     * @var array
-     */
-    private array $fallback = [];
-
-    /**
-     * @var array
-     */
-    private array $types = [];
-
-    /**
-     * @var string
-     */
-    private string $chroot = '';
-
-    /**
-     * @var bool
-     */
-    private bool $follow_symlinks = true;
-
-    /**
-     * @var bool
-     */
-    private bool $traverse_mounts = true;
+    private ?ShareAction $share = null;
 
     /**
      * Updates the header fields of the upcoming response.
@@ -105,17 +73,17 @@ class RouteAction implements Arrayable
     /**
      * Receive return key
      *
-     * @return int|null
+     * @return ReturnAction|null
      */
-    public function getReturn(): ?int
+    public function getReturn(): ?ReturnAction
     {
         return $this->return;
     }
 
     /**
-     * @return string
+     * @return PassAction|null
      */
-    public function getPass(): string
+    public function getPass(): ?PassAction
     {
         return $this->pass;
     }
@@ -125,59 +93,39 @@ class RouteAction implements Arrayable
      *
      * @param mixed $return
      */
-    public function setReturn(int $return): void
+    public function setReturn(ReturnAction $return): void
     {
-        if ($return > 999 || $return < 0) {
-            throw new OutOfRangeException();
-        }
-
         $this->return = $return;
 
-        $this->setActionType('return');
+        $this->setActionType(RouteActionTypeEnum::RETURN);
     }
 
     /**
-     * @param string $pass
+     * @param PassAction $pass
      */
-    public function setPass(string $pass): void
+    public function setPass(PassAction $pass): void
     {
         $this->pass = $pass;
 
-        $this->setActionType('pass');
+        $this->setActionType(RouteActionTypeEnum::PASS);
     }
 
     /**
-     * @return string
+     * @return ProxyAction
      */
-    public function getProxy(): string
+    public function getProxy(): ?ProxyAction
     {
         return $this->proxy;
     }
 
     /**
-     * @param string $proxy
+     * @param ProxyAction $proxy
      */
-    public function setProxy(string $proxy): void
+    public function setProxy(ProxyAction $proxy): void
     {
         $this->proxy = $proxy;
 
-        $this->setActionType('proxy');
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocation(): string
-    {
-        return $this->location;
-    }
-
-    /**
-     * @param string $location
-     */
-    public function setLocation(string $location): void
-    {
-        $this->location = $location;
+        $this->setActionType(RouteActionTypeEnum::PROXY);
     }
 
     /**
@@ -197,122 +145,21 @@ class RouteAction implements Arrayable
     }
 
     /**
-     * @return array|string
+     * @return ShareAction|null
      */
-    public function getShare(): array|string
+    public function getShare(): ?ShareAction
     {
         return $this->share;
     }
 
     /**
-     * @param array|string $share
+     * @param ShareAction $share
      */
-    public function setShare(array|string $share): void
+    public function setShare(ShareAction $share): void
     {
         $this->share = $share;
 
-        $this->setActionType('share');
-    }
-
-    /**
-     * @return string
-     */
-    public function getIndex(): string
-    {
-        return $this->index;
-    }
-
-    /**
-     * @param string $index
-     */
-    public function setIndex(string $index): void
-    {
-        $this->index = $index;
-    }
-
-    /**
-     * @return string
-     */
-    public function getChroot(): string
-    {
-        return $this->chroot;
-    }
-
-    /**
-     * @param string $chroot
-     */
-    public function setChroot(string $chroot): void
-    {
-        $this->chroot = $chroot;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTypes(): array
-    {
-        return $this->types;
-    }
-
-    /**
-     * @param array $types
-     */
-    public function setTypes(array $types): void
-    {
-        $this->types = $types;
-    }
-
-    /**
-     * @return array
-     */
-    public function getFallback(): array
-    {
-        return $this->fallback;
-    }
-
-    /**
-     * @param array $fallback
-     * @throws UnitException
-     */
-    public function setFallback(array $fallback): void
-    {
-        if (!array_key_exists('pass', $fallback) && !array_key_exists('proxy', $fallback)) {
-            throw new UnitException('Parse Exception');
-        }
-
-        $this->fallback = $fallback;
-    }
-
-    /**
-     * @param bool $follow_symlinks
-     */
-    public function setFollowSymlinks(bool $follow_symlinks): void
-    {
-        $this->follow_symlinks = $follow_symlinks;
-    }
-
-    /**
-     * @param bool $traverse_mounts
-     */
-    public function setTraverseMounts(bool $traverse_mounts): void
-    {
-        $this->traverse_mounts = $traverse_mounts;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFollowSymlinks(): bool
-    {
-        return $this->follow_symlinks;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isTraverseMounts(): bool
-    {
-        return $this->traverse_mounts;
+        $this->setActionType(RouteActionTypeEnum::SHARE);
     }
 
     /**
@@ -342,78 +189,45 @@ class RouteAction implements Arrayable
     }
 
     /**
-     * @return string
+     * @return RouteActionTypeEnum
      */
-    public function getActionType(): string
+    public function getActionType(): RouteActionTypeEnum
     {
         return $this->actionType;
     }
 
     /**
-     * @param string $actionType
+     * @param RouteActionTypeEnum $actionType
      */
-    public function setActionType(string $actionType): void
+    public function setActionType(RouteActionTypeEnum $actionType): void
     {
         $this->actionType = $actionType;
     }
 
     /**
-     * @throws UnitException
+     * @param array $data
      */
     public function parseFromArray(array $data): void
     {
         // Action types
-
         if (array_key_exists('pass', $data)) {
-            $this->setPass($data['pass']);
-            $this->setActionType('pass');
+            $this->setPass(new PassAction($data['pass']));
         }
 
         if (array_key_exists('proxy', $data)) {
-            $this->setProxy($data['proxy']);
-            $this->setActionType('proxy');
+            $this->setProxy(new ProxyAction($data['proxy']));
         }
 
         if (array_key_exists('return', $data)) {
-            $this->setReturn($data['return']);
-            $this->setActionType('return');
+            $returnAction = array_key_exists('location', $data) ?
+                new ReturnAction($data['return'], $data['location']) :
+                new ReturnAction($data['return']);
 
-            // Data for the return action type
-
-            if (array_key_exists('location', $data)) {
-                $this->setLocation($data['location']);
-            }
+            $this->setReturn($returnAction);
         }
 
         if (array_key_exists('share', $data)) {
-            $this->setShare($data['share']);
-            $this->setActionType('share');
-
-            // Data for the share action type
-
-            if (array_key_exists('index', $data)) {
-                $this->setIndex($data['index']);
-            }
-
-            if (array_key_exists('fallback', $data)) {
-                $this->setFallback($data['fallback']);
-            }
-
-            if (array_key_exists('chroot', $data)) {
-                $this->setChroot($data['chroot']);
-            }
-
-            if (array_key_exists('types', $data)) {
-                $this->setTypes($data['types']);
-            }
-
-            if (array_key_exists('follow_symlinks', $data)) {
-                $this->setFollowSymlinks($data['follow_symlinks']);
-            }
-
-            if (array_key_exists('traverse_mounts', $data)) {
-                $this->setTraverseMounts($data['traverse_mounts']);
-            }
+            $this->setShare(new ShareAction($data['share'], $data));
         }
 
         // Additional options for any action type
@@ -432,20 +246,27 @@ class RouteAction implements Arrayable
      */
     #[\Override] public function toArray(): array
     {
-        return [
-            'pass' => $this->getPass(),
+        $data = [
             'response_headers' => $this->getResponseHeaders(),
-            'proxy' => $this->getProxy(),
-            'return' => $this->getReturn(),
-            'location' => $this->getLocation(),
             'rewrite' => $this->getRewrite(),
-            'share' => $this->getShare(),
-            'index' => $this->getIndex(),
-            'chroot' => $this->getChroot(),
-            'types' => $this->getTypes(),
-            'fallback' => $this->getFallback(),
-            'follow_symlinks' => $this->isFollowSymlinks(),
-            'traverse_mounts' => $this->isTraverseMounts(),
         ];
+
+        if ($this->getPass() !== null) {
+            return array_merge($data, $this->getPass()->toArray());
+        }
+
+        if ($this->getReturn() !== null) {
+            return array_merge($data, $this->getReturn()->toArray());
+        }
+
+        if ($this->getShare() !== null) {
+            return array_merge($data, $this->getShare()->toArray());
+        }
+
+        if ($this->getProxy() !== null) {
+            return array_merge($data, $this->getProxy()->toArray());
+        }
+
+        return $data;
     }
 }

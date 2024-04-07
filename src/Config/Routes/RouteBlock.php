@@ -2,7 +2,9 @@
 
 namespace UnitPhpSdk\Config\Routes;
 
+use Override;
 use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Enums\RouteActionTypeEnum;
 use UnitPhpSdk\Exceptions\UnitException;
 
 /**
@@ -86,14 +88,14 @@ class RouteBlock implements Arrayable
     /**
      * Retrieves the action type of the current route action.
      *
-     * @return string The action type of the current route action.
+     * @return RouteActionTypeEnum The action type of the current route action.
      */
-    public function getActionType(): string
+    public function getActionType(): RouteActionTypeEnum
     {
         return $this->action->getActionType();
     }
 
-    #[\Override] public function toArray(): array
+    #[Override] public function toArray(): array
     {
         return [
             'action' => $this->getAction()->toArray(),

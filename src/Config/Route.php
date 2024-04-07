@@ -4,7 +4,9 @@ namespace UnitPhpSdk\Config;
 
 use UnitPhpSdk\Config\Routes\RouteBlock;
 use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Contracts\Jsonable;
 use UnitPhpSdk\Contracts\RouteInterface;
+use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\HasListeners;
 
 /**
@@ -12,7 +14,7 @@ use UnitPhpSdk\Traits\HasListeners;
  *
  * @implements RouteInterface
  */
-class Route implements RouteInterface, Arrayable
+class Route implements RouteInterface, Arrayable, Jsonable
 {
     use HasListeners;
 
@@ -26,6 +28,9 @@ class Route implements RouteInterface, Arrayable
      */
     private array $listeners = [];
 
+    /**
+     * @throws UnitException
+     */
     public function __construct(
         private readonly string $name,
         $data = [],
@@ -71,13 +76,14 @@ class Route implements RouteInterface, Arrayable
      */
     #[\Override] public function toArray(): array
     {
-        return $this->getRouteBlocks();
+        return array_map(fn (RouteBlock $routeBlock) => $routeBlock->toArray(), $this->routeBlocks);
     }
 
     /**
-     * @return string|false
+     * @param int $options
+     * @return string
      */
-    public function toJson(): string|false
+    #[\Override] public function toJson(int $options = 0): string
     {
         return json_encode(array_filter($this->toArray(), fn ($item) => !empty($item)));
     }
