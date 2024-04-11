@@ -95,7 +95,7 @@ class RouteMatch implements Arrayable
     /**
      * @param HttpMethodsEnum $method
      */
-    public function setMethod(HttpMethodsEnum $method): void
+    public function setMethod(?HttpMethodsEnum $method): void
     {
         $this->method = $method;
     }
@@ -126,7 +126,7 @@ class RouteMatch implements Arrayable
      * @param HttpSchemeEnum $scheme
      * @return void
      */
-    public function setScheme(HttpSchemeEnum $scheme): void
+    public function setScheme(?HttpSchemeEnum $scheme): void
     {
         $this->scheme = $scheme;
     }

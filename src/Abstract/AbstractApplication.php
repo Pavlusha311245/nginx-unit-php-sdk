@@ -196,10 +196,11 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      *
      * @param ProcessIsolation $isolation
      * @return AbstractApplication
+     * @throws UnitException
      */
     public function setIsolation(ProcessIsolation $isolation): self
     {
-        $this->isolation = $isolation;
+        $this->isolation = is_array($isolation) ? new ProcessIsolation($isolation) : $isolation;
 
         return $this;
     }
@@ -217,12 +218,12 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
     /**
      * Set ProcessApplication object
      *
-     * @param ApplicationProcess|int $processes
+     * @param ApplicationProcess|int|array $processes
      * @return AbstractApplication
      */
-    public function setProcesses(ApplicationProcess|int $processes): self
+    public function setProcesses(ApplicationProcess|int|array $processes): self
     {
-        $this->processes = $processes;
+        $this->processes = is_array($processes) ? new ApplicationProcess($processes) : $processes;
 
         return $this;
     }
@@ -240,12 +241,12 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
     /**
      * Set RequestLimit object
      *
-     * @param RequestLimit $requestLimit
+     * @param RequestLimit|array $requestLimit
      * @return AbstractApplication
      */
-    public function setLimits(RequestLimit $requestLimit): self
+    public function setLimits(RequestLimit|array $requestLimit): self
     {
-        $this->limits = $requestLimit;
+        $this->limits = is_array($requestLimit) ? new RequestLimit($requestLimit) : $requestLimit;
 
         return $this;
     }
@@ -376,16 +377,15 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
         }
 
         if (array_key_exists('isolation', $data)) {
-            $this->setIsolation(new ProcessIsolation($data['isolation']));
+            $this->setIsolation($data['isolation']);
         }
 
         if (array_key_exists('processes', $data)) {
-            $this->setProcesses(is_array($data['processes'])
-                ? new ApplicationProcess($data['processes']) : $data['processes']);
+            $this->setProcesses($data['processes']);
         }
 
         if (array_key_exists('limits', $data)) {
-            $this->setLimits(new RequestLimit($data['limits']));
+            $this->setLimits($data['limits']);
         }
     }
 

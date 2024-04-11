@@ -2,10 +2,11 @@
 
 namespace UnitPhpSdk;
 
+use Override;
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Settings, Upstream, Upstream\Server};
 use UnitPhpSdk\Exceptions\{FileNotFoundException, UnitException};
-use UnitPhpSdk\Contracts\{Arrayable, ConfigInterface, Jsonable};
+use UnitPhpSdk\Contracts\ConfigInterface;
 use UnitPhpSdk\Http\UnitRequest;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 
@@ -62,9 +63,19 @@ class Config implements ConfigInterface
     {
         $this->unitRequest = $unitRequest;
 
-        if (!empty($data) && !empty($this->unitRequest)) {
+        if (!empty($data)) {
             $this->parseUnitObject($data);
         }
+    }
+
+    /**
+     * @param string $json
+     * @return void
+     * @throws UnitException
+     */
+    public function parseJson(string $json): void
+    {
+        $this->parseUnitObject(json_decode($json, false));
     }
 
     /**
@@ -75,14 +86,14 @@ class Config implements ConfigInterface
         $rawData = $data;
         $jsonData = json_decode(json_encode($data), true);
 
-        $this->loadRoutes($rawData);
-        $this->loadApplications($jsonData);
-        $this->loadUpstreams($jsonData);
-        $this->loadListeners($jsonData);
-        $this->loadSettings($jsonData);
+        $this->parseRoutes($rawData);
+        $this->parseApplications($jsonData);
+        $this->parseUpstreams($jsonData);
+        $this->parseListeners($jsonData);
+        $this->parseSettings($jsonData);
     }
 
-    private function loadSettings($jsonData): void
+    private function parseSettings($jsonData): void
     {
         if (array_key_exists('settings', $jsonData)) {
             $this->settings = new Settings($jsonData['settings']);
@@ -96,7 +107,7 @@ class Config implements ConfigInterface
      * @return void
      * @throws UnitException
      */
-    public function loadListeners(array $data): void
+    public function parseListeners(array $data): void
     {
         if (array_key_exists('listeners', $data)) {
             foreach ($data['listeners'] as $listener => $listenerData) {
@@ -123,7 +134,7 @@ class Config implements ConfigInterface
      * @return void
      * @throws UnitException
      */
-    public function loadApplications(array $data): void
+    public function parseApplications(array $data): void
     {
         if (array_key_exists('applications', $data)) {
             foreach ($data['applications'] as $appName => $appData) {
@@ -138,9 +149,11 @@ class Config implements ConfigInterface
                     'external' => $this->isNodeJsApplication($appData) ?
                         new Application\NodeJsExternalApplication($appData) :
                         new Application\GoExternalApplication($appData),
-                })
-                    ->setName($appName)
-                    ->setUnitRequest($this->unitRequest);
+                })->setName($appName);
+
+                if ($this->unitRequest) {
+                    $this->applications[$appName]->setUnitRequest($this->unitRequest);
+                }
             }
         }
     }
@@ -173,8 +186,9 @@ class Config implements ConfigInterface
      *
      * @param object $rawData
      * @return void
+     * @throws UnitException
      */
-    public function loadRoutes(object $rawData): void
+    public function parseRoutes(object $rawData): void
     {
         if (!empty($rawData->routes)) {
             $jsonRoutes = json_decode(json_encode($rawData), true)['routes'];
@@ -193,8 +207,9 @@ class Config implements ConfigInterface
      *
      * @param array $data
      * @return void
+     * @throws UnitException
      */
-    public function loadUpstreams(array $data): void
+    public function parseUpstreams(array $data): void
     {
         if (array_key_exists('upstreams', $data)) {
             foreach ($data['upstreams'] as $upstreamName => $upstreamData) {
@@ -575,7 +590,7 @@ class Config implements ConfigInterface
      *
      * @return array
      */
-    #[\Override] public function toArray(): array
+    #[Override] public function toArray(): array
     {
         return [
             'listeners' => $this->mapConfigObjectToArray($this->listeners),
@@ -618,7 +633,7 @@ class Config implements ConfigInterface
      * @param int $options
      * @return string
      */
-    #[\Override] public function toJson(int $options = 0): string
+    #[Override] public function toJson(int $options = 0): string
     {
         return json_encode($this->toArray());
     }
