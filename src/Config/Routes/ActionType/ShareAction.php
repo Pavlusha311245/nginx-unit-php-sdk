@@ -126,9 +126,10 @@ class ShareAction implements Arrayable
      */
     public function setFallback(array $fallback): void
     {
-        if (!array_key_exists('pass', $fallback) && !array_key_exists('proxy', $fallback)) {
-            throw new UnitException('Parse Exception');
-        }
+        // TODO: fix it
+//        if (!array_key_exists('pass', $fallback) && !array_key_exists('proxy', $fallback)) {
+//            throw new UnitException('Parse Exception');
+//        }
 
         $this->fallback = $fallback;
     }

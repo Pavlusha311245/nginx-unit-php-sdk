@@ -66,8 +66,12 @@ class PerlApplication extends AbstractApplication
     {
         parent::parseFromArray($data);
 
-        if (!array_key_exists('script', $data)) {
-            throw new RequiredKeyException('script');
+        $data = array_filter($data, fn ($value) => !empty($value));
+
+        foreach (self::REQUIRED_KEYS as $key) {
+            if (!array_key_exists($key, $data)) {
+                throw new RequiredKeyException($key);
+            }
         }
 
         $this->setScript($data['script']);

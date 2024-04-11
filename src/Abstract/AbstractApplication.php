@@ -352,6 +352,8 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      */
     public function parseFromArray(array $data): void
     {
+        $data = array_filter($data, fn ($item) => !empty($item), ARRAY_FILTER_USE_BOTH);
+
         if (array_key_exists('working_directory', $data)) {
             $this->setWorkingDirectory($data['working_directory']);
         }

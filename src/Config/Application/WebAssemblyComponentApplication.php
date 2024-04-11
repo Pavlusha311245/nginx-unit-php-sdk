@@ -3,6 +3,7 @@
 namespace UnitPhpSdk\Config\Application;
 
 use UnitPhpSdk\Abstract\AbstractApplication;
+use UnitPhpSdk\Exceptions\RequiredKeyException;
 
 class WebAssemblyComponentApplication extends AbstractApplication
 {
@@ -21,6 +22,14 @@ class WebAssemblyComponentApplication extends AbstractApplication
     public function parseFromArray(array $data): void
     {
         parent::parseFromArray($data);
+
+        $data = array_filter($data, fn ($value) => !empty($value));
+
+        foreach (self::REQUIRED_KEYS as $key) {
+            if (!array_key_exists($key, $data)) {
+                throw new RequiredKeyException($key);
+            }
+        }
 
         if (array_key_exists('component', $data)) {
             $this->setComponent($data['component']);

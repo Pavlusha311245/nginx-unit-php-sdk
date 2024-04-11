@@ -154,6 +154,8 @@ class PhpApplication extends AbstractApplication implements Arrayable
     {
         parent::parseFromArray($data);
 
+        $data = array_filter($data, fn ($value) => !empty($value));
+
         if (array_key_exists('root', $data)) {
             if (!is_string($data['root'])) {
                 throw new InvalidArgumentException('root must be a string');
@@ -205,7 +207,7 @@ class PhpApplication extends AbstractApplication implements Arrayable
                 'index' => $this->getIndex(),
                 'script' => $this->getScript(),
                 'options' => $this->getOptions(),
-                'targets' => $this->getTargets()
+                'targets' => array_map(fn (PhpTarget $target) => $target->toArray(), $this->getTargets() ?? [])
             ]
         );
     }
