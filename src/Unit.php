@@ -174,6 +174,7 @@ class Unit implements UnitInterface
 
     /**
      * @return array
+     * @throws UnitException
      */
     public function getJsModules(): array
     {
@@ -190,6 +191,9 @@ class Unit implements UnitInterface
         $this->js_modules = $js_modules;
     }
 
+    /**
+     * @throws UnitException
+     */
     private function loadJsModules(): void
     {
         $result = $this->request->send('/js_modules');
