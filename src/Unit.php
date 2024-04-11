@@ -3,6 +3,7 @@
 namespace UnitPhpSdk;
 
 use UnitPhpSdk\Contracts\{CertificateInterface, UnitInterface, Uploadable};
+use Override;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\FileNotFoundException;
 use UnitPhpSdk\Exceptions\UnitException;
@@ -50,7 +51,8 @@ class Unit implements UnitInterface
     public function __construct(
         private readonly string  $address,
         private readonly ?string $socket = null
-    ) {
+    )
+    {
         $this->request = new UnitRequest(
             address: $this->address,
             socket: $this->socket
@@ -296,5 +298,20 @@ class Unit implements UnitInterface
     public function remove(Uploadable $object): void
     {
         $object->remove($this->request);
+    }
+
+    #[Override] public function toArray(): array
+    {
+        return [
+            'certificates' => array_map(fn ($certificate) => $certificate->toArray(), $this->getCertificates()),
+            'config' => $this->getConfig()->toArray(),
+            'js_modules' => array_map(fn ($module) => $module->toArray(), $this->getJsModules()),
+            'status' => $this->getStatistics()->toArray()
+        ];
+    }
+
+    #[Override] public function toJson(int $options = 0): string
+    {
+        return json_encode($this->toArray(), $options);
     }
 }

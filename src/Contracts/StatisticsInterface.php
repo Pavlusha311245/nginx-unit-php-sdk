@@ -4,7 +4,7 @@ namespace UnitPhpSdk\Contracts;
 
 use UnitPhpSdk\Abstract\AbstractApplication;
 
-interface StatisticsInterface
+interface StatisticsInterface extends Arrayable, Jsonable
 {
     /**
      * Get connections
@@ -34,4 +34,14 @@ interface StatisticsInterface
      * @return ApplicationStatisticsInterface
      */
     public function getApplicationStatistics(AbstractApplication|string $application): ApplicationStatisticsInterface;
+
+    /**
+     * @inheritDoc
+     */
+    public function toArray(): array;
+
+    /**
+     * @inheritDoc
+     */
+    public function toJson(int $options = 0): string;
 }

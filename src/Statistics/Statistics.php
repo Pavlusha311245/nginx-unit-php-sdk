@@ -4,12 +4,14 @@ namespace UnitPhpSdk\Statistics;
 
 use Exception;
 use InvalidArgumentException;
+use Override;
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Contracts\{ApplicationStatisticsInterface,
     Arrayable,
     ConnectionsStatisticsInterface,
     RequestsStatisticsInterface,
-    StatisticsInterface};
+    StatisticsInterface
+};
 use UnitPhpSdk\Exceptions\UnitParseException;
 
 /**
@@ -18,7 +20,7 @@ use UnitPhpSdk\Exceptions\UnitParseException;
  * @implements StatisticsInterface
  * @final
  */
-final readonly class Statistics implements StatisticsInterface, Arrayable
+final readonly class Statistics implements StatisticsInterface
 {
     /**
      * Connections statistics
@@ -49,7 +51,7 @@ final readonly class Statistics implements StatisticsInterface, Arrayable
         //        $this->unitInformation = new UnitStatistics($data['unit']);
         $this->connections = new ConnectionsStatistics($data['connections']);
         $this->requests = new RequestsStatistics($data['requests']);
-        $this->applications = array_map(fn ($item) => new ApplicationStatistics($item), $data['applications']);
+        $this->applications = array_map(fn($item) => new ApplicationStatistics($item), $data['applications']);
     }
 
     /**
@@ -92,12 +94,23 @@ final readonly class Statistics implements StatisticsInterface, Arrayable
         return $this->applications[$application->getName()];
     }
 
-    #[\Override] public function toArray(): array
+    /**
+     * @inheritDoc
+     */
+    #[Override] public function toArray(): array
     {
         return [
             'connections' => $this->connections->toArray(),
             'requests' => $this->requests->toArray(),
-            'applications' => array_map(fn ($item) => $item->toArray(), $this->applications),
+            'applications' => array_map(fn($item) => $item->toArray(), $this->applications),
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override] public function toJson(int $options = 0): string
+    {
+        return json_encode($this->toArray(), $options);
     }
 }

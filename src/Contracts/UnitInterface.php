@@ -5,7 +5,7 @@ namespace UnitPhpSdk\Contracts;
 use UnitPhpSdk\Config;
 use UnitPhpSdk\Exceptions\UnitException;
 
-interface UnitInterface
+interface UnitInterface extends Arrayable, Jsonable
 {
     /**
      * Return Unit socket
@@ -107,4 +107,14 @@ interface UnitInterface
      * @return void
      */
     public function setJsModules(array $js_modules): void;
+
+    /**
+     * @inheritDoc
+     */
+    public function toArray(): array;
+
+    /**
+     * @inheritDoc
+     */
+    public function toJson(int $options = 0): string;
 }

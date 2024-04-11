@@ -73,7 +73,7 @@ readonly class Certificate implements CertificateInterface, Arrayable
     {
         return [
             'key' => $this->getKey(),
-            'chain' => $this->getChain(),
+            'chain' => array_map(fn (ChainItem $item) => $item->toArray(), $this->getChain()),
         ];
     }
 }
