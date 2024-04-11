@@ -33,7 +33,8 @@ class Listener implements Uploadable, Arrayable
         string|ListenerPass     $pass,
         private ?Tls            $tls = null,
         private ?Forwarded      $forwarded = null,
-    ) {
+    )
+    {
         $this->parsePort();
         $this->parsePass($pass);
     }
@@ -148,6 +149,14 @@ class Listener implements Uploadable, Arrayable
      * @return string
      */
     public function getListener(): string
+    {
+        return $this->listener;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return $this->listener;
     }

@@ -166,4 +166,12 @@ interface ConfigInterface extends Arrayable, Jsonable
      * @return array
      */
     public function toArray(): array;
+
+    /**
+     * Convert the object to a JSON string
+     *
+     * @param int $options JSON encoding options, defaulting to 0
+     * @return string Returns the JSON representation of the object
+     */
+    public function toJson(int $options = 0): string;
 }

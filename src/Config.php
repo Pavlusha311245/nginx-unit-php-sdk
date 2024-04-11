@@ -21,7 +21,7 @@ class Config implements ConfigInterface
      *
      * @var array
      */
-    private array $listeners;
+    private array $listeners = [];
 
     /**
      * Route entities defines internal request routing.
@@ -203,7 +203,7 @@ class Config implements ConfigInterface
                 }
 
                 $servers = array_map(
-                    fn ($v, $k) => new Server($v, $k['weight'] ?? 1),
+                    fn($v, $k) => new Server($v, $k['weight'] ?? 1),
                     array_keys($upstreamData['servers']),
                     array_values($upstreamData['servers'])
                 );
@@ -577,15 +577,25 @@ class Config implements ConfigInterface
      */
     #[\Override] public function toArray(): array
     {
-        $array = [];
+        return [
+            'listeners' => $this->mapConfigObjectToArray($this->listeners),
+            'routes' => $this->mapConfigObjectToArray($this->routes),
+            'applications' => $this->mapConfigObjectToArray($this->applications),
+            'upstreams' => $this->mapConfigObjectToArray($this->upstreams),
+            'settings' => $this->settings->toArray()
+        ];
+    }
 
-        foreach (array_keys(get_object_vars($this)) as $key) {
-            if (!empty($this->{$key})) {
-                $array[substr($key, 1)] = $this->{$key};
-            }
-        }
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function mapConfigObjectToArray(array $data): array
+    {
+        $keys = array_map(fn($item) => $item->getName(), $data);
+        $values = array_map(fn($item) => $item->toArray(), $data);
 
-        return $array;
+        return array_combine($keys, $values);
     }
 
     /**
@@ -608,8 +618,8 @@ class Config implements ConfigInterface
      * @param int $options
      * @return string
      */
-    public function toJson(int $options = 0): string
+    #[\Override] public function toJson(int $options = 0): string
     {
-        return json_encode($this->toJson());
+        return json_encode($this->toArray());
     }
 }
