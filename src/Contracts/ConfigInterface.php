@@ -5,7 +5,7 @@ namespace UnitPhpSdk\Contracts;
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Config\{AccessLog, Listener, Route, Settings, Upstream};
 
-interface ConfigInterface
+interface ConfigInterface extends Arrayable, Jsonable
 {
     /**
      * Get all listeners

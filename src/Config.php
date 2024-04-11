@@ -14,7 +14,7 @@ use UnitPhpSdk\Enums\HttpMethodsEnum;
  *
  * @implements ConfigInterface
  */
-class Config implements ConfigInterface, Arrayable, Jsonable
+class Config implements ConfigInterface
 {
     /**
      * Listeners that accept requests
