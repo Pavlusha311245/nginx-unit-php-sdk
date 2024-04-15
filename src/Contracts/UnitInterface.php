@@ -62,12 +62,6 @@ interface UnitInterface extends Arrayable, Jsonable
     public function getConfig(): ConfigInterface;
 
     /**
-     * @param Config $config
-     * @return bool
-     */
-    public function uploadConfig(Config $config): bool;
-
-    /**
      * Upload full file config
      *
      * @param string $path
@@ -83,13 +77,6 @@ interface UnitInterface extends Arrayable, Jsonable
      * @throws UnitException
      */
     public function removeCertificate(string $certificateName): bool;
-
-    /**
-     * Remove all data from config
-     *
-     * @return bool
-     */
-    public function removeConfig(): bool;
 
     /**
      * Retrieve the list of JavaScript modules.

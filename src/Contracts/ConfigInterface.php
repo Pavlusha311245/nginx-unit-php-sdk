@@ -151,10 +151,11 @@ interface ConfigInterface extends Arrayable, Jsonable
      */
     public function removeAccessLog(): bool;
 
+
     /**
-     * @return Settings
+     * @return Settings|null
      */
-    public function getSettings(): Settings;
+    public function getSettings(): ?Settings;
 
     /**
      * @param Settings $settings

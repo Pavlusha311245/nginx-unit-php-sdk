@@ -7,6 +7,7 @@ use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Settings, Upstream, Upstream\Server};
 use UnitPhpSdk\Exceptions\{FileNotFoundException, UnitException};
 use UnitPhpSdk\Contracts\ConfigInterface;
+use UnitPhpSdk\Contracts\Uploadable;
 use UnitPhpSdk\Http\UnitRequest;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 
@@ -15,7 +16,7 @@ use UnitPhpSdk\Enums\HttpMethodsEnum;
  *
  * @implements ConfigInterface
  */
-class Config implements ConfigInterface
+class Config implements ConfigInterface, Uploadable
 {
     /**
      * Listeners that accept requests
@@ -47,9 +48,9 @@ class Config implements ConfigInterface
     private array $upstreams = [];
 
     /**
-     * @var Settings
+     * @var Settings|null
      */
-    private Settings $settings;
+    private ?Settings $settings = null;
 
     private ?UnitRequest $unitRequest;
 
@@ -614,9 +615,9 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @return Settings
+     * @return Settings|null
      */
-    public function getSettings(): Settings
+    public function getSettings(): ?Settings
     {
         return $this->settings;
     }
@@ -636,5 +637,39 @@ class Config implements ConfigInterface
     #[Override] public function toJson(int $options = 0): string
     {
         return json_encode($this->toArray());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override] public function upload(UnitRequest $request)
+    {
+        try {
+            $request
+                ->setMethod(HttpMethodsEnum::PUT)
+                ->send('/config', requestOptions: [
+                    'json' => $this->toArray()
+                ]);
+
+            return true;
+        } catch (UnitException) {
+            return false;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override] public function remove(UnitRequest $request)
+    {
+        try {
+            $request
+                ->setMethod(HttpMethodsEnum::DELETE)
+                ->send('/config');
+
+            return true;
+        } catch (UnitException) {
+            return false;
+        }
     }
 }

@@ -225,11 +225,6 @@ class Unit implements UnitInterface
         return $this->certificates[$certificateName] ?? null;
     }
 
-    public function uploadConfig(Config $config): bool
-    {
-        return true;
-    }
-
     /**
      * @inheritDoc
      * @throws UnitException
@@ -256,22 +251,6 @@ class Unit implements UnitInterface
                 ]);
         } catch (UnitException $exception) {
             print_r($exception->getMessage());
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function removeConfig(): bool
-    {
-        try {
-            $this->request
-                ->setMethod(HttpMethodsEnum::DELETE->value)
-                ->send('/config');
-        } catch (UnitException) {
             return false;
         }
 
