@@ -593,13 +593,19 @@ class Config implements ConfigInterface, Uploadable
      */
     #[Override] public function toArray(): array
     {
-        return [
+        $data = [
             'listeners' => $this->mapConfigObjectToArray($this->listeners),
             'routes' => $this->mapConfigObjectToArray($this->routes),
             'applications' => $this->mapConfigObjectToArray($this->applications),
             'upstreams' => $this->mapConfigObjectToArray($this->upstreams),
-            'settings' => $this->settings->toArray()
+            'settings' => $this->settings?->toArray()
         ];
+
+        if (!empty($this->settings)) {
+            $data = array_merge($data, $this->settings->toArray());
+        }
+
+        return $data;
     }
 
     /**
