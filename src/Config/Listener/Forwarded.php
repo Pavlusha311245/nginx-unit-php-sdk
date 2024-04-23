@@ -23,7 +23,7 @@ class Forwarded implements Arrayable
      *
      * @var string|null
      */
-    private ?string $client_ip;
+    private ?string $client_ip = null;
 
     /**
      * Defines the relevant HTTP header field to look for in the request.
@@ -31,7 +31,7 @@ class Forwarded implements Arrayable
      *
      * @var string|null
      */
-    private ?string $protocol;
+    private ?string $protocol = null;
 
     /**
      * Controls how the client_ip fields are traversed

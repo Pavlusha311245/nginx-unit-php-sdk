@@ -97,9 +97,14 @@ class RouteBlock implements Arrayable
 
     #[Override] public function toArray(): array
     {
-        return [
+        $data = [
             'action' => $this->getAction()->toArray(),
-            'match' => $this->getMatch()?->toArray(),
         ];
+
+        if ($this->hasMatch()) {
+            $data['match'] = $this->getMatch()?->toArray();
+        }
+
+        return $data;
     }
 }

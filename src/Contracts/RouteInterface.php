@@ -4,7 +4,7 @@ namespace UnitPhpSdk\Contracts;
 
 use UnitPhpSdk\Config\Listener;
 
-interface RouteInterface
+interface RouteInterface extends Arrayable, Jsonable
 {
     /**
      * Get route name

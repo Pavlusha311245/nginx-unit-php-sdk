@@ -39,6 +39,10 @@ class Listener implements Uploadable, Arrayable
         $this->parsePass($pass);
     }
 
+    /**
+     * @param $pass
+     * @return void
+     */
     private function parsePass($pass): void
     {
         if (is_string($pass)) {
