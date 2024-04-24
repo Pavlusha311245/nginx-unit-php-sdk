@@ -312,17 +312,48 @@ class RouteMatch implements Arrayable
      */
     #[\Override] public function toArray(): array
     {
-        return [
-            'host' => $this->getHost(),
-            'method' => $this->getMethod(),
-            'destination' => $this->getDestination(),
-            'scheme' => $this->getScheme(),
-            'uri' => $this->getUri(),
-            'arguments' => $this->getArguments(),
-            'query' => $this->getQuery(),
-            'cookies' => $this->getCookies(),
-            'headers' => $this->getHeaders(),
-            'source' => $this->getSource(),
-        ];
+        $data = [];
+
+        if (!empty($this->getHost())) {
+            $data['host'] = $this->getHost();
+        }
+
+        if (!empty($this->getMethod())) {
+            $data['method'] = $this->getMethod();
+        }
+
+        if (!empty($this->getDestination())) {
+            $data['destination'] = $this->getDestination();
+        }
+
+        if (!empty($this->getScheme())) {
+            $data['scheme'] = $this->getScheme();
+        }
+
+        if (!empty($this->getUri())) {
+            $data['uri'] = $this->getUri();
+        }
+
+        if (!empty($this->getArguments())) {
+            $data['arguments'] = $this->getArguments();
+        }
+
+        if (!empty($this->getQuery())) {
+            $data['query'] = $this->getQuery();
+        }
+
+        if (!empty($this->getCookies())) {
+            $data['cookies'] = $this->getCookies();
+        }
+
+        if (!empty($this->getHeaders())) {
+            $data['headers'] = $this->getHeaders();
+        }
+
+        if (!empty($this->getSource())) {
+            $data['source'] = $this->getSource();
+        }
+
+        return $data;
     }
 }

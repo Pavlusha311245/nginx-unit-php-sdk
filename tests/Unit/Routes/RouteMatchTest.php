@@ -148,16 +148,5 @@ it('should handle invalid http method and scheme', function () {
 
 it('should return empty array if no data is set', function () {
     $routeMatch = new RouteMatch();
-    expect($routeMatch->toArray())->toBe([
-        'host' => '',
-        'method' => null,
-        'destination' => '',
-        'scheme' => null,
-        'uri' => '',
-        'arguments' => [],
-        'query' => [],
-        'cookies' => [],
-        'headers' => [],
-        'source' => '',
-    ]);
+    expect($routeMatch->toArray())->toBe([]);
 });
