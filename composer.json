@@ -1,5 +1,5 @@
 {
-  "name": "pavlusha311245/unit-php-sdk",
+  "name": "pavlusha/unit-php-sdk",
   "version": "0.7.0",
   "type": "sdk",
   "description": "This project allows developers to interact with the Nginx Unit web server through PHP classes",
