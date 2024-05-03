@@ -51,7 +51,7 @@ final readonly class Statistics implements StatisticsInterface
         //        $this->unitInformation = new UnitStatistics($data['unit']);
         $this->connections = new ConnectionsStatistics($data['connections']);
         $this->requests = new RequestsStatistics($data['requests']);
-        $this->applications = array_map(fn($item) => new ApplicationStatistics($item), $data['applications']);
+        $this->applications = array_map(fn ($item) => new ApplicationStatistics($item), $data['applications']);
     }
 
     /**
@@ -102,7 +102,7 @@ final readonly class Statistics implements StatisticsInterface
         return [
             'connections' => $this->connections->toArray(),
             'requests' => $this->requests->toArray(),
-            'applications' => array_map(fn($item) => $item->toArray(), $this->applications),
+            'applications' => array_map(fn ($item) => $item->toArray(), $this->applications),
         ];
     }
 

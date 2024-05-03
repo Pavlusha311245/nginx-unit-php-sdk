@@ -2,11 +2,13 @@
 
 namespace UnitPhpSdk\Config\Listener;
 
+use Override;
 use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Contracts\Jsonable;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 
-class Forwarded implements Arrayable
+class Forwarded implements Arrayable, Jsonable
 {
     /**
      * Defines address-based patterns for trusted addresses.
@@ -157,10 +159,11 @@ class Forwarded implements Arrayable
     }
 
     /**
-     * @return false|string
+     * @param int $options
+     * @return string
      */
-    public function toJson(): false|string
+    #[Override] public function toJson(int $options = 0): string
     {
-        return json_encode($this->toArray());
+        return json_encode($this->toArray(), $options);
     }
 }

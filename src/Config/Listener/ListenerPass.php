@@ -2,6 +2,7 @@
 
 namespace UnitPhpSdk\Config\Listener;
 
+use Override;
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\Jsonable;
 
@@ -91,7 +92,7 @@ readonly class ListenerPass implements Arrayable, Jsonable
     /**
      * @inheritDoc
      */
-    public function toJson(int $options = 0): string
+    #[Override] public function toJson(int $options = 0): string
     {
         return json_encode($this->toArray(), $options);
     }

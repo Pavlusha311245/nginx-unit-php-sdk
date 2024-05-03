@@ -7,17 +7,19 @@ use UnitPhpSdk\Config\Listener\{
     ListenerPass,
     Tls
 };
+use UnitPhpSdk\Builders\EndpointBuilder;
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\Uploadable;
-use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\UnitException;
-use UnitPhpSdk\Http\UnitRequest;
+use UnitPhpSdk\Traits\CanUpload;
 
 /**
  * This class presents "listeners" section from config
  */
 class Listener implements Uploadable, Arrayable
 {
+    use CanUpload;
+
     /**
      * @var ListenerPass
      */
@@ -33,10 +35,11 @@ class Listener implements Uploadable, Arrayable
         string|ListenerPass     $pass,
         private ?Tls            $tls = null,
         private ?Forwarded      $forwarded = null,
-    )
-    {
+    ) {
         $this->parsePort();
         $this->parsePass($pass);
+
+        $this->setApiEndpoint(EndpointBuilder::create($this)->get() . '/' . $this->getListener());
     }
 
     /**
@@ -245,35 +248,5 @@ class Listener implements Uploadable, Arrayable
     public function getTarget()
     {
         return $this->getPass();
-    }
-
-    /**
-     * @throws UnitException
-     */
-    #[\Override] public function upload(UnitRequest $request): void
-    {
-        $request->setMethod(HttpMethodsEnum::PUT->value)->send(
-            $this->getApiEndpoint(),
-            true,
-            ['json' => $this->toArray()]
-        );
-    }
-
-    /**
-     * @throws UnitException
-     */
-    #[\Override] public function remove(UnitRequest $request): void
-    {
-        $request->setMethod(HttpMethodsEnum::DELETE->value)->send($this->getApiEndpoint());
-    }
-
-    /**
-     * Returns the API endpoint for the current listener.
-     *
-     * @return string The API endpoint for the current listener.
-     */
-    private function getApiEndpoint(): string
-    {
-        return "/config/listeners/{$this->getListener()}";
     }
 }

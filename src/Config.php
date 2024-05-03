@@ -4,12 +4,15 @@ namespace UnitPhpSdk;
 
 use Override;
 use UnitPhpSdk\Abstract\AbstractApplication;
-use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Settings, Upstream, Upstream\Server};
+use UnitPhpSdk\Config\{AccessLog, Listener, Route, Settings, Upstream, Upstream\Server};
 use UnitPhpSdk\Exceptions\{FileNotFoundException, UnitException};
+use UnitPhpSdk\Builders\ApplicationBuilder;
+use UnitPhpSdk\Builders\EndpointBuilder;
 use UnitPhpSdk\Contracts\ConfigInterface;
 use UnitPhpSdk\Contracts\Uploadable;
 use UnitPhpSdk\Http\UnitRequest;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
+use UnitPhpSdk\Traits\CanUpload;
 
 /**
  * This class contains Nginx Unit config data
@@ -18,6 +21,8 @@ use UnitPhpSdk\Enums\HttpMethodsEnum;
  */
 class Config implements ConfigInterface, Uploadable
 {
+    use CanUpload;
+
     /**
      * Listeners that accept requests
      *
@@ -67,6 +72,8 @@ class Config implements ConfigInterface, Uploadable
         if (!empty($data)) {
             $this->parseUnitObject($data);
         }
+
+        $this->setApiEndpoint(EndpointBuilder::create('/config')->get());
     }
 
     /**
@@ -139,22 +146,7 @@ class Config implements ConfigInterface, Uploadable
     {
         if (array_key_exists('applications', $data)) {
             foreach ($data['applications'] as $appName => $appData) {
-                $this->applications[$appName] = (match ($appData['type']) {
-                    'php' => new Application\PhpApplication($appData),
-                    'java' => new Application\JavaApplication($appData),
-                    'perl' => new Application\PerlApplication($appData),
-                    'python' => new Application\PythonApplication($appData),
-                    'wasm' => new Application\WebAssemblyApplication($appData),
-                    'ruby' => new Application\RubyApplication($appData),
-                    'wasm-wasi-component' => new Application\WebAssemblyComponentApplication($appData),
-                    'external' => $this->isNodeJsApplication($appData) ?
-                        new Application\NodeJsExternalApplication($appData) :
-                        new Application\GoExternalApplication($appData),
-                })->setName($appName);
-
-                if ($this->unitRequest) {
-                    $this->applications[$appName]->setUnitRequest($this->unitRequest);
-                }
+                $this->applications[$appName] = ApplicationBuilder::create($appName, $appData, $appData['type']);
             }
         }
     }
@@ -219,7 +211,7 @@ class Config implements ConfigInterface, Uploadable
                 }
 
                 $servers = array_map(
-                    fn($v, $k) => new Server($v, $k['weight'] ?? 1),
+                    fn ($v, $k) => new Server($v, $k['weight'] ?? 1),
                     array_keys($upstreamData['servers']),
                     array_values($upstreamData['servers'])
                 );
@@ -614,8 +606,8 @@ class Config implements ConfigInterface, Uploadable
      */
     private function mapConfigObjectToArray(array $data): array
     {
-        $keys = array_map(fn($item) => $item->getName(), $data);
-        $values = array_map(fn($item) => $item->toArray(), $data);
+        $keys = array_map(fn ($item) => $item->getName(), $data);
+        $values = array_map(fn ($item) => $item->toArray(), $data);
 
         return array_combine($keys, $values);
     }
@@ -643,39 +635,5 @@ class Config implements ConfigInterface, Uploadable
     #[Override] public function toJson(int $options = 0): string
     {
         return json_encode($this->toArray());
-    }
-
-    /**
-     * @inheritDoc
-     */
-    #[Override] public function upload(UnitRequest $request)
-    {
-        try {
-            $request
-                ->setMethod(HttpMethodsEnum::PUT)
-                ->send('/config', requestOptions: [
-                    'json' => $this->toArray()
-                ]);
-
-            return true;
-        } catch (UnitException) {
-            return false;
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    #[Override] public function remove(UnitRequest $request)
-    {
-        try {
-            $request
-                ->setMethod(HttpMethodsEnum::DELETE)
-                ->send('/config');
-
-            return true;
-        } catch (UnitException) {
-            return false;
-        }
     }
 }

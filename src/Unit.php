@@ -4,6 +4,7 @@ namespace UnitPhpSdk;
 
 use UnitPhpSdk\Contracts\{CertificateInterface, UnitInterface, Uploadable};
 use Override;
+use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\FileNotFoundException;
 use UnitPhpSdk\Exceptions\UnitException;
@@ -14,6 +15,7 @@ use UnitPhpSdk\Statistics\Statistics;
  * This is main class of Nginx Unit manipulation
  *
  * @implements UnitInterface
+ * @property Config $config
  */
 class Unit implements UnitInterface
 {
@@ -46,13 +48,14 @@ class Unit implements UnitInterface
     private UnitRequest $request;
 
     /**
+     * Constructor
+     *
      * @throws UnitException
      */
     public function __construct(
         private readonly string  $address,
         private readonly ?string $socket = null
-    )
-    {
+    ) {
         $this->request = new UnitRequest(
             address: $this->address,
             socket: $this->socket
@@ -258,25 +261,45 @@ class Unit implements UnitInterface
     }
 
     /**
-     * Uploads the specified Uploadable object.
+     * Uploads the specified Uploadable objects.
      *
-     * @param Uploadable $object
+     * @param Uploadable ...$objects
      */
-    public function upload(Uploadable $object): void
+    public function upload(Uploadable ...$objects): void
     {
-        $object->upload($this->request);
+        foreach ($objects as $object) {
+            $object->upload($this->request);
+        }
     }
 
     /**
-     * Removes an Uploadable object.
+     * Removes an Uploadable objects.
      *
-     * @param Uploadable $object The Uploadable object to be removed.
-     *
+     * @param Uploadable ...$objects
      * @return void
      */
-    public function remove(Uploadable $object): void
+    public function remove(Uploadable ...$objects): void
     {
-        $object->remove($this->request);
+        foreach ($objects as $object) {
+            $object->remove($this->request);
+        }
+    }
+
+    /**
+     * Restarts the given application.
+     *
+     * @param AbstractApplication $application The application to be restarted.
+     * @return bool Returns true if the application was restarted successfully, false otherwise.
+     */
+    public function restartApplication(AbstractApplication $application): bool
+    {
+        try {
+            $this->request->send("/control/applications/{$application->getName()}/restart");
+        } catch (UnitException) {
+            return false;
+        }
+
+        return true;
     }
 
     #[Override] public function toArray(): array

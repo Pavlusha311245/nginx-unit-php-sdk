@@ -4,7 +4,7 @@ use UnitPhpSdk\Config\Application\RubyApplication;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 
 it('checks that RubyApplication correctly sets and gets script values', function () {
-    $rubyApplication = new RubyApplication();
+    $rubyApplication = new RubyApplication('test-ruby-app');
 
     $script = 'example_script';
     $rubyApplication->setScript($script);
@@ -13,7 +13,7 @@ it('checks that RubyApplication correctly sets and gets script values', function
 });
 
 it('checks that RubyApplication correctly sets and gets hooks values', function () {
-    $rubyApplication = new RubyApplication();
+    $rubyApplication = new RubyApplication('test-ruby-app');
 
     $hooks = 'example_hooks';
     $rubyApplication->setHooks($hooks);
@@ -22,7 +22,7 @@ it('checks that RubyApplication correctly sets and gets hooks values', function 
 });
 
 it('checks that RubyApplication throws exception with missing script', function () {
-    $rubyApplication = new RubyApplication();
+    $rubyApplication = new RubyApplication('test-ruby-app');
 
     $array = ['hooks' => 'example_hooks'];
 
@@ -34,7 +34,7 @@ it('checks that RubyApplication throws exception with missing script', function 
 });
 
 it('checks that RubyApplication correctly parses from array', function () {
-    $rubyApplication = new RubyApplication();
+    $rubyApplication = new RubyApplication('test-ruby-app');
 
     $array = ['script' => 'example_script', 'hooks' => 'example_hooks', 'threads' => 4];
 

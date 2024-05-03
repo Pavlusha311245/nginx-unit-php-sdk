@@ -1,5 +1,8 @@
 <?php
 
+use UnitPhpSdk\Config;
+use UnitPhpSdk\Unit;
+
 if (!function_exists('parse_listener_pass')) {
     /**
      * Validates the listener pass string and returns the parsed data.
@@ -31,3 +34,18 @@ if (!function_exists('parse_listener_pass')) {
         }
     }
 }
+
+//if (!function_exists('get_unit_endpoint')) {
+//    /**
+//     * Get the Unit endpoint from the configuration.
+//     *
+//     * @return string The Unit endpoint.
+//     */
+//    function get_unit_endpoint($class): string
+//    {
+//        return match ($class) {
+//            Unit::class => '/',
+//            Config::class => '/config'
+//        };
+//    }
+//}

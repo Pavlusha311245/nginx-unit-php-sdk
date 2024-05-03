@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.8.0 - [2024/04/26]
+
+- Updated application classes
+- Removed doc folder
+- Updated tests
+
 ## v0.7.0 - [2024/04/07]
 
 - Now SDK support connection via only address.
