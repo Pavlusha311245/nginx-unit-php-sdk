@@ -45,7 +45,7 @@ trait CanUpload
     /**
      * @throws UnitException
      */
-    #[\Override] public function upload(UnitRequest $request)
+    public function upload(UnitRequest $request)
     {
         $data = $this->removeEmptyArrays($this->toArray());
 
@@ -69,7 +69,7 @@ trait CanUpload
      * @return void
      * @throws UnitException
      */
-    #[\Override] public function remove(UnitRequest $request)
+    public function remove(UnitRequest $request)
     {
         try {
             $request->setMethod(HttpMethodsEnum::DELETE->value)->send($this->getApiEndpoint());
