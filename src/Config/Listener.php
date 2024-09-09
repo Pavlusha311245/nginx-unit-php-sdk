@@ -7,8 +7,10 @@ use UnitPhpSdk\Config\Listener\{
     ListenerPass,
     Tls
 };
+use Override;
 use UnitPhpSdk\Builders\EndpointBuilder;
 use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Contracts\Jsonable;
 use UnitPhpSdk\Contracts\Uploadable;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\CanUpload;
@@ -16,7 +18,7 @@ use UnitPhpSdk\Traits\CanUpload;
 /**
  * This class presents "listeners" section from config
  */
-class Listener implements Uploadable, Arrayable
+class Listener implements Uploadable, Arrayable, Jsonable
 {
     use CanUpload;
 
@@ -26,6 +28,8 @@ class Listener implements Uploadable, Arrayable
     private ListenerPass $pass;
 
     /**
+     *
+     *
      * @var int
      */
     private int $port;
@@ -231,21 +235,22 @@ class Listener implements Uploadable, Arrayable
     /**
      * Return Listener as JSON
      *
-     * @return string|false
+     * @param int $options
+     * @return string
      */
-    public function toJson(): string|false
+    #[Override] public function toJson(int $options = 0): string
     {
-        return json_encode($this->toArray());
+        return json_encode($this->toArray(), $options);
     }
 
-    public function toUnitArray()
+    public function toUnitArray(): array
     {
         return [
             $this->getListener() => $this->toArray()
         ];
     }
 
-    public function getTarget()
+    public function getTarget(): ListenerPass
     {
         return $this->getPass();
     }
