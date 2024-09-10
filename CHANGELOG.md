@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v0.8.0 - [2024/04/26]
+## v0.8.0 - [2024/09/10]
 
 - Updated application classes
 - Removed doc folder
