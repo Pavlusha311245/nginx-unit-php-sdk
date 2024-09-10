@@ -5,24 +5,24 @@ use UnitPhpSdk\Config\Application\PhpApplication;
 use UnitPhpSdk\Exceptions\UnitException;
 
 it('should initialize PhpApplication', function () {
-    $app = new PhpApplication();
+    $app = new PhpApplication('test-php-app');
     expect($app)->toBeInstanceOf(PhpApplication::class);
 });
 
 it('should set and get root', function () {
-    $app = new PhpApplication();
+    $app = new PhpApplication('test-php-app');
     $app->setRoot('/var/www');
     expect($app->getRoot())->toBe('/var/www');
 });
 
 it('should set and get index', function () {
-    $app = new PhpApplication();
+    $app = new PhpApplication('test-php-app');
     $app->setIndex('myindex.php');
     expect($app->getIndex())->toBe('myindex.php');
 });
 
 it('should set and get script', function () {
-    $app = new PhpApplication();
+    $app = new PhpApplication('test-php-app');
     $app->setScript('myscript.php');
     expect($app->getScript())->toBe('myscript.php');
 });
@@ -43,7 +43,7 @@ it('should set and get options', function () {
         ->setUser($optionsData['user'])
         ->setFile($optionsData['file']);
 
-    $app = new PhpApplication();
+    $app = new PhpApplication('test-php-app');
     $app->setOptions($optionsData);
 
     expect($app->getOptions())->toBeInstanceOf(PhpOptions::class)
@@ -90,31 +90,31 @@ it('should set and get options', function () {
 //});
 
 it('should set and get user on PhpApplication', function () {
-    $app = new PhpApplication();
+    $app = new PhpApplication('test-php-app');
     $app->setUser('myUser');
     expect($app->getUser())->toBe('myUser');
 });
 
 it('should set and get group on PhpApplication', function () {
-    $app = new PhpApplication();
+    $app = new PhpApplication('test-php-app');
     $app->setGroup('myGroup');
     expect($app->getGroup())->toBe('myGroup');
 });
 
 it('should set and get working_directory on PhpApplication', function () {
-    $app = new PhpApplication();
+    $app = new PhpApplication('test-php-app');
     $app->setWorkingDirectory('/my/dir');
     expect($app->getWorkingDirectory())->toBe('/my/dir');
 });
 
 it('should set and get stderr on PhpApplication', function () {
-    $app = new PhpApplication();
+    $app = new PhpApplication('test-php-app');
     $app->setStdErr('/my/stderr');
     expect($app->getStdErr())->toBe('/my/stderr');
 });
 
 it('should set and get stdout on PhpApplication', function () {
-    $app = new PhpApplication();
+    $app = new PhpApplication('test-php-app');
     $app->setStdOut('/my/stdout');
     expect($app->getStdOut())->toBe('/my/stdout');
 });
@@ -164,7 +164,7 @@ it('should set and get stdout on PhpApplication', function () {
 it(/**
  * @throws UnitException
  */ 'should correctly convert to JSON', function () {
-    $app = new PhpApplication();
+    $app = new PhpApplication('test-php-app');
     $data = [
         'root' => '/var/www',
         'targets' => ['test' => ['root' => '/var/test']],

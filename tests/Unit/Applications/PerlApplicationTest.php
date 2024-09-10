@@ -4,18 +4,18 @@ use UnitPhpSdk\Config\Application\PerlApplication;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 
 it('should initialize PerlApplication', function () {
-    $app = new PerlApplication();
+    $app = new PerlApplication('test-perl-app');
     expect($app)->toBeInstanceOf(PerlApplication::class);
 });
 
 it('should set and get script', function () {
-    $app = new PerlApplication();
+    $app = new PerlApplication('test-perl-app');
     $app->setScript('myScript');
     expect($app->getScript())->toBe('myScript');
 });
 
 it('should throw RequiredKeyException when try to parseFromArray with insufficient data', function () {
-    $app = new PerlApplication();
+    $app = new PerlApplication('test-perl-app');
     $data = ['user' => 'myUser', 'group' => 'myGroup'];
     $app->parseFromArray($data);
 })->throws(RequiredKeyException::class, 'script');
@@ -50,7 +50,7 @@ it('should throw RequiredKeyException when try to parseFromArray with insufficie
 //});
 
 it('should convert toArray correctly', function () {
-    $app = new PerlApplication();
+    $app = new PerlApplication('test-perl-app');
     $data = [
         'type' => 'perl',
         'user' => 'myUser',

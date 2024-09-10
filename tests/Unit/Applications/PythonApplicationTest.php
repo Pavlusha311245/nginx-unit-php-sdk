@@ -6,48 +6,48 @@ use UnitPhpSdk\Exceptions\RequiredKeyException;
 use UnitPhpSdk\Exceptions\UnitException;
 
 it('should initialize PythonApplication', function () {
-    $app = new PythonApplication();
+    $app = new PythonApplication('test-python-app');
     expect($app)->toBeInstanceOf(PythonApplication::class);
 });
 
 it('should set and get module', function () {
-    $app = new PythonApplication();
+    $app = new PythonApplication('test-python-app');
     $app->setModule('myModule');
     expect($app->getModule())->toBe('myModule');
 });
 
 it('should set and get callable', function () {
-    $app = new PythonApplication();
+    $app = new PythonApplication('test-python-app');
     $app->setCallable('myCallable');
     expect($app->getCallable())->toBe('myCallable');
 });
 
 it('should set and get home', function () {
-    $app = new PythonApplication();
+    $app = new PythonApplication('test-python-app');
     $app->setHome('myHome');
     expect($app->getHome())->toBe('myHome');
 });
 
 it('should set and get path', function () {
-    $app = new PythonApplication();
+    $app = new PythonApplication('test-python-app');
     $app->setPath('myPath');
     expect($app->getPath())->toBe('myPath');
 });
 
 it('should set and get prefix', function () {
-    $app = new PythonApplication();
+    $app = new PythonApplication('test-python-app');
     $app->setPrefix('myPrefix');
     expect($app->getPrefix())->toBe('myPrefix');
 });
 
 it('should set and get protocol', function () {
-    $app = new PythonApplication();
+    $app = new PythonApplication('test-python-app');
     $app->setProtocol('myProtocol');
     expect($app->getProtocol())->toBe('myProtocol');
 });
 
 it('should throw RequiredKeyException when try to parseFromArray with insufficient data', function () {
-    $app = new PythonApplication();
+    $app = new PythonApplication('test-python-app');
     $data = ['user' => 'myUser', 'group' => 'myGroup'];
     $app->parseFromArray($data);
 })->throws(RequiredKeyException::class, 'module');
@@ -96,7 +96,7 @@ it(/**
  * @throws UnitException
  * @throws RequiredKeyException
  */ 'should convert toArray correctly', function () {
-    $app = new PythonApplication();
+    $app = new PythonApplication('test-python-app');
     $data = [
         'type' => 'python',
         'path' => 'myPath',

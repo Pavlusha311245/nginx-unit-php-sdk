@@ -3,6 +3,7 @@
 namespace UnitPhpSdk\Config\Routes\ActionType;
 
 use OutOfRangeException;
+use Override;
 use UnitPhpSdk\Contracts\Arrayable;
 
 class ReturnAction implements Arrayable
@@ -69,7 +70,7 @@ class ReturnAction implements Arrayable
      *
      * @return array The converted array representation of the object.
      */
-    public function toArray(): array
+    #[Override] public function toArray(): array
     {
         return [
             'return' => $this->return,

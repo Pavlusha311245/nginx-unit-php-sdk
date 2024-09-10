@@ -5,7 +5,7 @@ namespace UnitPhpSdk\Contracts;
 use UnitPhpSdk\Config;
 use UnitPhpSdk\Exceptions\UnitException;
 
-interface UnitInterface
+interface UnitInterface extends Arrayable, Jsonable
 {
     /**
      * Return Unit socket
@@ -62,12 +62,6 @@ interface UnitInterface
     public function getConfig(): ConfigInterface;
 
     /**
-     * @param Config $config
-     * @return bool
-     */
-    public function uploadConfig(Config $config): bool;
-
-    /**
      * Upload full file config
      *
      * @param string $path
@@ -85,13 +79,6 @@ interface UnitInterface
     public function removeCertificate(string $certificateName): bool;
 
     /**
-     * Remove all data from config
-     *
-     * @return bool
-     */
-    public function removeConfig(): bool;
-
-    /**
      * Retrieve the list of JavaScript modules.
      *
      * This method returns an array containing the names of all available JavaScript modules.
@@ -107,4 +94,14 @@ interface UnitInterface
      * @return void
      */
     public function setJsModules(array $js_modules): void;
+
+    /**
+     * @inheritDoc
+     */
+    public function toArray(): array;
+
+    /**
+     * @inheritDoc
+     */
+    public function toJson(int $options = 0): string;
 }

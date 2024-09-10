@@ -3,6 +3,8 @@
 namespace UnitPhpSdk;
 
 use UnitPhpSdk\Contracts\{CertificateInterface, UnitInterface, Uploadable};
+use Override;
+use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\FileNotFoundException;
 use UnitPhpSdk\Exceptions\UnitException;
@@ -13,6 +15,7 @@ use UnitPhpSdk\Statistics\Statistics;
  * This is main class of Nginx Unit manipulation
  *
  * @implements UnitInterface
+ * @property Config $config
  */
 class Unit implements UnitInterface
 {
@@ -45,6 +48,8 @@ class Unit implements UnitInterface
     private UnitRequest $request;
 
     /**
+     * Constructor
+     *
      * @throws UnitException
      */
     public function __construct(
@@ -174,6 +179,7 @@ class Unit implements UnitInterface
 
     /**
      * @return array
+     * @throws UnitException
      */
     public function getJsModules(): array
     {
@@ -190,6 +196,9 @@ class Unit implements UnitInterface
         $this->js_modules = $js_modules;
     }
 
+    /**
+     * @throws UnitException
+     */
     private function loadJsModules(): void
     {
         $result = $this->request->send('/js_modules');
@@ -217,11 +226,6 @@ class Unit implements UnitInterface
         $this->loadCertificates();
 
         return $this->certificates[$certificateName] ?? null;
-    }
-
-    public function uploadConfig(Config $config): bool
-    {
-        return true;
     }
 
     /**
@@ -257,14 +261,40 @@ class Unit implements UnitInterface
     }
 
     /**
-     * @inheritDoc
+     * Uploads the specified Uploadable objects.
+     *
+     * @param Uploadable ...$objects
      */
-    public function removeConfig(): bool
+    public function upload(Uploadable ...$objects): void
+    {
+        foreach ($objects as $object) {
+            $object->upload($this->request);
+        }
+    }
+
+    /**
+     * Removes an Uploadable objects.
+     *
+     * @param Uploadable ...$objects
+     * @return void
+     */
+    public function remove(Uploadable ...$objects): void
+    {
+        foreach ($objects as $object) {
+            $object->remove($this->request);
+        }
+    }
+
+    /**
+     * Restarts the given application.
+     *
+     * @param AbstractApplication $application The application to be restarted.
+     * @return bool Returns true if the application was restarted successfully, false otherwise.
+     */
+    public function restartApplication(AbstractApplication $application): bool
     {
         try {
-            $this->request
-                ->setMethod(HttpMethodsEnum::DELETE->value)
-                ->send('/config');
+            $this->request->send("/control/applications/{$application->getName()}/restart");
         } catch (UnitException) {
             return false;
         }
@@ -272,25 +302,18 @@ class Unit implements UnitInterface
         return true;
     }
 
-    /**
-     * Uploads the specified Uploadable object.
-     *
-     * @param Uploadable $object
-     */
-    public function upload(Uploadable $object): void
+    #[Override] public function toArray(): array
     {
-        $object->upload($this->request);
+        return [
+            'certificates' => array_map(fn ($certificate) => $certificate->toArray(), $this->getCertificates()),
+            'config' => $this->getConfig()->toArray(),
+            'js_modules' => array_map(fn ($module) => $module->toArray(), $this->getJsModules()),
+            'status' => $this->getStatistics()->toArray()
+        ];
     }
 
-    /**
-     * Removes an Uploadable object.
-     *
-     * @param Uploadable $object The Uploadable object to be removed.
-     *
-     * @return void
-     */
-    public function remove(Uploadable $object): void
+    #[Override] public function toJson(int $options = 0): string
     {
-        $object->remove($this->request);
+        return json_encode($this->toArray(), $options);
     }
 }

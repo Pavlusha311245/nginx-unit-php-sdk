@@ -5,7 +5,7 @@ namespace UnitPhpSdk\Contracts;
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Config\{AccessLog, Listener, Route, Settings, Upstream};
 
-interface ConfigInterface
+interface ConfigInterface extends Arrayable, Jsonable
 {
     /**
      * Get all listeners
@@ -151,10 +151,11 @@ interface ConfigInterface
      */
     public function removeAccessLog(): bool;
 
+
     /**
-     * @return Settings
+     * @return Settings|null
      */
-    public function getSettings(): Settings;
+    public function getSettings(): ?Settings;
 
     /**
      * @param Settings $settings
@@ -163,7 +164,12 @@ interface ConfigInterface
     public function setSettings(Settings $settings): void;
 
     /**
-     * @return array
+     * @inheritDoc
      */
     public function toArray(): array;
+
+    /**
+     * @inheritDoc
+     */
+    public function toJson(int $options = 0): string;
 }

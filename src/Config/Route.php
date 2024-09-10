@@ -2,11 +2,13 @@
 
 namespace UnitPhpSdk\Config;
 
+use SplObjectStorage;
+use UnitPhpSdk\Builders\EndpointBuilder;
 use UnitPhpSdk\Config\Routes\RouteBlock;
-use UnitPhpSdk\Contracts\Arrayable;
-use UnitPhpSdk\Contracts\Jsonable;
 use UnitPhpSdk\Contracts\RouteInterface;
+use UnitPhpSdk\Contracts\Uploadable;
 use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Traits\CanUpload;
 use UnitPhpSdk\Traits\HasListeners;
 
 /**
@@ -14,14 +16,15 @@ use UnitPhpSdk\Traits\HasListeners;
  *
  * @implements RouteInterface
  */
-class Route implements RouteInterface, Arrayable, Jsonable
+class Route implements RouteInterface, Uploadable
 {
     use HasListeners;
+    use CanUpload;
 
     /**
-     * @var array
+     * @var SplObjectStorage|null
      */
-    private array $routeBlocks = [];
+    private ?SplObjectStorage $routeBlocks = null;
 
     /**
      * @var array
@@ -36,15 +39,18 @@ class Route implements RouteInterface, Arrayable, Jsonable
         $data = [],
         bool                    $single = false
     ) {
+        $this->routeBlocks = new SplObjectStorage();
         if (!empty($data)) {
             if ($single) {
-                $this->routeBlocks[] = new RouteBlock($data);
+                $this->routeBlocks->attach(new RouteBlock($data));
             } else {
                 foreach ($data as $routeBlock) {
-                    $this->routeBlocks[] = new RouteBlock($routeBlock);
+                    $this->routeBlocks->attach(new RouteBlock($routeBlock));
                 }
             }
         }
+
+        $this->setApiEndpoint(EndpointBuilder::create($this)->get() . '/' . $this->getName());
     }
 
     /**
@@ -60,7 +66,20 @@ class Route implements RouteInterface, Arrayable, Jsonable
      */
     public function setRouteBlocks(array $routeBlocks): void
     {
-        $this->routeBlocks = $routeBlocks;
+        foreach ($routeBlocks as $routeBlock) {
+            $this->routeBlocks->attach(
+                $routeBlock instanceof RouteBlock ? $routeBlock : new RouteBlock($routeBlock)
+            );
+        }
+    }
+
+    /**
+     * @param RouteBlock $routeBlock
+     * @return void
+     */
+    public function addRouteBlock(RouteBlock $routeBlock): void
+    {
+        $this->routeBlocks->attach($routeBlock);
     }
 
     /**
@@ -68,7 +87,13 @@ class Route implements RouteInterface, Arrayable, Jsonable
      */
     public function getRouteBlocks(): array
     {
-        return $this->routeBlocks;
+        $data = [];
+
+        foreach ($this->routeBlocks as $routeBlock) {
+            $data[] = $routeBlock;
+        }
+
+        return $data;
     }
 
     /**
@@ -76,7 +101,7 @@ class Route implements RouteInterface, Arrayable, Jsonable
      */
     #[\Override] public function toArray(): array
     {
-        return array_map(fn (RouteBlock $routeBlock) => $routeBlock->toArray(), $this->routeBlocks);
+        return array_map(fn (RouteBlock $routeBlock) => $routeBlock->toArray(), $this->getRouteBlocks());
     }
 
     /**

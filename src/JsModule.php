@@ -2,6 +2,7 @@
 
 namespace UnitPhpSdk;
 
+use Override;
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\Jsonable;
 
@@ -46,7 +47,7 @@ class JsModule implements Arrayable, Jsonable
         $this->content = $content;
     }
 
-    #[\Override] public function toArray(): array
+    #[Override] public function toArray(): array
     {
         return [
             $this->name => $this->content,

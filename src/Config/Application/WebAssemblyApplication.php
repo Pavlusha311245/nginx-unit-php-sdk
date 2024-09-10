@@ -299,9 +299,9 @@ class WebAssemblyApplication extends AbstractApplication
     {
         parent::parseFromArray($data);
 
-        $requiredKeys = ['module', 'request_handler', 'malloc_handler', 'free_handler'];
+        $data = array_filter($data, fn ($value) => !empty($value));
 
-        foreach ($requiredKeys as $key) {
+        foreach (self::REQUIRED_KEYS as $key) {
             if (!array_key_exists($key, $data)) {
                 throw new RequiredKeyException($key);
             }

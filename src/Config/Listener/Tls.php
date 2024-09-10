@@ -2,7 +2,10 @@
 
 namespace UnitPhpSdk\Config\Listener;
 
-class Tls
+use Override;
+use UnitPhpSdk\Contracts\Jsonable;
+
+class Tls implements Jsonable
 {
     /**
      * Refers to one or more certificate bundles uploaded earlier, enabling secure communication via the listener.
@@ -117,10 +120,11 @@ class Tls
     }
 
     /**
-     * @return false|string
+     * @param int $options
+     * @return string
      */
-    public function toJson(): false|string
+    #[Override] public function toJson(int $options = 0): string
     {
-        return json_encode($this->toArray());
+        return json_encode($this->toArray(), $options);
     }
 }

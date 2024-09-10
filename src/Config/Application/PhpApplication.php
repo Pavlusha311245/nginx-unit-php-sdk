@@ -2,6 +2,8 @@
 
 namespace UnitPhpSdk\Config\Application;
 
+use InvalidArgumentException;
+use Override;
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Config\Application\Options\PhpOptions;
 use UnitPhpSdk\Config\Application\Targets\PhpTarget;
@@ -152,9 +154,11 @@ class PhpApplication extends AbstractApplication implements Arrayable
     {
         parent::parseFromArray($data);
 
+        $data = array_filter($data, fn ($value) => !empty($value));
+
         if (array_key_exists('root', $data)) {
             if (!is_string($data['root'])) {
-                throw new \InvalidArgumentException('root must be a string');
+                throw new InvalidArgumentException('root must be a string');
             }
 
             $this->setRoot($data['root']);
@@ -164,7 +168,7 @@ class PhpApplication extends AbstractApplication implements Arrayable
             $targets = [];
             foreach ($data['targets'] as $targetName => $targetData) {
                 if (!is_array($targetData)) {
-                    throw new \InvalidArgumentException('target data must be an array');
+                    throw new InvalidArgumentException('target data must be an array');
                 }
 
                 if (!array_key_exists('root', $targetData)) {
@@ -193,7 +197,7 @@ class PhpApplication extends AbstractApplication implements Arrayable
     /**
      * @inheritDoc
      */
-    #[\Override] public function toArray(): array
+    #[Override] public function toArray(): array
     {
         return array_merge(
             parent::toArray(),
@@ -203,7 +207,7 @@ class PhpApplication extends AbstractApplication implements Arrayable
                 'index' => $this->getIndex(),
                 'script' => $this->getScript(),
                 'options' => $this->getOptions(),
-                'targets' => $this->getTargets()
+                'targets' => array_map(fn (PhpTarget $target) => $target->toArray(), $this->getTargets() ?? [])
             ]
         );
     }

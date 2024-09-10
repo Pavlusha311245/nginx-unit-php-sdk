@@ -2,8 +2,14 @@
 
 namespace UnitPhpSdk\Config;
 
-class AccessLog
+use UnitPhpSdk\Builders\EndpointBuilder;
+use UnitPhpSdk\Contracts\Uploadable;
+use UnitPhpSdk\Traits\CanUpload;
+
+class AccessLog implements Uploadable
 {
+    use CanUpload;
+
     /**
      * Pathname of the access log file.
      *
@@ -23,6 +29,8 @@ class AccessLog
     ) {
         $this->path = $data['path'] ?? null;
         $this->format = $data['format'] ?? null;
+
+        $this->setApiEndpoint(EndpointBuilder::create('/config/access_log')->get());
     }
 
     /**

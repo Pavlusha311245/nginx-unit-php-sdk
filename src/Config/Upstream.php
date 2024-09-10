@@ -3,13 +3,13 @@
 namespace UnitPhpSdk\Config;
 
 use OutOfRangeException;
+use UnitPhpSdk\Builders\EndpointBuilder;
 use UnitPhpSdk\Config\Upstream\Server;
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\Uploadable;
 use UnitPhpSdk\Contracts\UpstreamInterface;
-use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\UnitException;
-use UnitPhpSdk\Http\UnitRequest;
+use UnitPhpSdk\Traits\CanUpload;
 use UnitPhpSdk\Traits\HasListeners;
 
 /**
@@ -18,6 +18,7 @@ use UnitPhpSdk\Traits\HasListeners;
 class Upstream implements UpstreamInterface, Uploadable, Arrayable
 {
     use HasListeners;
+    use CanUpload;
 
     /**
      * Array of servers
@@ -35,6 +36,8 @@ class Upstream implements UpstreamInterface, Uploadable, Arrayable
                 $this->servers[] = $server instanceof Server ? $server : new Server($server);
             }
         }
+
+        $this->setApiEndpoint(EndpointBuilder::create($this)->get() . '/' . $this->getName());
     }
 
     /**
@@ -90,7 +93,6 @@ class Upstream implements UpstreamInterface, Uploadable, Arrayable
      */
     #[\Override] public function toArray(): array
     {
-
         return [
             'servers' => $this->getServers()
         ];
@@ -102,48 +104,5 @@ class Upstream implements UpstreamInterface, Uploadable, Arrayable
     public function toJson(): string|false
     {
         return json_encode($this->toArray());
-    }
-
-    /**
-     * @param UnitRequest $request
-     * @return bool
-     */
-    #[\Override] public function upload(UnitRequest $request)
-    {
-        try {
-            $request
-                ->setMethod(HttpMethodsEnum::PUT->value)
-                ->send($this->getApiEndpoint(), requestOptions: [
-                    'json' => $this->toArray()
-                ]);
-        } catch (UnitException) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Removes the upstream configuration for this unit.
-     *
-     * @param UnitRequest $request The unit request object.
-     *
-     * @return bool Returns true if the upstream configuration was successfully removed,
-     *              otherwise false if an exception occurred.
-     */
-    #[\Override] public function remove(UnitRequest $request)
-    {
-        try {
-            $request->setMethod(HttpMethodsEnum::DELETE->value)->send($this->getApiEndpoint());
-        } catch (UnitException) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function getApiEndpoint(): string
-    {
-        return "/config/upstreams/{$this->getName()}";
     }
 }

@@ -2,26 +2,33 @@
 
 namespace UnitPhpSdk;
 
+use Override;
 use UnitPhpSdk\Abstract\AbstractApplication;
-use UnitPhpSdk\Config\{AccessLog, Application, Listener, Route, Settings, Upstream, Upstream\Server};
+use UnitPhpSdk\Config\{AccessLog, Listener, Route, Settings, Upstream, Upstream\Server};
 use UnitPhpSdk\Exceptions\{FileNotFoundException, UnitException};
-use UnitPhpSdk\Contracts\{Arrayable, ConfigInterface, Jsonable};
+use UnitPhpSdk\Builders\ApplicationBuilder;
+use UnitPhpSdk\Builders\EndpointBuilder;
+use UnitPhpSdk\Contracts\ConfigInterface;
+use UnitPhpSdk\Contracts\Uploadable;
 use UnitPhpSdk\Http\UnitRequest;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
+use UnitPhpSdk\Traits\CanUpload;
 
 /**
  * This class contains Nginx Unit config data
  *
  * @implements ConfigInterface
  */
-class Config implements ConfigInterface, Arrayable, Jsonable
+class Config implements ConfigInterface, Uploadable
 {
+    use CanUpload;
+
     /**
      * Listeners that accept requests
      *
      * @var array
      */
-    private array $listeners;
+    private array $listeners = [];
 
     /**
      * Route entities defines internal request routing.
@@ -46,9 +53,9 @@ class Config implements ConfigInterface, Arrayable, Jsonable
     private array $upstreams = [];
 
     /**
-     * @var Settings
+     * @var Settings|null
      */
-    private Settings $settings;
+    private ?Settings $settings = null;
 
     private ?UnitRequest $unitRequest;
 
@@ -62,9 +69,21 @@ class Config implements ConfigInterface, Arrayable, Jsonable
     {
         $this->unitRequest = $unitRequest;
 
-        if (!empty($data) && !empty($this->unitRequest)) {
+        if (!empty($data)) {
             $this->parseUnitObject($data);
         }
+
+        $this->setApiEndpoint(EndpointBuilder::create('/config')->get());
+    }
+
+    /**
+     * @param string $json
+     * @return void
+     * @throws UnitException
+     */
+    public function parseJson(string $json): void
+    {
+        $this->parseUnitObject(json_decode($json, false));
     }
 
     /**
@@ -75,14 +94,14 @@ class Config implements ConfigInterface, Arrayable, Jsonable
         $rawData = $data;
         $jsonData = json_decode(json_encode($data), true);
 
-        $this->loadRoutes($rawData);
-        $this->loadApplications($jsonData);
-        $this->loadUpstreams($jsonData);
-        $this->loadListeners($jsonData);
-        $this->loadSettings($jsonData);
+        $this->parseRoutes($rawData);
+        $this->parseApplications($jsonData);
+        $this->parseUpstreams($jsonData);
+        $this->parseListeners($jsonData);
+        $this->parseSettings($jsonData);
     }
 
-    private function loadSettings($jsonData): void
+    private function parseSettings($jsonData): void
     {
         if (array_key_exists('settings', $jsonData)) {
             $this->settings = new Settings($jsonData['settings']);
@@ -96,7 +115,7 @@ class Config implements ConfigInterface, Arrayable, Jsonable
      * @return void
      * @throws UnitException
      */
-    public function loadListeners(array $data): void
+    public function parseListeners(array $data): void
     {
         if (array_key_exists('listeners', $data)) {
             foreach ($data['listeners'] as $listener => $listenerData) {
@@ -123,24 +142,11 @@ class Config implements ConfigInterface, Arrayable, Jsonable
      * @return void
      * @throws UnitException
      */
-    public function loadApplications(array $data): void
+    public function parseApplications(array $data): void
     {
         if (array_key_exists('applications', $data)) {
             foreach ($data['applications'] as $appName => $appData) {
-                $this->applications[$appName] = (match ($appData['type']) {
-                    'php' => new Application\PhpApplication($appData),
-                    'java' => new Application\JavaApplication($appData),
-                    'perl' => new Application\PerlApplication($appData),
-                    'python' => new Application\PythonApplication($appData),
-                    'wasm' => new Application\WebAssemblyApplication($appData),
-                    'ruby' => new Application\RubyApplication($appData),
-                    'wasm-wasi-component' => new Application\WebAssemblyComponentApplication($appData),
-                    'external' => $this->isNodeJsApplication($appData) ?
-                        new Application\NodeJsExternalApplication($appData) :
-                        new Application\GoExternalApplication($appData),
-                })
-                    ->setName($appName)
-                    ->setUnitRequest($this->unitRequest);
+                $this->applications[$appName] = ApplicationBuilder::create($appName, $appData, $appData['type']);
             }
         }
     }
@@ -173,8 +179,9 @@ class Config implements ConfigInterface, Arrayable, Jsonable
      *
      * @param object $rawData
      * @return void
+     * @throws UnitException
      */
-    public function loadRoutes(object $rawData): void
+    public function parseRoutes(object $rawData): void
     {
         if (!empty($rawData->routes)) {
             $jsonRoutes = json_decode(json_encode($rawData), true)['routes'];
@@ -193,8 +200,9 @@ class Config implements ConfigInterface, Arrayable, Jsonable
      *
      * @param array $data
      * @return void
+     * @throws UnitException
      */
-    public function loadUpstreams(array $data): void
+    public function parseUpstreams(array $data): void
     {
         if (array_key_exists('upstreams', $data)) {
             foreach ($data['upstreams'] as $upstreamName => $upstreamData) {
@@ -575,23 +583,39 @@ class Config implements ConfigInterface, Arrayable, Jsonable
      *
      * @return array
      */
-    #[\Override] public function toArray(): array
+    #[Override] public function toArray(): array
     {
-        $array = [];
+        $data = [
+            'listeners' => $this->mapConfigObjectToArray($this->listeners),
+            'routes' => $this->mapConfigObjectToArray($this->routes),
+            'applications' => $this->mapConfigObjectToArray($this->applications),
+            'upstreams' => $this->mapConfigObjectToArray($this->upstreams),
+            'settings' => $this->settings?->toArray()
+        ];
 
-        foreach (array_keys(get_object_vars($this)) as $key) {
-            if (!empty($this->{$key})) {
-                $array[substr($key, 1)] = $this->{$key};
-            }
+        if (!empty($this->settings)) {
+            $data = array_merge($data, $this->settings->toArray());
         }
 
-        return $array;
+        return $data;
     }
 
     /**
-     * @return Settings
+     * @param array $data
+     * @return array
      */
-    public function getSettings(): Settings
+    private function mapConfigObjectToArray(array $data): array
+    {
+        $keys = array_map(fn ($item) => $item->getName(), $data);
+        $values = array_map(fn ($item) => $item->toArray(), $data);
+
+        return array_combine($keys, $values);
+    }
+
+    /**
+     * @return Settings|null
+     */
+    public function getSettings(): ?Settings
     {
         return $this->settings;
     }
@@ -608,8 +632,8 @@ class Config implements ConfigInterface, Arrayable, Jsonable
      * @param int $options
      * @return string
      */
-    public function toJson(int $options = 0): string
+    #[Override] public function toJson(int $options = 0): string
     {
-        return json_encode($this->toJson());
+        return json_encode($this->toArray());
     }
 }

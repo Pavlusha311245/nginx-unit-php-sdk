@@ -7,23 +7,29 @@ use UnitPhpSdk\Config\Listener\{
     ListenerPass,
     Tls
 };
+use Override;
+use UnitPhpSdk\Builders\EndpointBuilder;
 use UnitPhpSdk\Contracts\Arrayable;
+use UnitPhpSdk\Contracts\Jsonable;
 use UnitPhpSdk\Contracts\Uploadable;
-use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\UnitException;
-use UnitPhpSdk\Http\UnitRequest;
+use UnitPhpSdk\Traits\CanUpload;
 
 /**
  * This class presents "listeners" section from config
  */
-class Listener implements Uploadable, Arrayable
+class Listener implements Uploadable, Arrayable, Jsonable
 {
+    use CanUpload;
+
     /**
      * @var ListenerPass
      */
     private ListenerPass $pass;
 
     /**
+     *
+     *
      * @var int
      */
     private int $port;
@@ -36,8 +42,14 @@ class Listener implements Uploadable, Arrayable
     ) {
         $this->parsePort();
         $this->parsePass($pass);
+
+        $this->setApiEndpoint(EndpointBuilder::create($this)->get() . '/' . $this->getListener());
     }
 
+    /**
+     * @param $pass
+     * @return void
+     */
     private function parsePass($pass): void
     {
         if (is_string($pass)) {
@@ -153,6 +165,14 @@ class Listener implements Uploadable, Arrayable
     }
 
     /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->listener;
+    }
+
+    /**
      * Parse data from array
      *
      * @throws UnitException
@@ -215,52 +235,23 @@ class Listener implements Uploadable, Arrayable
     /**
      * Return Listener as JSON
      *
-     * @return string|false
+     * @param int $options
+     * @return string
      */
-    public function toJson(): string|false
+    #[Override] public function toJson(int $options = 0): string
     {
-        return json_encode($this->toArray());
+        return json_encode($this->toArray(), $options);
     }
 
-    public function toUnitArray()
+    public function toUnitArray(): array
     {
         return [
             $this->getListener() => $this->toArray()
         ];
     }
 
-    public function getTarget()
+    public function getTarget(): ListenerPass
     {
         return $this->getPass();
-    }
-
-    /**
-     * @throws UnitException
-     */
-    #[\Override] public function upload(UnitRequest $request): void
-    {
-        $request->setMethod(HttpMethodsEnum::PUT->value)->send(
-            $this->getApiEndpoint(),
-            true,
-            ['json' => $this->toArray()]
-        );
-    }
-
-    /**
-     * @throws UnitException
-     */
-    #[\Override] public function remove(UnitRequest $request): void
-    {
-        $request->setMethod(HttpMethodsEnum::DELETE->value)->send($this->getApiEndpoint());
-    }
-
-    /**
-     * Returns the API endpoint for the current listener.
-     *
-     * @return string The API endpoint for the current listener.
-     */
-    private function getApiEndpoint(): string
-    {
-        return "/config/listeners/{$this->getListener()}";
     }
 }

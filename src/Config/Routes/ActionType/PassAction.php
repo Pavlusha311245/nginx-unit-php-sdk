@@ -2,14 +2,14 @@
 
 namespace UnitPhpSdk\Config\Routes\ActionType;
 
+use Override;
 use UnitPhpSdk\Contracts\Arrayable;
 
 class PassAction implements Arrayable
 {
     public function __construct(
         private string $pass
-    )
-    {
+    ) {
         $this->setPass($pass);
     }
 
@@ -29,7 +29,7 @@ class PassAction implements Arrayable
         $this->pass = $pass;
     }
 
-    public function toArray(): array
+    #[Override] public function toArray(): array
     {
         return [
             'pass' => $this->getPass()

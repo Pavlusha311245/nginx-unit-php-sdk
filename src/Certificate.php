@@ -2,6 +2,8 @@
 
 namespace UnitPhpSdk;
 
+use InvalidArgumentException;
+use Override;
 use UnitPhpSdk\Certificate\ChainItem;
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\CertificateInterface;
@@ -28,7 +30,7 @@ readonly class Certificate implements CertificateInterface, Arrayable
         private string $name
     ) {
         if (!isset($data['key']) || !isset($data['chain'])) {
-            throw new \InvalidArgumentException('Certificate data should contain key and chain');
+            throw new InvalidArgumentException('Certificate data should contain key and chain');
         }
 
         $chainItems = [];
@@ -67,11 +69,11 @@ readonly class Certificate implements CertificateInterface, Arrayable
         return $this->chain;
     }
 
-    #[\Override] public function toArray(): array
+    #[Override] public function toArray(): array
     {
         return [
             'key' => $this->getKey(),
-            'chain' => $this->getChain(),
+            'chain' => array_map(fn (ChainItem $item) => $item->toArray(), $this->getChain()),
         ];
     }
 }

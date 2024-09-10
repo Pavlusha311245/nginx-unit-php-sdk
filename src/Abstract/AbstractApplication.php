@@ -6,22 +6,21 @@ use UnitPhpSdk\Config\Application\{ProcessManagement\ApplicationProcess,
     ProcessManagement\ProcessIsolation,
     ProcessManagement\RequestLimit
 };
+use UnitPhpSdk\Builders\EndpointBuilder;
 use UnitPhpSdk\Exceptions\UnitException;
-use UnitPhpSdk\Http\UnitRequest;
-use UnitPhpSdk\Contracts\{ApplicationControlInterface, ApplicationInterface, Arrayable, Uploadable};
+use UnitPhpSdk\Contracts\{ApplicationInterface, Arrayable, Uploadable};
+use UnitPhpSdk\Traits\CanUpload;
 use UnitPhpSdk\Traits\HasListeners;
 
 /**
- * @implements ApplicationInterface, ApplicationControlInterface, Arrayable
+ * @implements ApplicationInterface
+ * @implements Arrayable
+ * @implements Uploadable
  */
-abstract class AbstractApplication implements ApplicationInterface, ApplicationControlInterface, Arrayable, Uploadable
+abstract class AbstractApplication implements ApplicationInterface, Arrayable, Uploadable
 {
     use HasListeners;
-
-    /**
-     * @var UnitRequest
-     */
-    private UnitRequest $unitRequest;
+    use CanUpload;
 
     /**
      * Environment variables to be passed to the app
@@ -89,24 +88,18 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
     private ?ProcessIsolation $isolation = null;
 
     /**
-     * @throws UnitException
+     * @param string $name
+     * @param array|null $data
      */
-    public function __construct($data = null)
+    public function __construct(string $name, ?array $data = [])
     {
+        $this->setName($name);
+
         if (!empty($data)) {
             $this->parseFromArray($data);
         }
-    }
 
-    /**
-     * @param UnitRequest $unitRequest
-     * @return AbstractApplication
-     */
-    public function setUnitRequest(UnitRequest $unitRequest): self
-    {
-        $this->unitRequest = $unitRequest;
-
-        return $this;
+        $this->setApiEndpoint(EndpointBuilder::create("config/applications/")->get() . $this->getName());
     }
 
     /**
@@ -196,10 +189,11 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      *
      * @param ProcessIsolation $isolation
      * @return AbstractApplication
+     * @throws UnitException
      */
     public function setIsolation(ProcessIsolation $isolation): self
     {
-        $this->isolation = $isolation;
+        $this->isolation = is_array($isolation) ? new ProcessIsolation($isolation) : $isolation;
 
         return $this;
     }
@@ -217,12 +211,12 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
     /**
      * Set ProcessApplication object
      *
-     * @param ApplicationProcess|int $processes
+     * @param ApplicationProcess|int|array $processes
      * @return AbstractApplication
      */
-    public function setProcesses(ApplicationProcess|int $processes): self
+    public function setProcesses(ApplicationProcess|int|array $processes): self
     {
-        $this->processes = $processes;
+        $this->processes = is_array($processes) ? new ApplicationProcess($processes) : $processes;
 
         return $this;
     }
@@ -240,12 +234,12 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
     /**
      * Set RequestLimit object
      *
-     * @param RequestLimit $requestLimit
+     * @param RequestLimit|array $requestLimit
      * @return AbstractApplication
      */
-    public function setLimits(RequestLimit $requestLimit): self
+    public function setLimits(RequestLimit|array $requestLimit): self
     {
-        $this->limits = $requestLimit;
+        $this->limits = is_array($requestLimit) ? new RequestLimit($requestLimit) : $requestLimit;
 
         return $this;
     }
@@ -347,60 +341,33 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
      *
      * @param array $data
      * @return void
-     * @throws UnitException
      */
     public function parseFromArray(array $data): void
     {
-        if (array_key_exists('working_directory', $data)) {
-            $this->setWorkingDirectory($data['working_directory']);
-        }
+        $data = array_filter($data, fn ($item) => !empty($item), ARRAY_FILTER_USE_BOTH);
 
-        if (array_key_exists('user', $data)) {
-            $this->setUser($data['user']);
-        }
+        $attributes = ['working_directory', 'user', 'group', 'environment', 'stderr', 'stdout', 'isolation', 'processes', 'limits',];
 
-        if (array_key_exists('group', $data)) {
-            $this->setGroup($data['group']);
-        }
+        foreach ($attributes as $attribute) {
+            $camelCase = str_replace(' ', '', ucwords(str_replace('_', ' ', $attribute)));
+            $method = "set" . $camelCase;
 
-        if (array_key_exists('environment', $data)) {
-            $this->setEnvironment($data['environment']);
-        }
-
-        if (array_key_exists('stderr', $data)) {
-            $this->setStdErr($data['stderr']);
-        }
-
-        if (array_key_exists('stdout', $data)) {
-            $this->setStdOut($data['stdout']);
-        }
-
-        if (array_key_exists('isolation', $data)) {
-            $this->setIsolation(new ProcessIsolation($data['isolation']));
-        }
-
-        if (array_key_exists('processes', $data)) {
-            $this->setProcesses(is_array($data['processes'])
-                ? new ApplicationProcess($data['processes']) : $data['processes']);
-        }
-
-        if (array_key_exists('limits', $data)) {
-            $this->setLimits(new RequestLimit($data['limits']));
+            $this->setDataAttributeIfExists($data, $attribute, $method);
         }
     }
 
     /**
-     * @inheritDoc
+     * If the given key exists in the data array, call the corresponding setter method.
+     *
+     * @param array $data
+     * @param string $key
+     * @param string $method
      */
-    public function restartApplication(): bool
+    protected function setDataAttributeIfExists(array $data, string $key, string $method): void
     {
-        try {
-            $this->unitRequest->send("/control/applications/{$this->getName()}/restart");
-        } catch (UnitException) {
-            return false;
+        if (array_key_exists($key, $data)) {
+            $this->$method($data[$key]);
         }
-
-        return true;
     }
 
     /**
@@ -427,26 +394,5 @@ abstract class AbstractApplication implements ApplicationInterface, ApplicationC
     public function toJson(): string|false
     {
         return json_encode(array_filter(static::toArray(), fn ($item) => !empty($item)), JSON_UNESCAPED_SLASHES);
-    }
-
-    /**
-     * @param UnitRequest $request
-     * @return void
-     * @throws UnitException
-     */
-    #[\Override] public function upload(UnitRequest $request): void
-    {
-        $request->setMethod('PUT')
-            ->send($this->getApiEndpoint(), true, ['json' => array_filter($this->toArray(), fn ($item) => !empty($item))]);
-    }
-
-    #[\Override] public function remove(UnitRequest $request): void
-    {
-        $request->setMethod('DELETE')->send($this->getApiEndpoint());
-    }
-
-    public function getApiEndpoint(): string
-    {
-        return "/config/applications/{$this->getName()}";
     }
 }

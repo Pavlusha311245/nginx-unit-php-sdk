@@ -203,6 +203,8 @@ class PythonApplication extends AbstractApplication
     {
         parent::parseFromArray($data);
 
+        $data = array_filter($data, fn ($value) => !empty($value));
+
         if (!array_key_exists('module', $data) && !array_key_exists('targets', $data)) {
             throw new RequiredKeyException('module', 'targets');
         }
@@ -212,7 +214,7 @@ class PythonApplication extends AbstractApplication
         }
 
         // TODO: add condition to skip this step if module does not exist
-        if (array_key_exists('targets', $data)) {
+        if (array_key_exists('targets', $data) && !empty($data['targets'])) {
             $targets = [];
 
             foreach ($data['targets'] as $targetName => $targetValues) {
@@ -269,7 +271,7 @@ class PythonApplication extends AbstractApplication
                 'path' => $this->getPath(),
                 'prefix' => $this->getPrefix(),
                 'protocol' => $this->getProtocol(),
-                'targets' => $this->getTargets(),
+                'targets' =>  array_map(fn (PythonTarget $target) => $target->toArray(), $this->getTargets() ?? []),
                 'thread_stack_size' => $this->getThreadStackSize(),
                 'threads' => $this->getThreads(),
                 'module' => $this->getModule(),

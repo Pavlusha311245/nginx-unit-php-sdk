@@ -2,6 +2,7 @@
 
 namespace UnitPhpSdk\Config\Routes\ActionType;
 
+use Override;
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Exceptions\UnitException;
 
@@ -126,9 +127,10 @@ class ShareAction implements Arrayable
      */
     public function setFallback(array $fallback): void
     {
-        if (!array_key_exists('pass', $fallback) && !array_key_exists('proxy', $fallback)) {
-            throw new UnitException('Parse Exception');
-        }
+        // TODO: fix it
+        //        if (!array_key_exists('pass', $fallback) && !array_key_exists('proxy', $fallback)) {
+        //            throw new UnitException('Parse Exception');
+        //        }
 
         $this->fallback = $fallback;
     }
@@ -195,7 +197,7 @@ class ShareAction implements Arrayable
         }
     }
 
-    public function toArray(): array
+    #[Override] public function toArray(): array
     {
         return [
             'share' => $this->getShare(),
@@ -203,8 +205,9 @@ class ShareAction implements Arrayable
             'fallback' => $this->getFallback(),
             'chroot' => $this->getChroot(),
             'types' => $this->getTypes(),
-            'follow_symlinks' => $this->isFollowSymlinks(),
-            'traverse_mounts' => $this->isTraverseMounts(),
+            // TODO: fix broken functionality
+//            'follow_symlinks' => $this->isFollowSymlinks(),
+//            'traverse_mounts' => $this->isTraverseMounts(),
         ];
     }
 }

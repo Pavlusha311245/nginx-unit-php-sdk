@@ -116,8 +116,12 @@ class JavaApplication extends AbstractApplication
     {
         parent::parseFromArray($data);
 
-        if (!array_key_exists('webapp', $data)) {
-            throw new RequiredKeyException('webapp');
+        $data = array_filter($data, fn ($value) => !empty($value));
+
+        foreach (self::REQUIRED_KEYS as $key) {
+            if (!array_key_exists($key, $data)) {
+                throw new RequiredKeyException($key);
+            }
         }
 
         $this->setWebApp($data['webapp']);

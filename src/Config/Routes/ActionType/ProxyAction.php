@@ -2,14 +2,14 @@
 
 namespace UnitPhpSdk\Config\Routes\ActionType;
 
+use Override;
 use UnitPhpSdk\Contracts\Arrayable;
 
 class ProxyAction implements Arrayable
 {
     public function __construct(
         private string $proxy
-    )
-    {
+    ) {
         $this->setProxy($proxy);
     }
 
@@ -30,10 +30,8 @@ class ProxyAction implements Arrayable
     }
 
 
-    public function toArray(): array
+    #[Override] public function toArray(): array
     {
-        return [
-            'proxy' => $this->getProxy()
-        ];
+        return ['proxy' => $this->getProxy()];
     }
 }

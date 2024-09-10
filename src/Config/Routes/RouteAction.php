@@ -246,10 +246,15 @@ class RouteAction implements Arrayable
      */
     #[\Override] public function toArray(): array
     {
-        $data = [
-            'response_headers' => $this->getResponseHeaders(),
-            'rewrite' => $this->getRewrite(),
-        ];
+        $data = [];
+
+        if (!empty($this->getResponseHeaders())) {
+            $data['response_headers'] = $this->getResponseHeaders();
+        }
+
+        if (!empty($this->getRewrite())) {
+            $data['rewrite'] = $this->getRewrite();
+        }
 
         if ($this->getPass() !== null) {
             return array_merge($data, $this->getPass()->toArray());

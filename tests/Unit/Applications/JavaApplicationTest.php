@@ -4,18 +4,18 @@ use UnitPhpSdk\Config\Application\JavaApplication;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 
 it('should initialize JavaApplication', function () {
-    $app = new JavaApplication();
+    $app = new JavaApplication('test-java-app');
     expect($app)->toBeInstanceOf(JavaApplication::class);
 });
 
 it('should set and get webApp', function () {
-    $app = new JavaApplication();
+    $app = new JavaApplication('test-java-app');
     $app->setWebApp('myWebApp');
     expect($app->getWebApp())->toBe('myWebApp');
 });
 
 it('should set and get options', function () {
-    $app = new JavaApplication();
+    $app = new JavaApplication('test-java-app');
     $options = ['option1' => 'value1', 'option2' => 'value2'];
     $app->setOptions($options);
     expect($app->getOptions())->toBeArray()->and(
@@ -24,7 +24,7 @@ it('should set and get options', function () {
 });
 
 it('should set and get classPath', function () {
-    $app = new JavaApplication();
+    $app = new JavaApplication('test-java-app');
     $classPath = ['/path/to/app1', '/path/to/app2'];
     $app->setClassPath($classPath);
     expect($app->getClassPath())->toBeArray()->and(
@@ -33,7 +33,7 @@ it('should set and get classPath', function () {
 });
 
 it('should throw RequiredKeyException when try to parseFromArray with insufficient data', function () {
-    $app = new JavaApplication();
+    $app = new JavaApplication('test-java-app');
     $data = ['user' => 'myUser', 'group' => 'myGroup'];
     $app->parseFromArray($data);
 })->throws(RequiredKeyException::class, 'webapp');
@@ -74,7 +74,7 @@ it('should throw RequiredKeyException when try to parseFromArray with insufficie
 //});
 
 it('should convert toArray correctly', function () {
-    $app = new JavaApplication();
+    $app = new JavaApplication('test-java-app');
     $data = [
         'type' => 'java',
         'user' => 'myUser',

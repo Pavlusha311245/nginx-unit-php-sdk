@@ -2,6 +2,7 @@
 
 namespace UnitPhpSdk\Config\Application\Targets;
 
+use Override;
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Exceptions\RequiredKeyException;
 
@@ -72,7 +73,7 @@ class PythonTarget implements Arrayable
     /**
      * @return array
      */
-    #[\Override] public function toArray(): array
+    #[Override] public function toArray(): array
     {
         return [
             'module' => $this->getModule(),
