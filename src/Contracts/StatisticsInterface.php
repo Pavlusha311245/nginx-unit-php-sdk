@@ -3,9 +3,25 @@
 namespace UnitPhpSdk\Contracts;
 
 use UnitPhpSdk\Abstract\AbstractApplication;
+use UnitPhpSdk\Statistics\ModuleStatistics;
 
 interface StatisticsInterface extends Arrayable, Jsonable
 {
+    /**
+     * Get modules
+     *
+     * @return array
+     */
+    public function getModules(): array;
+
+    /**
+     * Get module statistics
+     *
+     * @param string $module
+     * @return ModuleStatistics
+     */
+    public function getModuleStatistics(string $module): ModuleStatisticsInterface;
+
     /**
      * Get connections
      *

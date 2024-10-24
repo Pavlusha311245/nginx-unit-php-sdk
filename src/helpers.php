@@ -30,7 +30,7 @@ if (!function_exists('parse_listener_pass')) {
 
             return $data;
         } else {
-            throw new ParseError('Error when try to parse listenerPass');
+            throw new ParseError('Invalid format. The string must start with applications, routes, or upstreams, followed by up to three optional segments separated by slashes, where each segment can contain letters, digits, underscores, or hyphens.');
         }
     }
 }
