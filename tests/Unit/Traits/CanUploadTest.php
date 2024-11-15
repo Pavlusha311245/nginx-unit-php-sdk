@@ -16,7 +16,7 @@ beforeEach(function () {
 it('sets and gets API endpoint', function () {
     $upload = new class { use CanUpload; };
 
-    $apiEndpoint = $this->faker->url;
+    $apiEndpoint = $this->faker->url();
     $upload->setApiEndpoint($apiEndpoint);
     expect($upload->getApiEndpoint())->toBe($apiEndpoint);
 });
@@ -49,7 +49,7 @@ it('throws exception during upload', function () {
     $upload = new class {
         use CanUpload;
         public function toArray() {
-            return ['key' => $this->faker->word];
+            return ['key' => 'value'];
         }
     };
 
@@ -57,7 +57,7 @@ it('throws exception during upload', function () {
     $request->shouldReceive('setMethod')->with(HttpMethodsEnum::PUT->value)->andReturnSelf();
     $request->shouldReceive('send')->andThrow(UnitException::class, 'Upload failed');
 
-    $apiEndpoint = $this->faker->url;
+    $apiEndpoint = $this->faker->url();
     $upload->setApiEndpoint($apiEndpoint);
 
     expect(fn() => $upload->upload($request))->toThrow(UnitException::class, 'Upload failed');
@@ -72,7 +72,7 @@ it('removes data successfully', function () {
     $request->shouldReceive('setMethod')->with(HttpMethodsEnum::DELETE->value)->andReturnSelf();
     $request->shouldReceive('send')->with(Mockery::any())->andReturnSelf();
 
-    $apiEndpoint = $this->faker->url;
+    $apiEndpoint = $this->faker->url();
     $upload->setApiEndpoint($apiEndpoint);
 
     try {
@@ -92,7 +92,7 @@ it('throws exception during remove', function () {
     $request->shouldReceive('setMethod')->with(HttpMethodsEnum::DELETE->value)->andReturnSelf();
     $request->shouldReceive('send')->andThrow(UnitException::class, 'Remove failed');
 
-    $apiEndpoint = $this->faker->url;
+    $apiEndpoint = $this->faker->url();
     $upload->setApiEndpoint($apiEndpoint);
 
     expect(fn() => $upload->remove($request))->toThrow(UnitException::class, 'Remove failed');

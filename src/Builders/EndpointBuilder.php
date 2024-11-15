@@ -16,9 +16,12 @@ class EndpointBuilder
 {
     protected string $endpoint = '';
 
+    /**
+     * @param array|string $url
+     */
     public function __construct(
         // TODO: change with http extension
-        array|string $url = null
+        array|string $url = ''
     ) {
         $this->endpoint = '/' . (is_array($url) ? implode('/', $url) : $url);
     }

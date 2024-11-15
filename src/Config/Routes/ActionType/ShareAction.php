@@ -13,14 +13,18 @@ class ShareAction implements Arrayable
      *
      * @var string
      */
-    private string $index = 'index.html';
+    private string $index = '';
 
     /**
+     * Used if the request can’t be served by share or index.
+     *
      * @var array
      */
     private array $fallback = [];
 
     /**
+     * Used to filter the shared files.
+     *
      * @var array
      */
     private array $types = [];
@@ -41,16 +45,16 @@ class ShareAction implements Arrayable
     private bool $traverse_mounts = true;
 
     public function __construct(
-        private string $share,
+        private string|array $share,
         $data = []
     ) {
         $this->parseData($data);
     }
 
     /**
-     * @return string
+     * @return string|array
      */
-    public function getShare(): string
+    public function getShare(): string|array
     {
         return $this->share;
     }
@@ -58,7 +62,7 @@ class ShareAction implements Arrayable
     /**
      * @param string $share
      */
-    public function setShare(string $share): void
+    public function setShare(string|array $share): void
     {
         $this->share = $share;
     }

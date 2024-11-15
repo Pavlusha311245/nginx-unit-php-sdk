@@ -49,10 +49,6 @@ trait CanUpload
     {
         $data = $this->removeEmptyArrays($this->toArray());
 
-        echo '<pre>';
-        print_r(json_encode($data));
-        echo '</pre>';
-
         try {
             $request->setMethod(HttpMethodsEnum::PUT->value)->send(
                 $this->getApiEndpoint(),

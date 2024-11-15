@@ -3,10 +3,11 @@
 namespace UnitPhpSdk\Config;
 
 use UnitPhpSdk\Builders\EndpointBuilder;
+use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\Uploadable;
 use UnitPhpSdk\Traits\CanUpload;
 
-class AccessLog implements Uploadable
+class AccessLog implements Uploadable, Arrayable
 {
     use CanUpload;
 
@@ -22,11 +23,12 @@ class AccessLog implements Uploadable
      *
      * @var string|mixed|null
      */
-    private ?string $format;
+    private string|array|null $format;
 
     public function __construct(
         array $data
-    ) {
+    )
+    {
         $this->path = $data['path'] ?? null;
         $this->format = $data['format'] ?? null;
 
@@ -63,5 +65,16 @@ class AccessLog implements Uploadable
     public function setFormat(string $format): void
     {
         $this->format = $format;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[\Override] public function toArray(): array
+    {
+        return [
+            'path' => $this->path,
+            'format' => $this->format,
+        ];
     }
 }

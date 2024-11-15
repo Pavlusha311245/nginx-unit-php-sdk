@@ -19,7 +19,7 @@ class PhpTarget implements Arrayable
      *
      * @var string
      */
-    private string $script = 'index.php';
+    private string $script = '';
 
     /**
      * Filename added to URI paths that point to directories if no script is set
@@ -27,7 +27,7 @@ class PhpTarget implements Arrayable
      *
      * @var string
      */
-    private string $index = 'index.php';
+    private string $index = '';
 
     public function __construct(array $data)
     {
