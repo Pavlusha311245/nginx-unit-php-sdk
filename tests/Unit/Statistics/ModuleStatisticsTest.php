@@ -22,9 +22,9 @@ it('creates ModuleStatistics instance correctly', function () {
 });
 
 it(
-/**
- * @throws InvalidArgumentException
- */
+    /**
+     * @throws InvalidArgumentException
+     */
     'throws InvalidArgumentException when version is missing',
     function () {
         $data = [
@@ -39,9 +39,9 @@ it(
 );
 
 it(
-/**
- * @throws InvalidArgumentException
- */
+    /**
+     * @throws InvalidArgumentException
+     */
     'throws InvalidArgumentException when lib is missing',
     function () {
         $data = [

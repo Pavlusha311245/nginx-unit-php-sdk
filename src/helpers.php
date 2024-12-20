@@ -34,18 +34,3 @@ if (!function_exists('parse_listener_pass')) {
         }
     }
 }
-
-//if (!function_exists('get_unit_endpoint')) {
-//    /**
-//     * Get the Unit endpoint from the configuration.
-//     *
-//     * @return string The Unit endpoint.
-//     */
-//    function get_unit_endpoint($class): string
-//    {
-//        return match ($class) {
-//            Unit::class => '/',
-//            Config::class => '/config'
-//        };
-//    }
-//}

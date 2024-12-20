@@ -1,7 +1,6 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-
 use UnitPhpSdk\Config\Application\ProcessManagement\ApplicationProcess;
 
 use function PHPUnit\Framework\assertEquals;

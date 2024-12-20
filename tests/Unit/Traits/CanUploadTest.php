@@ -14,7 +14,9 @@ beforeEach(function () {
 });
 
 it('sets and gets API endpoint', function () {
-    $upload = new class { use CanUpload; };
+    $upload = new class () {
+        use CanUpload;
+    };
 
     $apiEndpoint = $this->faker->url();
     $upload->setApiEndpoint($apiEndpoint);
@@ -46,9 +48,10 @@ it('sets and gets API endpoint', function () {
 //});
 
 it('throws exception during upload', function () {
-    $upload = new class {
+    $upload = new class () {
         use CanUpload;
-        public function toArray() {
+        public function toArray()
+        {
             return ['key' => 'value'];
         }
     };
@@ -60,11 +63,11 @@ it('throws exception during upload', function () {
     $apiEndpoint = $this->faker->url();
     $upload->setApiEndpoint($apiEndpoint);
 
-    expect(fn() => $upload->upload($request))->toThrow(UnitException::class, 'Upload failed');
+    expect(fn () => $upload->upload($request))->toThrow(UnitException::class, 'Upload failed');
 });
 
 it('removes data successfully', function () {
-    $upload = new class {
+    $upload = new class () {
         use CanUpload;
     };
 
@@ -84,7 +87,7 @@ it('removes data successfully', function () {
 });
 
 it('throws exception during remove', function () {
-    $upload = new class {
+    $upload = new class () {
         use CanUpload;
     };
 
@@ -95,5 +98,5 @@ it('throws exception during remove', function () {
     $apiEndpoint = $this->faker->url();
     $upload->setApiEndpoint($apiEndpoint);
 
-    expect(fn() => $upload->remove($request))->toThrow(UnitException::class, 'Remove failed');
+    expect(fn () => $upload->remove($request))->toThrow(UnitException::class, 'Remove failed');
 });

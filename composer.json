@@ -19,17 +19,17 @@
   ],
   "scripts": {
     "test": [
-      "composer test:unit",
-      "composer test:phpstan"
+      "@test:unit",
+      "@test:phpstan"
     ],
     "test:unit": "./vendor/bin/pest",
     "test:coverage": "./vendor/bin/pest --coverage --coverage-clover coverage.xml",
     "test:phpstan": "./vendor/bin/phpstan analyse -c phpstan.neon",
-    "lint": "./vendor/bin/php-cs-fixer fix --rules=@PSR12 ."
+    "lint": "PHP_CS_FIXER_IGNORE_ENV=1 ./vendor/bin/php-cs-fixer fix --rules=@PSR12 ."
   },
   "require": {
     "php": "^8.3|^8.4",
-    "friendsofphp/php-cs-fixer": "^3.65",
+    "friendsofphp/php-cs-fixer": "^3.68",
     "guzzlehttp/guzzle": "^7.9",
     "nesbot/carbon": "^3.8",
     "doctrine/inflector": "^2.0",
