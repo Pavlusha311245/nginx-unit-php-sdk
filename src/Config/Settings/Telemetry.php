@@ -35,8 +35,7 @@ class Telemetry implements Arrayable, Jsonable
          * @var TelemetryProtocolEnum $protocol
          */
         private TelemetryProtocolEnum $protocol
-    )
-    {
+    ) {
         $this->setEndpoint($endpoint);
         $this->setProtocol($protocol);
     }

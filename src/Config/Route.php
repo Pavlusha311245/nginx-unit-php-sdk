@@ -2,6 +2,7 @@
 
 namespace UnitPhpSdk\Config;
 
+use Override;
 use SplObjectStorage;
 use UnitPhpSdk\Builders\EndpointBuilder;
 use UnitPhpSdk\Config\Routes\RouteBlock;
@@ -63,6 +64,7 @@ class Route implements RouteInterface, Uploadable
 
     /**
      * @param array $routeBlocks
+     * @throws UnitException
      */
     public function setRouteBlocks(array $routeBlocks): void
     {
@@ -99,7 +101,7 @@ class Route implements RouteInterface, Uploadable
     /**
      * @return array
      */
-    #[\Override] public function toArray(): array
+    #[Override] public function toArray(): array
     {
         return array_map(fn (RouteBlock $routeBlock) => $routeBlock->toArray(), $this->getRouteBlocks());
     }
@@ -108,7 +110,7 @@ class Route implements RouteInterface, Uploadable
      * @param int $options
      * @return string
      */
-    #[\Override] public function toJson(int $options = 0): string
+    #[Override] public function toJson(int $options = 0): string
     {
         return json_encode(array_filter($this->toArray(), fn ($item) => !empty($item)));
     }

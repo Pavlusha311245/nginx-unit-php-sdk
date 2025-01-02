@@ -5,6 +5,7 @@ namespace UnitPhpSdk\Config;
 use UnitPhpSdk\Builders\EndpointBuilder;
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\Uploadable;
+use UnitPhpSdk\Enums\ApiPathEnum;
 use UnitPhpSdk\Traits\CanUpload;
 
 class AccessLog implements Uploadable, Arrayable
@@ -27,12 +28,11 @@ class AccessLog implements Uploadable, Arrayable
 
     public function __construct(
         array $data
-    )
-    {
+    ) {
         $this->path = $data['path'] ?? null;
         $this->format = $data['format'] ?? null;
 
-        $this->setApiEndpoint(EndpointBuilder::create('/config/access_log')->get());
+        $this->setApiEndpoint(EndpointBuilder::create(ApiPathEnum::ACCESS_LOG->value)->get());
     }
 
     /**

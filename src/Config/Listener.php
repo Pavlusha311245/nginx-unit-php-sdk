@@ -147,9 +147,9 @@ class Listener implements Uploadable, Arrayable, Jsonable
     /**
      * Get tls section
      *
-     * @return Tls
+     * @return Tls|null
      */
-    public function getTls(): Tls
+    public function getTls(): ?Tls
     {
         return $this->tls;
     }

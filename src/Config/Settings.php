@@ -125,6 +125,6 @@ class Settings implements Uploadable, Arrayable, Jsonable
      */
     #[\Override] public function toJson(int $options = 0): string
     {
-        return json_encode(array_filter($this->toArray(), fn($item) => !empty($item)), $options);
+        return json_encode(array_filter($this->toArray(), fn ($item) => !empty($item)), $options);
     }
 }
