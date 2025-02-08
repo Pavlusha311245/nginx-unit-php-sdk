@@ -52,7 +52,7 @@ interface UnitInterface extends Arrayable, Jsonable
      * @return bool
      * @throws UnitException
      */
-    public function uploadCertificate(string $path, string $certificateName): bool;
+    public function uploadCertificate(string $path, string $certificateName);
 
     /**
      * Return full config uploaded on Nginx Unit

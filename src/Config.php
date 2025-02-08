@@ -3,6 +3,7 @@
 namespace UnitPhpSdk;
 
 use Override;
+use Throwable;
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Config\{AccessLog, Listener, Route, Settings, Upstream, Upstream\Server};
 use UnitPhpSdk\Exceptions\{FileNotFoundException, UnitException};
@@ -10,6 +11,7 @@ use UnitPhpSdk\Builders\ApplicationBuilder;
 use UnitPhpSdk\Builders\EndpointBuilder;
 use UnitPhpSdk\Contracts\ConfigInterface;
 use UnitPhpSdk\Contracts\Uploadable;
+use UnitPhpSdk\Enums\ApiPathEnum;
 use UnitPhpSdk\Http\UnitRequest;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Traits\CanUpload;
@@ -73,7 +75,7 @@ class Config implements ConfigInterface, Uploadable
             $this->parseUnitObject($data);
         }
 
-        $this->setApiEndpoint(EndpointBuilder::create('/config')->get());
+        $this->setApiEndpoint(EndpointBuilder::create(ApiPathEnum::CONFIG->value)->get());
     }
 
     /**
@@ -253,7 +255,7 @@ class Config implements ConfigInterface, Uploadable
     public function uploadListener(Listener $listener): bool
     {
         try {
-            $this->unitRequest->setMethod(HttpMethodsEnum::PUT->value)
+            $this->unitRequest->setMethod(HttpMethodsEnum::PUT)
                 ->send("/config/listeners/{$listener->getListener()}", requestOptions: [
                     'json' => $listener->toArray()
                 ]);
@@ -281,7 +283,7 @@ class Config implements ConfigInterface, Uploadable
         }
 
         try {
-            $this->unitRequest->setMethod('PUT')
+            $this->unitRequest->setMethod(HttpMethodsEnum::PUT)
                 ->send("/config/listeners/$listener", requestOptions: [
                     'body' => $fileContent
                 ]);
@@ -441,8 +443,8 @@ class Config implements ConfigInterface, Uploadable
         }
 
         try {
-            $this->unitRequest->setMethod(HttpMethodsEnum::DELETE->value)
-                ->send('/config/routes');
+            $this->unitRequest->setMethod(HttpMethodsEnum::DELETE)
+                ->send(ApiPathEnum::ROUTES->value);
         } catch (UnitException) {
             return false;
         }
@@ -543,7 +545,7 @@ class Config implements ConfigInterface, Uploadable
         }
 
         try {
-            $this->unitRequest->setMethod(HttpMethodsEnum::PUT->value)
+            $this->unitRequest->setMethod(HttpMethodsEnum::PUT)
                 ->send('/config/access_log', requestOptions: [
                     'json' => json_encode($data)
                 ]);
@@ -554,15 +556,20 @@ class Config implements ConfigInterface, Uploadable
         return true;
     }
 
+    /**
+     * Add access log to config
+     *
+     * @return AccessLog|null
+     */
     public function getAccessLog(): ?AccessLog
     {
         try {
-            $result = $this->unitRequest->send('/config/access_log');
-        } catch (UnitException) {
-            return null;
-        }
+            $result = $this->unitRequest->send(ApiPathEnum::ACCESS_LOG->value);
 
-        return new AccessLog($result);
+            return new AccessLog($result);
+        } catch (Throwable $exception) {
+            throw new UnitException($exception->getMessage(), $exception->getCode(), $exception);
+        }
     }
 
     public function removeAccessLog(): bool
@@ -610,6 +617,32 @@ class Config implements ConfigInterface, Uploadable
         $values = array_map(fn ($item) => $item->toArray(), $data);
 
         return array_combine($keys, $values);
+    }
+
+    public function reset(): bool
+    {
+        try {
+            $this->unitRequest->setMethod(HttpMethodsEnum::DELETE)
+                ->send('/config');
+
+            $this->unitRequest->setMethod(HttpMethodsEnum::POST)
+                ->send(
+                    uri: '/config',
+                    requestOptions: [
+                        'json' => json_encode([
+                            'listeners' => (object)[],
+                            'routes' => (object)[],
+                            'applications' => (object)[],
+                            'upstreams' => (object)[],
+                            'settings' => (object)[]
+                        ])
+                    ]
+                );
+        } catch (UnitException) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

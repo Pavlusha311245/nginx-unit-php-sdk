@@ -3,9 +3,10 @@
 namespace UnitPhpSdk;
 
 use UnitPhpSdk\Contracts\{CertificateInterface, UnitInterface, Uploadable};
+use GuzzleHttp\Client;
 use Override;
+use Psr\Http\Client\ClientInterface;
 use UnitPhpSdk\Abstract\AbstractApplication;
-use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\FileNotFoundException;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Http\UnitRequest;
@@ -47,6 +48,7 @@ class Unit implements UnitInterface
 
     private UnitRequest $request;
 
+
     /**
      * Constructor
      *
@@ -54,7 +56,7 @@ class Unit implements UnitInterface
      */
     public function __construct(
         private readonly string  $address,
-        private readonly ?string $socket = null
+        private readonly ?string $socket = null,
     ) {
         $this->request = new UnitRequest(
             address: $this->address,
@@ -84,6 +86,7 @@ class Unit implements UnitInterface
     private function loadConfig(): void
     {
         $result = $this->request->send('/config', false);
+        //        dd($result);
         $this->config = new Config($result, $this->request);
     }
 
@@ -101,7 +104,7 @@ class Unit implements UnitInterface
     /**
      * @inheritDoc
      */
-    public function uploadCertificate(string $path, string $certificateName): bool
+    public function uploadCertificate(string $path, string $certificateName)
     {
         // TODO: need to review
         $fileContent = file_get_contents($path);
@@ -115,12 +118,13 @@ class Unit implements UnitInterface
                 ->send("/certificates/$certificateName", requestOptions: [
                     'body' => $fileContent
                 ]);
-        } catch (UnitException $exception) {
-            print_r($exception->getMessage());
-            return false;
-        }
+        } catch (\Throwable $exception) {
+            if ($exception->getCode() == 400) {
+                throw new UnitException($exception->getMessage());
+            }
 
-        return true;
+            throw new UnitException($exception->getMessage());
+        }
     }
 
     /**
@@ -213,7 +217,7 @@ class Unit implements UnitInterface
      */
     private function loadStatistics(): void
     {
-        $result = (new UnitRequest($this->address, $this->socket))->send('/status');
+        $result = $this->request->send('/status');
         $this->statistics = new Statistics($result);
     }
 
@@ -302,6 +306,9 @@ class Unit implements UnitInterface
         return true;
     }
 
+    /**
+     * @throws UnitException
+     */
     #[Override] public function toArray(): array
     {
         return [
@@ -310,6 +317,22 @@ class Unit implements UnitInterface
             'js_modules' => array_map(fn ($module) => $module->toArray(), $this->getJsModules()),
             'status' => $this->getStatistics()->toArray()
         ];
+    }
+
+    /**
+     * Checks if a connection to the server is established.
+     *
+     * @return bool Returns true if the connection is successful, false otherwise.
+     */
+    public function isConnected(): bool
+    {
+        try {
+            $this->request->send('/');
+        } catch (UnitException) {
+            return false;
+        }
+
+        return true;
     }
 
     #[Override] public function toJson(int $options = 0): string
