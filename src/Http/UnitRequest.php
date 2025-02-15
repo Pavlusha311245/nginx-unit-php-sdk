@@ -25,8 +25,6 @@ class UnitRequest
      */
     private readonly string $address;
 
-    private ClientInterface $client;
-
     /**
      * Constructor
      *
@@ -35,7 +33,8 @@ class UnitRequest
      */
     public function __construct(
         string                   $address,
-        private readonly ?string $socket = null
+        private readonly ?string $socket = null,
+        private ?ClientInterface  $client = null
     ) {
         $this->client = $client ?? new Client([
             'base_uri' => $address,
@@ -83,12 +82,15 @@ class UnitRequest
      * @param bool $associative
      * @param array $requestOptions
      * @return mixed
-     * @throws GuzzleException
      * @throws UnitException
      */
-    public function send($uri, bool $associative = true, array $requestOptions = [])
+    public function send($uri, bool $associative = true, array $requestOptions = []): mixed
     {
-        $response = $this->client->request($this->method, $this->address . $uri, $requestOptions);
+        try {
+            $response = $this->client->request($this->method, $this->address . $uri, $requestOptions);
+        } catch (GuzzleException $e) {
+            throw new UnitException($e->getMessage());
+        }
 
         $rawData = json_decode($response->getBody()->getContents(), $associative);
 

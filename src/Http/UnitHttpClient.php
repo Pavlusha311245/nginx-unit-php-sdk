@@ -3,7 +3,9 @@
 namespace UnitPhpSdk\Http;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class UnitHttpClient
 {
@@ -27,9 +29,12 @@ class UnitHttpClient
         ]);
     }
 
-    public function request(string $method, string $uri, array $options = [])
+    /**
+     * @throws GuzzleException
+     */
+    public function request(string $method, string $uri, array $options = []): ResponseInterface
     {
-
+        return $this->client->request($method, $uri, $options);
     }
 
     //    /**

@@ -3,12 +3,13 @@
 namespace UnitPhpSdk;
 
 use UnitPhpSdk\Contracts\{CertificateInterface, UnitInterface, Uploadable};
-use GuzzleHttp\Client;
 use Override;
-use Psr\Http\Client\ClientInterface;
 use UnitPhpSdk\Abstract\AbstractApplication;
+use UnitPhpSdk\Enums\ApiPathEnum;
+use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\FileNotFoundException;
 use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Http\UnitHttpClient;
 use UnitPhpSdk\Http\UnitRequest;
 use UnitPhpSdk\Statistics\Statistics;
 
@@ -48,6 +49,8 @@ class Unit implements UnitInterface
 
     private UnitRequest $request;
 
+    private UnitHttpClient $client;
+
 
     /**
      * Constructor
@@ -60,6 +63,11 @@ class Unit implements UnitInterface
     ) {
         $this->request = new UnitRequest(
             address: $this->address,
+            socket: $this->socket
+        );
+
+        $this->client = new UnitHttpClient(
+            baseUrl: $this->address,
             socket: $this->socket
         );
 
@@ -85,8 +93,7 @@ class Unit implements UnitInterface
      */
     private function loadConfig(): void
     {
-        $result = $this->request->send('/config', false);
-        //        dd($result);
+        $result = $this->request->send(ApiPathEnum::CONFIG->value, false);
         $this->config = new Config($result, $this->request);
     }
 
@@ -114,8 +121,8 @@ class Unit implements UnitInterface
         }
 
         try {
-            $this->request->setMethod('PUT')
-                ->send("/certificates/$certificateName", requestOptions: [
+            $this->request->setMethod(HttpMethodsEnum::PUT)
+                ->send(ApiPathEnum::CERTIFICATE->getPath($certificateName), requestOptions: [
                     'body' => $fileContent
                 ]);
         } catch (\Throwable $exception) {
@@ -135,8 +142,8 @@ class Unit implements UnitInterface
         // TODO: need to review
         try {
             $this->request
-                ->setMethod('DELETE')
-                ->send("/certificates/$certificateName");
+                ->setMethod(HttpMethodsEnum::DELETE)
+                ->send(ApiPathEnum::CERTIFICATE->getPath($certificateName));
         } catch (UnitException) {
             return false;
         }
@@ -149,7 +156,7 @@ class Unit implements UnitInterface
      */
     private function loadCertificates(): void
     {
-        $result = $this->request->send('/certificates');
+        $result = $this->request->send(ApiPathEnum::CERTIFICATES->value);
         foreach ($result as $key => $value) {
             $this->certificates[$key] = new Certificate($value, $key);
         }
@@ -205,7 +212,7 @@ class Unit implements UnitInterface
      */
     private function loadJsModules(): void
     {
-        $result = $this->request->send('/js_modules');
+        $result = $this->request->send(ApiPathEnum::JS_MODULES->value);
 
         foreach ($result as $key => $value) {
             $this->js_modules[$key] = new JsModule($key, $value);
@@ -217,7 +224,7 @@ class Unit implements UnitInterface
      */
     private function loadStatistics(): void
     {
-        $result = $this->request->send('/status');
+        $result = $this->request->send(ApiPathEnum::STATUS->value);
         $this->statistics = new Statistics($result);
     }
 
@@ -252,8 +259,8 @@ class Unit implements UnitInterface
 
         try {
             $this->request
-                ->setMethod('PUT')
-                ->send(uri: "/config", requestOptions: [
+                ->setMethod(HttpMethodsEnum::PUT)
+                ->send(uri: ApiPathEnum::CONFIG->value, requestOptions: [
                     'form_params' => $data
                 ]);
         } catch (UnitException $exception) {
@@ -294,12 +301,17 @@ class Unit implements UnitInterface
      *
      * @param AbstractApplication $application The application to be restarted.
      * @return bool Returns true if the application was restarted successfully, false otherwise.
+     * @throws UnitException
      */
     public function restartApplication(AbstractApplication $application): bool
     {
         try {
-            $this->request->send("/control/applications/{$application->getName()}/restart");
-        } catch (UnitException) {
+            $this->request->send(ApiPathEnum::APPLICATION_RESET->getPath($application->getName()));
+        } catch (UnitException $e) {
+            if ($e->getCode() == 404) {
+                throw new UnitException('Application not found');
+            }
+
             return false;
         }
 
@@ -327,7 +339,7 @@ class Unit implements UnitInterface
     public function isConnected(): bool
     {
         try {
-            $this->request->send('/');
+            $this->request->send(ApiPathEnum::UNIT->value);
         } catch (UnitException) {
             return false;
         }

@@ -50,7 +50,7 @@ trait CanUpload
         $data = $this->removeEmptyArrays($this->toArray());
 
         try {
-            $request->setMethod(HttpMethodsEnum::PUT->value)->send(
+            $request->setMethod(HttpMethodsEnum::PUT)->send(
                 $this->getApiEndpoint(),
                 true,
                 ['json' => $data]
@@ -68,7 +68,7 @@ trait CanUpload
     public function remove(UnitRequest $request)
     {
         try {
-            $request->setMethod(HttpMethodsEnum::DELETE->value)->send($this->getApiEndpoint());
+            $request->setMethod(HttpMethodsEnum::DELETE)->send($this->getApiEndpoint());
         } catch (UnitException $e) {
             throw new UnitException($e->getMessage());
         }

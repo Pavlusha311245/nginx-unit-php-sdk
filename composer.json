@@ -19,12 +19,12 @@
   ],
   "scripts": {
     "test": [
-      "@test:unit",
-      "@test:phpstan"
+      "@test:phpstan",
+      "@test:unit"
     ],
     "test:unit": "./vendor/bin/pest",
-    "test:coverage": "./vendor/bin/pest --coverage --coverage-clover coverage.xml",
-    "test:phpstan": "./vendor/bin/phpstan analyse -c phpstan.neon",
+    "test:coverage": "XDEBUG_MODE=cover ./vendor/bin/pest --coverage --coverage-clover coverage.xml",
+    "test:phpstan": "./vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=256M",
     "lint": "PHP_CS_FIXER_IGNORE_ENV=1 ./vendor/bin/php-cs-fixer fix --rules=@PSR12 ."
   },
   "require": {

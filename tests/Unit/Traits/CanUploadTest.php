@@ -57,7 +57,7 @@ it('throws exception during upload', function () {
     };
 
     $request = Mockery::mock(UnitRequest::class);
-    $request->shouldReceive('setMethod')->with(HttpMethodsEnum::PUT->value)->andReturnSelf();
+    $request->shouldReceive('setMethod')->with(HttpMethodsEnum::PUT)->andReturnSelf();
     $request->shouldReceive('send')->andThrow(UnitException::class, 'Upload failed');
 
     $apiEndpoint = $this->faker->url();
@@ -72,7 +72,7 @@ it('removes data successfully', function () {
     };
 
     $request = Mockery::mock(UnitRequest::class);
-    $request->shouldReceive('setMethod')->with(HttpMethodsEnum::DELETE->value)->andReturnSelf();
+    $request->shouldReceive('setMethod')->with(HttpMethodsEnum::DELETE)->andReturnSelf();
     $request->shouldReceive('send')->with(Mockery::any())->andReturnSelf();
 
     $apiEndpoint = $this->faker->url();
@@ -92,7 +92,7 @@ it('throws exception during remove', function () {
     };
 
     $request = Mockery::mock(UnitRequest::class);
-    $request->shouldReceive('setMethod')->with(HttpMethodsEnum::DELETE->value)->andReturnSelf();
+    $request->shouldReceive('setMethod')->with(HttpMethodsEnum::DELETE)->andReturnSelf();
     $request->shouldReceive('send')->andThrow(UnitException::class, 'Remove failed');
 
     $apiEndpoint = $this->faker->url();
