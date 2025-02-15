@@ -32,7 +32,7 @@ class AccessLog implements Uploadable, Arrayable
         $this->path = $data['path'] ?? null;
         $this->format = $data['format'] ?? null;
 
-        $this->setApiEndpoint(EndpointBuilder::create(ApiPathEnum::ACCESS_LOG->value)->get());
+        $this->setApiEndpoint(ApiPathEnum::ACCESS_LOG->value);
     }
 
     /**

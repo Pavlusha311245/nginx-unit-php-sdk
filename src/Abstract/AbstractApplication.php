@@ -100,7 +100,7 @@ abstract class AbstractApplication implements ApplicationInterface, Arrayable, U
             $this->parseFromArray($data);
         }
 
-        $this->setApiEndpoint(EndpointBuilder::create(ApiPathEnum::APPLICATIONS->value)->get() . '/' . $this->getName());
+        $this->setApiEndpoint(ApiPathEnum::APPLICATION->getPath($this->getName()));
     }
 
     /**

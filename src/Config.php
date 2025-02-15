@@ -75,7 +75,7 @@ class Config implements ConfigInterface, Uploadable
             $this->parseUnitObject($data);
         }
 
-        $this->setApiEndpoint(EndpointBuilder::create(ApiPathEnum::CONFIG->value)->get());
+        $this->setApiEndpoint(ApiPathEnum::CONFIG->value);
     }
 
     /**

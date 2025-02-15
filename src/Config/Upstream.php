@@ -8,6 +8,7 @@ use UnitPhpSdk\Config\Upstream\Server;
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\Uploadable;
 use UnitPhpSdk\Contracts\UpstreamInterface;
+use UnitPhpSdk\Enums\ApiPathEnum;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\CanUpload;
 use UnitPhpSdk\Traits\HasListeners;
@@ -37,7 +38,7 @@ class Upstream implements UpstreamInterface, Uploadable, Arrayable
             }
         }
 
-        $this->setApiEndpoint(EndpointBuilder::create($this)->get() . '/' . $this->getName());
+        $this->setApiEndpoint(ApiPathEnum::UPSTREAM->getPath($this->getName()));
     }
 
     /**

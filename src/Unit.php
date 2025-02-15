@@ -94,6 +94,7 @@ class Unit implements UnitInterface
     private function loadConfig(): void
     {
         $result = $this->request->send(ApiPathEnum::CONFIG->value, false);
+
         $this->config = new Config($result, $this->request);
     }
 

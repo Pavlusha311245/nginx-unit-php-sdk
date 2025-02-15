@@ -20,6 +20,8 @@ enum ApiPathEnum: string
     case ACCESS_LOG = '/config/access_log';
     case JS_MODULES = '/js_modules';
     case APPLICATION_RESET = '/config/applications/{application}/reset';
+    case SETTINGS = '/config/settings';
+    case HTTP = '/config/settings/http';
 
     public function getPath(string $name): string
     {

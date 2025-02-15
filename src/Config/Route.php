@@ -8,6 +8,7 @@ use UnitPhpSdk\Builders\EndpointBuilder;
 use UnitPhpSdk\Config\Routes\RouteBlock;
 use UnitPhpSdk\Contracts\RouteInterface;
 use UnitPhpSdk\Contracts\Uploadable;
+use UnitPhpSdk\Enums\ApiPathEnum;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\CanUpload;
 use UnitPhpSdk\Traits\HasListeners;
@@ -37,9 +38,10 @@ class Route implements RouteInterface, Uploadable
      */
     public function __construct(
         private readonly string $name,
-        $data = [],
+                                $data = [],
         bool                    $single = false
-    ) {
+    )
+    {
         $this->routeBlocks = new SplObjectStorage();
         if (!empty($data)) {
             if ($single) {
@@ -51,7 +53,7 @@ class Route implements RouteInterface, Uploadable
             }
         }
 
-        $this->setApiEndpoint(EndpointBuilder::create($this)->get() . '/' . $this->getName());
+        $this->setApiEndpoint(ApiPathEnum::ROUTE->getPath($this->getName()));
     }
 
     /**
@@ -103,7 +105,7 @@ class Route implements RouteInterface, Uploadable
      */
     #[Override] public function toArray(): array
     {
-        return array_map(fn (RouteBlock $routeBlock) => $routeBlock->toArray(), $this->getRouteBlocks());
+        return array_map(fn(RouteBlock $routeBlock) => $routeBlock->toArray(), $this->getRouteBlocks());
     }
 
     /**
@@ -112,6 +114,6 @@ class Route implements RouteInterface, Uploadable
      */
     #[Override] public function toJson(int $options = 0): string
     {
-        return json_encode(array_filter($this->toArray(), fn ($item) => !empty($item)));
+        return json_encode(array_filter($this->toArray(), fn($item) => !empty($item)));
     }
 }

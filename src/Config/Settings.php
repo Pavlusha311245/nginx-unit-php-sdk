@@ -9,6 +9,7 @@ use UnitPhpSdk\Config\Settings\Telemetry;
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\Jsonable;
 use UnitPhpSdk\Contracts\Uploadable;
+use UnitPhpSdk\Enums\ApiPathEnum;
 use UnitPhpSdk\Traits\CanUpload;
 
 class Settings implements Uploadable, Arrayable, Jsonable
@@ -48,7 +49,7 @@ class Settings implements Uploadable, Arrayable, Jsonable
             $this->parseTelemetry($data['telemetry']);
         }
 
-        $this->setApiEndpoint(EndpointBuilder::create($this)->get());
+        $this->setApiEndpoint(ApiPathEnum::SETTINGS->value);
     }
 
     /**
@@ -125,6 +126,6 @@ class Settings implements Uploadable, Arrayable, Jsonable
      */
     #[\Override] public function toJson(int $options = 0): string
     {
-        return json_encode(array_filter($this->toArray(), fn ($item) => !empty($item)), $options);
+        return json_encode(array_filter($this->toArray(), fn($item) => !empty($item)), $options);
     }
 }

@@ -12,6 +12,7 @@ use UnitPhpSdk\Builders\EndpointBuilder;
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\Jsonable;
 use UnitPhpSdk\Contracts\Uploadable;
+use UnitPhpSdk\Enums\ApiPathEnum;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Traits\CanUpload;
 
@@ -43,7 +44,7 @@ class Listener implements Uploadable, Arrayable, Jsonable
         $this->parsePort();
         $this->parsePass($pass);
 
-        $this->setApiEndpoint(EndpointBuilder::create($this)->get() . '/' . $this->getListener());
+        $this->setApiEndpoint(ApiPathEnum::LISTENER->getPath($this->getListener()));
     }
 
     /**
