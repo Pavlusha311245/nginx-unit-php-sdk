@@ -30,6 +30,7 @@ server management into your projects
 
 | Version | Nginx Unit Capability | Supported          |
 |---------|:----------------------|--------------------|
+| 0.9.x   | >= 1.33.0             | :white_check_mark: |
 | 0.8.x   | <= 1.32.1             | :white_check_mark: |
 | < 0.7.x | -                     | :x:                |
 

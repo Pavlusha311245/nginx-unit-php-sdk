@@ -8,7 +8,6 @@ use UnitPhpSdk\Config\Listener\{
     Tls
 };
 use Override;
-use UnitPhpSdk\Builders\EndpointBuilder;
 use UnitPhpSdk\Contracts\Arrayable;
 use UnitPhpSdk\Contracts\Jsonable;
 use UnitPhpSdk\Contracts\Uploadable;
@@ -37,10 +36,29 @@ class Listener implements Uploadable, Arrayable, Jsonable
 
     public function __construct(
         private readonly string $listener,
+        /**
+         * Destination to which the listener passes incoming requests
+         * @var string|ListenerPass
+         */
         string|ListenerPass     $pass,
+        /**
+         * Defines SSL/TLS settings.
+         * @var Tls|null
+         */
         private ?Tls            $tls = null,
+        /**
+         * Configures client IP address and protocol replacement.
+         * @var Forwarded|null
+         */
         private ?Forwarded      $forwarded = null,
-    ) {
+        /**
+         * Controls the ‘backlog’ parameter to the listen(2) system-call.
+         * This essentially limits the number of pending connections waiting to be accepted.
+         * @var int
+         */
+        private ?int            $backlog = null
+    )
+    {
         $this->parsePort();
         $this->parsePass($pass);
 
@@ -254,5 +272,15 @@ class Listener implements Uploadable, Arrayable, Jsonable
     public function getTarget(): ListenerPass
     {
         return $this->getPass();
+    }
+
+    public function getBacklog(): ?int
+    {
+        return $this->backlog;
+    }
+
+    public function setBacklog(?int $backlog): void
+    {
+        $this->backlog = $backlog;
     }
 }
