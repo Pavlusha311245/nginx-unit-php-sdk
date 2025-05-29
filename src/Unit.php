@@ -5,6 +5,9 @@ namespace UnitPhpSdk;
 use UnitPhpSdk\Contracts\{CertificateInterface, UnitInterface, Uploadable};
 use Override;
 use UnitPhpSdk\Abstract\AbstractApplication;
+use UnitPhpSdk\Config\Listener;
+use UnitPhpSdk\Config\Route;
+use UnitPhpSdk\Config\Upstream;
 use UnitPhpSdk\Enums\ApiPathEnum;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\FileNotFoundException;
@@ -60,7 +63,8 @@ class Unit implements UnitInterface
     public function __construct(
         private readonly string  $address,
         private readonly ?string $socket = null,
-    ) {
+    )
+    {
         $this->request = new UnitRequest(
             address: $this->address,
             socket: $this->socket
@@ -145,11 +149,15 @@ class Unit implements UnitInterface
             $this->request
                 ->setMethod(HttpMethodsEnum::DELETE)
                 ->send(ApiPathEnum::CERTIFICATE->getPath($certificateName));
-        } catch (UnitException) {
-            return false;
-        }
 
-        return true;
+            return true;
+        } catch (UnitException $exception) {
+            if ($exception->getCode() == 404) {
+                throw new UnitException('Certificate not found');
+            }
+
+            throw new UnitException($exception->getMessage());
+        }
     }
 
     /**
@@ -325,9 +333,9 @@ class Unit implements UnitInterface
     #[Override] public function toArray(): array
     {
         return [
-            'certificates' => array_map(fn ($certificate) => $certificate->toArray(), $this->getCertificates()),
+            'certificates' => array_map(fn($certificate) => $certificate->toArray(), $this->getCertificates()),
             'config' => $this->getConfig()->toArray(),
-            'js_modules' => array_map(fn ($module) => $module->toArray(), $this->getJsModules()),
+            'js_modules' => array_map(fn($module) => $module->toArray(), $this->getJsModules()),
             'status' => $this->getStatistics()->toArray()
         ];
     }

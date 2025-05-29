@@ -2,6 +2,11 @@
 
 namespace UnitPhpSdk\Traits;
 
+use UnitPhpSdk\Abstract\AbstractApplication;
+use UnitPhpSdk\Config\Listener;
+use UnitPhpSdk\Config\Route;
+use UnitPhpSdk\Config\Upstream;
+use UnitPhpSdk\Enums\ApiPathEnum;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Http\UnitRequest;
@@ -48,6 +53,12 @@ trait CanUpload
     public function upload(UnitRequest $request)
     {
         $data = $this->removeEmptyArrays($this->toArray());
+        $configInstancesThatCanBeNotFound = [
+            Route::class => ApiPathEnum::ROUTES,
+            Listener::class => ApiPathEnum::LISTENERS,
+            AbstractApplication::class => ApiPathEnum::APPLICATIONS,
+            Upstream::class => ApiPathEnum::UPSTREAMS
+        ];
 
         try {
             $request->setMethod(HttpMethodsEnum::PUT)->send(
@@ -56,6 +67,22 @@ trait CanUpload
                 ['json' => $data]
             );
         } catch (UnitException $e) {
+            foreach ($configInstancesThatCanBeNotFound as $configInstance => $path) {
+                if ($this instanceof $configInstance) {
+                    $request->setMethod(HttpMethodsEnum::PUT)->send(
+                        $path->value,
+                        true,
+                        ['json' => (object)[]]
+                    );
+
+                    $request->setMethod(HttpMethodsEnum::PUT)->send(
+                        $this->getApiEndpoint(),
+                        true,
+                        ['json' => $data]
+                    );
+                    return;
+                }
+            }
             throw new UnitException($e->getMessage());
         }
     }

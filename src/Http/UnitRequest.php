@@ -34,8 +34,9 @@ class UnitRequest
     public function __construct(
         string                   $address,
         private readonly ?string $socket = null,
-        private ?ClientInterface  $client = null
-    ) {
+        private ?ClientInterface $client = null
+    )
+    {
         $this->client = $client ?? new Client([
             'base_uri' => $address,
             'curl' => $this->socket ? [CURLOPT_UNIX_SOCKET_PATH => $this->socket] : []
@@ -89,6 +90,9 @@ class UnitRequest
         try {
             $response = $this->client->request($this->method, $this->address . $uri, $requestOptions);
         } catch (GuzzleException $e) {
+//            $responseBody = $e->hasResponse() ? $e->getResponse()->getBody()->getContents() : null;
+//            throw new UnitException($responseBody ? json_decode($responseBody)['error'] : '');
+
             throw new UnitException($e->getMessage());
         }
 

@@ -77,6 +77,16 @@ class Route implements RouteInterface, Uploadable
         }
     }
 
+    public function getRouteBlock($index): RouteBlock
+    {
+        return $this->routeBlocks->offsetGet($index);
+    }
+
+    public function removeRouteBlock($index): void
+    {
+        $this->routeBlocks->offsetUnset($index);
+    }
+
     /**
      * @param RouteBlock $routeBlock
      * @return void

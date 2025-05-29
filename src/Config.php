@@ -229,7 +229,7 @@ class Config implements ConfigInterface, Uploadable
      */
     public function getListener(string $listener): ?Listener
     {
-        return $this->listeners[$listener] ?? null;
+        return array_find($this->listeners, fn (Listener $item) => $item->getListener() == $listener);
     }
 
     /**
@@ -549,8 +549,8 @@ class Config implements ConfigInterface, Uploadable
 
         try {
             $this->unitRequest->setMethod(HttpMethodsEnum::PUT)
-                ->send(ApiPathEnum::ACCESS_LOG, requestOptions: [
-                    'json' => json_encode($data)
+                ->send(ApiPathEnum::ACCESS_LOG->value, requestOptions: [
+                    'json' => $data
                 ]);
         } catch (UnitException) {
             return false;
@@ -571,7 +571,9 @@ class Config implements ConfigInterface, Uploadable
 
             return new AccessLog($result);
         } catch (Throwable $exception) {
-            throw new UnitException($exception->getMessage(), $exception->getCode(), $exception);
+//            TODO: add for all 404 normal exception
+
+            return null;
         }
     }
 
