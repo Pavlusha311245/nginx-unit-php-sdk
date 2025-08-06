@@ -108,9 +108,17 @@ class Unit implements UnitInterface
      */
     public function getCertificates(): array
     {
-        $this->loadCertificates();
+        try {
+            $this->loadCertificates();
 
-        return $this->certificates;
+            return $this->certificates;
+        } catch (UnitException $exception) {
+            if ($exception->getCode() == 404) {
+                return [];
+            }
+
+            throw new UnitException($exception->getMessage());
+        }
     }
 
     /**
@@ -221,10 +229,14 @@ class Unit implements UnitInterface
      */
     private function loadJsModules(): void
     {
-        $result = $this->request->send(ApiPathEnum::JS_MODULES->value);
+        try {
+            $result = $this->request->send(ApiPathEnum::JS_MODULES->value);
 
-        foreach ($result as $key => $value) {
-            $this->js_modules[$key] = new JsModule($key, $value);
+            foreach ($result as $key => $value) {
+                $this->js_modules[$key] = new JsModule($key, $value);
+            }
+        } catch (UnitException $exception) {
+            $this->js_modules = [];
         }
     }
 
@@ -243,9 +255,17 @@ class Unit implements UnitInterface
      */
     public function getCertificate(string $certificateName): ?CertificateInterface
     {
-        $this->loadCertificates();
+        try {
+            $this->loadCertificates();
 
-        return $this->certificates[$certificateName] ?? null;
+            return $this->certificates[$certificateName];
+        } catch (UnitException $exception) {
+            if ($exception->getCode() == 404) {
+                throw new UnitException('Certificate not found');
+            }
+
+            throw new UnitException($exception->getMessage());
+        }
     }
 
     /**

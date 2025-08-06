@@ -8,11 +8,11 @@
 
 <p align="center">
 <a href="https://packagist.org/packages/pavlusha311245/unit-php-sdk"><img src="https://img.shields.io/packagist/v/Pavlusha311245/unit-php-sdk?labelColor=%231e293b&color=%23702963&link=https%3A%2F%2Fpackagist.org%2Fpackages%2Fpavlusha311245%2Funit-php-sdk" alt="packagist link"></a>
-<a href="https://unit-sdk.pavlusha.me/"><img src="https://img.shields.io/website?url=https%3A%2F%2Funit-sdk.pavlusha.me%2F&label=documentation&link=https%3A%2F%2Funit-sdk.pavlusha.me%2F" alt="documentation link"></a>
 <img src="https://github.com/Pavlusha311245/nginx-unit-php-sdk/actions/workflows/deploy_codecov.yaml/badge.svg" alt="documentation link">
 <a href="https://codecov.io/gh/Pavlusha311245/nginx-unit-php-sdk" > 
  <img src="https://codecov.io/gh/Pavlusha311245/nginx-unit-php-sdk/graph/badge.svg?token=FGTTDSJ7BX" alt="Codecov dabge"/> 
  </a>
+<a href="https://deepwiki.com/Pavlusha311245/nginx-unit-php-sdk"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
 </p>
 
 ## About

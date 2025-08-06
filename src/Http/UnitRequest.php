@@ -93,7 +93,7 @@ class UnitRequest
 //            $responseBody = $e->hasResponse() ? $e->getResponse()->getBody()->getContents() : null;
 //            throw new UnitException($responseBody ? json_decode($responseBody)['error'] : '');
 
-            throw new UnitException($e->getMessage());
+            throw new UnitException($e->getMessage(), $e->getCode());
         }
 
         $rawData = json_decode($response->getBody()->getContents(), $associative);
