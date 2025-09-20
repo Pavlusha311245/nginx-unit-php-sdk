@@ -3,6 +3,7 @@
 namespace UnitPhpSdk;
 
 use Override;
+use Throwable;
 use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Config\{AccessLog, Listener, Route, Settings, Upstream, Upstream\Server};
 use UnitPhpSdk\Exceptions\{FileNotFoundException, UnitException};
@@ -10,6 +11,7 @@ use UnitPhpSdk\Builders\ApplicationBuilder;
 use UnitPhpSdk\Builders\EndpointBuilder;
 use UnitPhpSdk\Contracts\ConfigInterface;
 use UnitPhpSdk\Contracts\Uploadable;
+use UnitPhpSdk\Enums\ApiPathEnum;
 use UnitPhpSdk\Http\UnitRequest;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Traits\CanUpload;
@@ -65,7 +67,7 @@ class Config implements ConfigInterface, Uploadable
      * @param object|null $data
      * @throws UnitException
      */
-    public function __construct(object $data = null, UnitRequest $unitRequest = null)
+    public function __construct(?object $data = null, ?UnitRequest $unitRequest = null)
     {
         $this->unitRequest = $unitRequest;
 
@@ -73,7 +75,7 @@ class Config implements ConfigInterface, Uploadable
             $this->parseUnitObject($data);
         }
 
-        $this->setApiEndpoint(EndpointBuilder::create('/config')->get());
+        $this->setApiEndpoint(ApiPathEnum::CONFIG->value);
     }
 
     /**
@@ -227,7 +229,7 @@ class Config implements ConfigInterface, Uploadable
      */
     public function getListener(string $listener): ?Listener
     {
-        return $this->listeners[$listener] ?? null;
+        return array_find($this->listeners, fn (Listener $item) => $item->getListener() == $listener);
     }
 
     /**
@@ -253,10 +255,13 @@ class Config implements ConfigInterface, Uploadable
     public function uploadListener(Listener $listener): bool
     {
         try {
-            $this->unitRequest->setMethod(HttpMethodsEnum::PUT->value)
-                ->send("/config/listeners/{$listener->getListener()}", requestOptions: [
-                    'json' => $listener->toArray()
-                ]);
+            $this->unitRequest->setMethod(HttpMethodsEnum::PUT)
+                ->send(
+                    uri: "/config/listeners/{$listener->getListener()}",
+                    requestOptions: [
+                        'json' => $listener->toArray()
+                    ]
+                );
         } catch (UnitException $e) {
             print_r($e->getMessage());
             return false;
@@ -268,7 +273,7 @@ class Config implements ConfigInterface, Uploadable
     /**
      * @throws UnitException
      */
-    public function uploadListenerFromFile(string $path, string $listener): bool
+    public function uploadListenerFromFile(string $path, string $listenerName): bool
     {
         $fileContent = file_get_contents($path);
 
@@ -281,8 +286,8 @@ class Config implements ConfigInterface, Uploadable
         }
 
         try {
-            $this->unitRequest->setMethod('PUT')
-                ->send("/config/listeners/$listener", requestOptions: [
+            $this->unitRequest->setMethod(HttpMethodsEnum::PUT)
+                ->send(ApiPathEnum::LISTENER->getPath($listenerName), requestOptions: [
                     'body' => $fileContent
                 ]);
         } catch (UnitException) {
@@ -299,10 +304,10 @@ class Config implements ConfigInterface, Uploadable
      */
     public function removeListener(Listener $listener): bool
     {
-        $listenerId = $listener->getListener();
+        $listenerName = $listener->getListener();
         $this->unitRequest
-            ->setMethod(HttpMethodsEnum::DELETE->value)
-            ->send("/config/listeners/$listenerId");
+            ->setMethod(HttpMethodsEnum::DELETE)
+            ->send(ApiPathEnum::LISTENER->getPath($listenerName));
 
         return true;
     }
@@ -345,12 +350,12 @@ class Config implements ConfigInterface, Uploadable
             throw new UnitException('Application name not specified');
         }
 
-        $appName = empty($application->getName()) ? $name : $application->getName();
+        $applicationName = empty($application->getName()) ? $name : $application->getName();
 
         try {
             $this->unitRequest
-                ->setMethod(HttpMethodsEnum::PUT->value)
-                ->send("/config/applications/$appName", requestOptions: [
+                ->setMethod(HttpMethodsEnum::PUT)
+                ->send(ApiPathEnum::APPLICATION->getPath($applicationName), requestOptions: [
                     'json' => $application->toJson()
                 ]);
         } catch (UnitException) {
@@ -364,7 +369,7 @@ class Config implements ConfigInterface, Uploadable
      * @inheritdoc
      * @throws UnitException
      */
-    public function uploadApplicationFromFile(string $path, string $name): bool
+    public function uploadApplicationFromFile(string $path, string $applicationName): bool
     {
         // TODO: add validation if json contains application name
         $fileContent = file_get_contents($path);
@@ -379,8 +384,8 @@ class Config implements ConfigInterface, Uploadable
 
         try {
             $this->unitRequest
-                ->setMethod(HttpMethodsEnum::PUT->value)
-                ->send("/config/applications/$name", requestOptions: [
+                ->setMethod(HttpMethodsEnum::PUT)
+                ->send(ApiPathEnum::APPLICATION->getPath($applicationName), requestOptions: [
                     'body' => $fileContent
                 ]);
         } catch (UnitException) {
@@ -400,8 +405,8 @@ class Config implements ConfigInterface, Uploadable
     {
         $applicationName = is_string($application) ? $application : $application->getName();
         $this->unitRequest
-            ->setMethod(HttpMethodsEnum::DELETE->value)
-            ->send("/config/applications/$applicationName");
+            ->setMethod(HttpMethodsEnum::DELETE)
+            ->send(ApiPathEnum::APPLICATION->getPath($applicationName));
 
         return true;
     }
@@ -441,8 +446,8 @@ class Config implements ConfigInterface, Uploadable
         }
 
         try {
-            $this->unitRequest->setMethod(HttpMethodsEnum::DELETE->value)
-                ->send('/config/routes');
+            $this->unitRequest->setMethod(HttpMethodsEnum::DELETE)
+                ->send(ApiPathEnum::ROUTES->value);
         } catch (UnitException) {
             return false;
         }
@@ -490,8 +495,8 @@ class Config implements ConfigInterface, Uploadable
 
         try {
             $this->unitRequest
-                ->setMethod(HttpMethodsEnum::PUT->value)
-                ->send("/config/upstreams/$upstreamName", requestOptions: [
+                ->setMethod(HttpMethodsEnum::PUT)
+                ->send(ApiPathEnum::UPSTREAM->getPath($upstreamName), requestOptions: [
                     'json' => $upstream->toArray()
                 ]);
         } catch (UnitException) {
@@ -519,8 +524,8 @@ class Config implements ConfigInterface, Uploadable
 
         try {
             $this->unitRequest
-                ->setMethod(HttpMethodsEnum::PUT->value)
-                ->send('/config/upstreams', requestOptions: [
+                ->setMethod(HttpMethodsEnum::PUT)
+                ->send(ApiPathEnum::UPSTREAMS, requestOptions: [
                     'body' => $fileContent
                 ]);
         } catch (UnitException $exception) {
@@ -543,9 +548,9 @@ class Config implements ConfigInterface, Uploadable
         }
 
         try {
-            $this->unitRequest->setMethod(HttpMethodsEnum::PUT->value)
-                ->send('/config/access_log', requestOptions: [
-                    'json' => json_encode($data)
+            $this->unitRequest->setMethod(HttpMethodsEnum::PUT)
+                ->send(ApiPathEnum::ACCESS_LOG->value, requestOptions: [
+                    'json' => $data
                 ]);
         } catch (UnitException) {
             return false;
@@ -554,23 +559,30 @@ class Config implements ConfigInterface, Uploadable
         return true;
     }
 
+    /**
+     * Add access log to config
+     *
+     * @return AccessLog|null
+     */
     public function getAccessLog(): ?AccessLog
     {
         try {
-            $result = $this->unitRequest->send('/config/access_log');
-        } catch (UnitException) {
+            $result = $this->unitRequest->send(ApiPathEnum::ACCESS_LOG->value);
+
+            return new AccessLog($result);
+        } catch (Throwable $exception) {
+//            TODO: add for all 404 normal exception
+
             return null;
         }
-
-        return new AccessLog($result);
     }
 
     public function removeAccessLog(): bool
     {
         try {
             $this->unitRequest
-                ->setMethod(HttpMethodsEnum::DELETE->value)
-                ->send('/config/access_log');
+                ->setMethod(HttpMethodsEnum::DELETE)
+                ->send(ApiPathEnum::ACCESS_LOG->value);
         } catch (UnitException) {
             return false;
         }
@@ -610,6 +622,32 @@ class Config implements ConfigInterface, Uploadable
         $values = array_map(fn ($item) => $item->toArray(), $data);
 
         return array_combine($keys, $values);
+    }
+
+    public function reset(): bool
+    {
+        try {
+            $this->unitRequest->setMethod(HttpMethodsEnum::DELETE)
+                ->send(ApiPathEnum::CONFIG->value);
+
+            $this->unitRequest->setMethod(HttpMethodsEnum::POST)
+                ->send(
+                    uri: ApiPathEnum::CONFIG->value,
+                    requestOptions: [
+                    'json' => json_encode([
+                        'listeners' => (object)[],
+                        'routes' => (object)[],
+                        'applications' => (object)[],
+                        'upstreams' => (object)[],
+                        'settings' => (object)[]
+                    ])
+                ]
+                );
+        } catch (UnitException) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

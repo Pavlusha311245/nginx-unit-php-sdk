@@ -1,6 +1,6 @@
 {
   "name": "pavlusha/unit-php-sdk",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "type": "sdk",
   "description": "This project allows developers to interact with the Nginx Unit web server through PHP classes",
   "license": "Apache-2.0",
@@ -19,27 +19,28 @@
   ],
   "scripts": {
     "test": [
-      "composer test:unit",
-      "composer test:phpstan"
+      "@test:phpstan",
+      "@test:unit"
     ],
     "test:unit": "./vendor/bin/pest",
-    "test:coverage": "./vendor/bin/pest --coverage --coverage-clover coverage.xml",
-    "test:phpstan": "./vendor/bin/phpstan analyse -c phpstan.neon",
-    "lint": "./vendor/bin/php-cs-fixer fix --rules=@PSR12 ."
+    "test:coverage": "XDEBUG_MODE=cover ./vendor/bin/pest --coverage --coverage-clover coverage.xml",
+    "test:phpstan": "./vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=256M",
+    "lint": "PHP_CS_FIXER_IGNORE_ENV=1 ./vendor/bin/php-cs-fixer fix --rules=@PSR12 ."
   },
   "require": {
-    "php": "^8.3",
-    "friendsofphp/php-cs-fixer": "^3.54",
-    "guzzlehttp/guzzle": "^7.8.1",
-    "nesbot/carbon": "^2.72",
+    "php": "^8.4",
+    "friendsofphp/php-cs-fixer": "^3.68",
+    "guzzlehttp/guzzle": "^7.9",
+    "nesbot/carbon": "^3.8",
     "doctrine/inflector": "^2.0",
     "ext-curl": "*"
   },
   "require-dev": {
-    "pestphp/pest": "^2.34",
-    "phpstan/phpstan": "^1.10",
+    "roave/security-advisories": "dev-latest",
+    "pestphp/pest": "^2.36",
+    "phpstan/phpstan": "^1.12",
     "mockery/mockery": "^1.6",
-    "fakerphp/faker": "^1.23"
+    "fakerphp/faker": "^1.24"
   },
   "autoload": {
     "psr-4": {

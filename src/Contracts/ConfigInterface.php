@@ -34,10 +34,10 @@ interface ConfigInterface extends Arrayable, Jsonable
      * Upload configuration from file
      *
      * @param string $path
-     * @param string $listener
+     * @param string $listenerName
      * @return bool
      */
-    public function uploadListenerFromFile(string $path, string $listener): bool;
+    public function uploadListenerFromFile(string $path, string $listenerName): bool;
 
     /**
      * @param Listener $listener
@@ -93,10 +93,10 @@ interface ConfigInterface extends Arrayable, Jsonable
      * Upload application to Nginx Unit from file
      *
      * @param string $path
-     * @param string $name
+     * @param string $applicationName
      * @return mixed
      */
-    public function uploadApplicationFromFile(string $path, string $name): bool;
+    public function uploadApplicationFromFile(string $path, string $applicationName): bool;
 
     /**
      * @param AbstractApplication|string $application

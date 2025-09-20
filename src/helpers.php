@@ -30,22 +30,7 @@ if (!function_exists('parse_listener_pass')) {
 
             return $data;
         } else {
-            throw new ParseError('Error when try to parse listenerPass');
+            throw new ParseError('Invalid format. The string must start with applications, routes, or upstreams, followed by up to three optional segments separated by slashes, where each segment can contain letters, digits, underscores, or hyphens.');
         }
     }
 }
-
-//if (!function_exists('get_unit_endpoint')) {
-//    /**
-//     * Get the Unit endpoint from the configuration.
-//     *
-//     * @return string The Unit endpoint.
-//     */
-//    function get_unit_endpoint($class): string
-//    {
-//        return match ($class) {
-//            Unit::class => '/',
-//            Config::class => '/config'
-//        };
-//    }
-//}

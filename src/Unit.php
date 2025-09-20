@@ -5,9 +5,14 @@ namespace UnitPhpSdk;
 use UnitPhpSdk\Contracts\{CertificateInterface, UnitInterface, Uploadable};
 use Override;
 use UnitPhpSdk\Abstract\AbstractApplication;
+use UnitPhpSdk\Config\Listener;
+use UnitPhpSdk\Config\Route;
+use UnitPhpSdk\Config\Upstream;
+use UnitPhpSdk\Enums\ApiPathEnum;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\FileNotFoundException;
 use UnitPhpSdk\Exceptions\UnitException;
+use UnitPhpSdk\Http\UnitHttpClient;
 use UnitPhpSdk\Http\UnitRequest;
 use UnitPhpSdk\Statistics\Statistics;
 
@@ -47,6 +52,9 @@ class Unit implements UnitInterface
 
     private UnitRequest $request;
 
+    private UnitHttpClient $client;
+
+
     /**
      * Constructor
      *
@@ -54,10 +62,16 @@ class Unit implements UnitInterface
      */
     public function __construct(
         private readonly string  $address,
-        private readonly ?string $socket = null
-    ) {
+        private readonly ?string $socket = null,
+    )
+    {
         $this->request = new UnitRequest(
             address: $this->address,
+            socket: $this->socket
+        );
+
+        $this->client = new UnitHttpClient(
+            baseUrl: $this->address,
             socket: $this->socket
         );
 
@@ -83,7 +97,8 @@ class Unit implements UnitInterface
      */
     private function loadConfig(): void
     {
-        $result = $this->request->send('/config', false);
+        $result = $this->request->send(ApiPathEnum::CONFIG->value, false);
+
         $this->config = new Config($result, $this->request);
     }
 
@@ -93,15 +108,23 @@ class Unit implements UnitInterface
      */
     public function getCertificates(): array
     {
-        $this->loadCertificates();
+        try {
+            $this->loadCertificates();
 
-        return $this->certificates;
+            return $this->certificates;
+        } catch (UnitException $exception) {
+            if ($exception->getCode() == 404) {
+                return [];
+            }
+
+            throw new UnitException($exception->getMessage());
+        }
     }
 
     /**
      * @inheritDoc
      */
-    public function uploadCertificate(string $path, string $certificateName): bool
+    public function uploadCertificate(string $path, string $certificateName)
     {
         // TODO: need to review
         $fileContent = file_get_contents($path);
@@ -111,16 +134,17 @@ class Unit implements UnitInterface
         }
 
         try {
-            $this->request->setMethod('PUT')
-                ->send("/certificates/$certificateName", requestOptions: [
+            $this->request->setMethod(HttpMethodsEnum::PUT)
+                ->send(ApiPathEnum::CERTIFICATE->getPath($certificateName), requestOptions: [
                     'body' => $fileContent
                 ]);
-        } catch (UnitException $exception) {
-            print_r($exception->getMessage());
-            return false;
-        }
+        } catch (\Throwable $exception) {
+            if ($exception->getCode() == 400) {
+                throw new UnitException($exception->getMessage());
+            }
 
-        return true;
+            throw new UnitException($exception->getMessage());
+        }
     }
 
     /**
@@ -131,13 +155,17 @@ class Unit implements UnitInterface
         // TODO: need to review
         try {
             $this->request
-                ->setMethod('DELETE')
-                ->send("/certificates/$certificateName");
-        } catch (UnitException) {
-            return false;
-        }
+                ->setMethod(HttpMethodsEnum::DELETE)
+                ->send(ApiPathEnum::CERTIFICATE->getPath($certificateName));
 
-        return true;
+            return true;
+        } catch (UnitException $exception) {
+            if ($exception->getCode() == 404) {
+                throw new UnitException('Certificate not found');
+            }
+
+            throw new UnitException($exception->getMessage());
+        }
     }
 
     /**
@@ -145,7 +173,7 @@ class Unit implements UnitInterface
      */
     private function loadCertificates(): void
     {
-        $result = $this->request->send('/certificates');
+        $result = $this->request->send(ApiPathEnum::CERTIFICATES->value);
         foreach ($result as $key => $value) {
             $this->certificates[$key] = new Certificate($value, $key);
         }
@@ -201,10 +229,14 @@ class Unit implements UnitInterface
      */
     private function loadJsModules(): void
     {
-        $result = $this->request->send('/js_modules');
+        try {
+            $result = $this->request->send(ApiPathEnum::JS_MODULES->value);
 
-        foreach ($result as $key => $value) {
-            $this->js_modules[$key] = new JsModule($key, $value);
+            foreach ($result as $key => $value) {
+                $this->js_modules[$key] = new JsModule($key, $value);
+            }
+        } catch (UnitException $exception) {
+            $this->js_modules = [];
         }
     }
 
@@ -213,7 +245,7 @@ class Unit implements UnitInterface
      */
     private function loadStatistics(): void
     {
-        $result = (new UnitRequest($this->address, $this->socket))->send('/status');
+        $result = $this->request->send(ApiPathEnum::STATUS->value);
         $this->statistics = new Statistics($result);
     }
 
@@ -223,9 +255,17 @@ class Unit implements UnitInterface
      */
     public function getCertificate(string $certificateName): ?CertificateInterface
     {
-        $this->loadCertificates();
+        try {
+            $this->loadCertificates();
 
-        return $this->certificates[$certificateName] ?? null;
+            return $this->certificates[$certificateName];
+        } catch (UnitException $exception) {
+            if ($exception->getCode() == 404) {
+                throw new UnitException('Certificate not found');
+            }
+
+            throw new UnitException($exception->getMessage());
+        }
     }
 
     /**
@@ -248,8 +288,8 @@ class Unit implements UnitInterface
 
         try {
             $this->request
-                ->setMethod('PUT')
-                ->send(uri: "/config", requestOptions: [
+                ->setMethod(HttpMethodsEnum::PUT)
+                ->send(uri: ApiPathEnum::CONFIG->value, requestOptions: [
                     'form_params' => $data
                 ]);
         } catch (UnitException $exception) {
@@ -290,26 +330,50 @@ class Unit implements UnitInterface
      *
      * @param AbstractApplication $application The application to be restarted.
      * @return bool Returns true if the application was restarted successfully, false otherwise.
+     * @throws UnitException
      */
     public function restartApplication(AbstractApplication $application): bool
     {
         try {
-            $this->request->send("/control/applications/{$application->getName()}/restart");
-        } catch (UnitException) {
+            $this->request->send(ApiPathEnum::APPLICATION_RESET->getPath($application->getName()));
+        } catch (UnitException $e) {
+            if ($e->getCode() == 404) {
+                throw new UnitException('Application not found');
+            }
+
             return false;
         }
 
         return true;
     }
 
+    /**
+     * @throws UnitException
+     */
     #[Override] public function toArray(): array
     {
         return [
-            'certificates' => array_map(fn ($certificate) => $certificate->toArray(), $this->getCertificates()),
+            'certificates' => array_map(fn($certificate) => $certificate->toArray(), $this->getCertificates()),
             'config' => $this->getConfig()->toArray(),
-            'js_modules' => array_map(fn ($module) => $module->toArray(), $this->getJsModules()),
+            'js_modules' => array_map(fn($module) => $module->toArray(), $this->getJsModules()),
             'status' => $this->getStatistics()->toArray()
         ];
+    }
+
+    /**
+     * Checks if a connection to the server is established.
+     *
+     * @return bool Returns true if the connection is successful, false otherwise.
+     */
+    public function isConnected(): bool
+    {
+        try {
+            $this->request->send(ApiPathEnum::UNIT->value);
+        } catch (UnitException) {
+            return false;
+        }
+
+        return true;
     }
 
     #[Override] public function toJson(int $options = 0): string

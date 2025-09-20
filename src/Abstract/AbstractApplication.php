@@ -7,6 +7,7 @@ use UnitPhpSdk\Config\Application\{ProcessManagement\ApplicationProcess,
     ProcessManagement\RequestLimit
 };
 use UnitPhpSdk\Builders\EndpointBuilder;
+use UnitPhpSdk\Enums\ApiPathEnum;
 use UnitPhpSdk\Exceptions\UnitException;
 use UnitPhpSdk\Contracts\{ApplicationInterface, Arrayable, Uploadable};
 use UnitPhpSdk\Traits\CanUpload;
@@ -99,7 +100,7 @@ abstract class AbstractApplication implements ApplicationInterface, Arrayable, U
             $this->parseFromArray($data);
         }
 
-        $this->setApiEndpoint(EndpointBuilder::create("config/applications/")->get() . $this->getName());
+        $this->setApiEndpoint(ApiPathEnum::APPLICATION->getPath($this->getName()));
     }
 
     /**

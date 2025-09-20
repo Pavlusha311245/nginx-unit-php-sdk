@@ -17,9 +17,10 @@ use UnitPhpSdk\Exceptions\UnitException;
 class ApplicationBuilder
 {
     /**
-     * @throws UnitException
-     *
-     * TODO: add ApplicationTypeEnum as possible type
+     * @param $appName
+     * @param $appData
+     * @param string $type
+     * @return GoExternalApplication|JavaApplication|NodeJsExternalApplication|PerlApplication|PhpApplication|PythonApplication|RubyApplication|WebAssemblyApplication|WebAssemblyComponentApplication
      */
     public static function create($appName, $appData, string $type = '')
     {

@@ -9,9 +9,9 @@ use UnitPhpSdk\Abstract\AbstractApplication;
 use UnitPhpSdk\Contracts\{ApplicationStatisticsInterface,
     Arrayable,
     ConnectionsStatisticsInterface,
+    ModuleStatisticsInterface,
     RequestsStatisticsInterface,
-    StatisticsInterface
-};
+    StatisticsInterface};
 use UnitPhpSdk\Exceptions\UnitParseException;
 
 /**
@@ -22,6 +22,13 @@ use UnitPhpSdk\Exceptions\UnitParseException;
  */
 final readonly class Statistics implements StatisticsInterface
 {
+    /**
+     * Modules statistics
+     *
+     * @var array
+     */
+    private array $modules;
+
     /**
      * Connections statistics
      *
@@ -48,7 +55,7 @@ final readonly class Statistics implements StatisticsInterface
      */
     public function __construct(array $data)
     {
-        //        $this->unitInformation = new UnitStatistics($data['unit']);
+        $this->modules = array_map(fn ($item) => new ModuleStatistics($item), $data['modules']);
         $this->connections = new ConnectionsStatistics($data['connections']);
         $this->requests = new RequestsStatistics($data['requests']);
         $this->applications = array_map(fn ($item) => new ApplicationStatistics($item), $data['applications']);
@@ -95,11 +102,32 @@ final readonly class Statistics implements StatisticsInterface
     }
 
     /**
+     * @return array
+     */
+    public function getModules(): array
+    {
+        return $this->modules;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getModuleStatistics(string $module): ModuleStatisticsInterface
+    {
+        if (!array_key_exists($module, $this->modules)) {
+            throw new InvalidArgumentException('Module with name ' . $module . ' not found');
+        }
+
+        return $this->modules[$module];
+    }
+
+    /**
      * @inheritDoc
      */
     #[Override] public function toArray(): array
     {
         return [
+            'modules' => array_map(fn ($item) => $item->toArray(), $this->modules),
             'connections' => $this->connections->toArray(),
             'requests' => $this->requests->toArray(),
             'applications' => array_map(fn ($item) => $item->toArray(), $this->applications),

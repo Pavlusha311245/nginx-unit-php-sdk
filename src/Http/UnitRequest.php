@@ -3,6 +3,7 @@
 namespace UnitPhpSdk\Http;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use UnitPhpSdk\Enums\HttpMethodsEnum;
 use UnitPhpSdk\Exceptions\UnitException;
@@ -32,8 +33,15 @@ class UnitRequest
      */
     public function __construct(
         string                   $address,
-        private readonly ?string $socket = null
-    ) {
+        private readonly ?string $socket = null,
+        private ?ClientInterface $client = null
+    )
+    {
+        $this->client = $client ?? new Client([
+            'base_uri' => $address,
+            'curl' => $this->socket ? [CURLOPT_UNIX_SOCKET_PATH => $this->socket] : []
+        ]);
+
         $this->address = $this->parseAddress($address);
     }
 
@@ -71,20 +79,21 @@ class UnitRequest
     /**
      * Send request
      *
+     * @param $uri
+     * @param bool $associative
+     * @param array $requestOptions
+     * @return mixed
      * @throws UnitException
      */
-    public function send($uri, $associative = true, array $requestOptions = [])
+    public function send($uri, bool $associative = true, array $requestOptions = []): mixed
     {
-        $client = new Client();
-
-        if (!empty($this->socket)) {
-            $requestOptions['curl'] = [CURLOPT_UNIX_SOCKET_PATH => $this->socket];
-        }
-
         try {
-            $response = $client->request($this->method, $this->address . $uri, $requestOptions);
-        } catch (GuzzleException $exception) {
-            throw new UnitException($exception->getMessage());
+            $response = $this->client->request($this->method, $this->address . $uri, $requestOptions);
+        } catch (GuzzleException $e) {
+//            $responseBody = $e->hasResponse() ? $e->getResponse()->getBody()->getContents() : null;
+//            throw new UnitException($responseBody ? json_decode($responseBody)['error'] : '');
+
+            throw new UnitException($e->getMessage(), $e->getCode());
         }
 
         $rawData = json_decode($response->getBody()->getContents(), $associative);

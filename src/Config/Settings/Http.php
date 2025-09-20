@@ -4,6 +4,7 @@ namespace UnitPhpSdk\Config\Settings;
 
 use UnitPhpSdk\Builders\EndpointBuilder;
 use UnitPhpSdk\Contracts\{Arrayable, Jsonable, Uploadable};
+use UnitPhpSdk\Enums\ApiPathEnum;
 use UnitPhpSdk\Traits\CanUpload;
 
 class Http implements Arrayable, Jsonable, Uploadable
@@ -97,7 +98,7 @@ class Http implements Arrayable, Jsonable, Uploadable
             }
         }
 
-        $this->setApiEndpoint(EndpointBuilder::create($this)->get());
+        $this->setApiEndpoint(ApiPathEnum::HTTP->value);
     }
 
     /**

@@ -1,72 +1,99 @@
-<?php
-
-// Test for ConnectionsStatistics methods
 use UnitPhpSdk\Contracts\ApplicationStatisticsInterface;
 use UnitPhpSdk\Contracts\ConnectionsStatisticsInterface;
 use UnitPhpSdk\Contracts\RequestsStatisticsInterface;
-use UnitPhpSdk\Statistics\ApplicationStatistics;
+use UnitPhpSdk\Contracts\ModuleStatisticsInterface;
 use UnitPhpSdk\Statistics\Statistics;
+use UnitPhpSdk\Statistics\ApplicationStatistics;
+use UnitPhpSdk\Statistics\ModuleStatistics;
 
 $statData = [
-    'connections' => [
-        'idle' => 5,
-        'active' => 2,
-        'accepted' => 7,
-        'closed' => 2
-    ],
-    'requests' => [
-        'total' => 50
-    ],
-    'applications' => [
-        'application1' => [
-            'requests' => [
-                'active' => 0
-            ],
-            'processes' => [
-                'running' => 14,
-                'starting' => 0,
-                'idle' => 4
-            ],
-        ],
-    ],
+'modules' => [
+['version' => '1.0.0', 'lib' => '/path/to/modulelib.so'],
+],
+'connections' => [
+'accepted' => 7,
+'active' => 2,
+'idle' => 5,
+'closed' => 2,
+],
+'requests' => [
+'total' => 50,
+],
+'applications' => [
+'application1' => [
+'requests' => [
+'active' => 0,
+],
+'processes' => [
+'running' => 14,
+'starting' => 0,
+'idle' => 4,
+],
+],
+],
 ];
 
+$moduleData = $statData['modules'][0];
 $connectionsData = $statData['connections'];
 $appData = $statData['applications']['application1'];
 
 it('tests connections methods', function () use ($statData, $connectionsData) {
-    $statistics = new Statistics($statData);
-    $this->assertInstanceOf(ConnectionsStatisticsInterface::class, $statistics->getConnections());
-    $this->assertEquals($statistics->getConnections()->getActiveConnections(), $connectionsData['active']);
+$statistics = new Statistics($statData);
+expect($statistics->getConnections())->toBeInstanceOf(ConnectionsStatisticsInterface::class);
+expect($statistics->getConnections()->getActiveConnections())->toBe($connectionsData['active']);
 });
-// Test for RequestsStatistics methods
+
 it('tests requests methods', function () use ($statData) {
-    $statistics = new Statistics($statData);
-    $this->assertInstanceOf(RequestsStatisticsInterface::class, $statistics->getRequests());
+$statistics = new Statistics($statData);
+expect($statistics->getRequests())->toBeInstanceOf(RequestsStatisticsInterface::class);
 });
-// Test for ApplicationStatistics methods
+
 it('tests applications methods', function () use ($statData, $appData) {
-    $statistics = new Statistics($statData);
-    $expectedApplicationStatistics = new ApplicationStatistics((array)$appData);
-    $application = 'application1';
-    $this->assertIsArray($statistics->getApplications());
-    $this->assertInstanceOf(ApplicationStatisticsInterface::class, $statistics->getApplicationStatistics($application));
-    $this->assertEquals($expectedApplicationStatistics->getActiveRequests(), $statistics->getApplicationStatistics($application)->getActiveRequests());
-    $this->assertEquals($expectedApplicationStatistics->getProcesses(), $statistics->getApplicationStatistics($application)->getProcesses());
-    $this->assertEquals($expectedApplicationStatistics->getRunningProcesses(), $statistics->getApplicationStatistics($application)->getRunningProcesses());
-    $this->assertEquals($expectedApplicationStatistics->getStartingProcesses(), $statistics->getApplicationStatistics($application)->getStartingProcesses());
-    $this->assertEquals($expectedApplicationStatistics->getIdleProcesses(), $statistics->getApplicationStatistics($application)->getIdleProcesses());
-    $this->assertIsArray($statistics->getApplicationStatistics($application)->getRequests());
+$statistics = new Statistics($statData);
+$expectedApplicationStatistics = new ApplicationStatistics($appData);
+$application = 'application1';
+expect($statistics->getApplications())->toBeArray();
+expect($statistics->getApplicationStatistics($application))->toBeInstanceOf(ApplicationStatisticsInterface::class);
+expect($statistics->getApplicationStatistics($application)->getActiveRequests())->toBe($expectedApplicationStatistics->getActiveRequests());
+expect($statistics->getApplicationStatistics($application)->getProcesses())->toEqual($expectedApplicationStatistics->getProcesses());
+expect($statistics->getApplicationStatistics($application)->getRunningProcesses())->toBe($expectedApplicationStatistics->getRunningProcesses());
+expect($statistics->getApplicationStatistics($application)->getStartingProcesses())->toBe($expectedApplicationStatistics->getStartingProcesses());
+expect($statistics->getApplicationStatistics($application)->getIdleProcesses())->toBe($expectedApplicationStatistics->getIdleProcesses());
+expect($statistics->getApplicationStatistics($application)->getRequests())->toBeArray();
 });
-// Test for invalid application
+
 it('throws exception for invalid application', function () use ($statData) {
-    $statistics = new Statistics($statData);
-    $this->expectException(InvalidArgumentException::class);
-    $statistics->getApplicationStatistics('nonexistentApplication');
+$statistics = new Statistics($statData);
+$this->expectException(InvalidArgumentException::class);
+$this->expectExceptionMessage('Application with name nonexistentApplication not found');
+$statistics->getApplicationStatistics('nonexistentApplication');
 });
-// Test toArray method
+
+it('tests modules methods', function () use ($statData, $moduleData) {
+$statistics = new Statistics($statData);
+$expectedModuleStatistics = new ModuleStatistics($moduleData);
+$module = '1.0.0'; // Assuming version is used for identifying modules
+expect($statistics->getModules())->toBeArray();
+expect($statistics->getModules()[0])->toBeInstanceOf(ModuleStatisticsInterface::class);
+expect($statistics->getModules()[0]->getVersion())->toBe($expectedModuleStatistics->getVersion());
+expect($statistics->getModules()[0]->getLibPath())->toBe($expectedModuleStatistics->getLibPath());
+});
+
+it('throws exception for invalid module', function () use ($statData) {
+$statistics = new Statistics($statData);
+$this->expectException(InvalidArgumentException::class);
+$this->expectExceptionMessage('Module with name nonexistentModule not found');
+$statistics->getModuleStatistics('nonexistentModule');
+});
+
 it('tests toArray method', function () use ($statData) {
-    $statistics = new Statistics($statData);
-    $this->assertIsArray($statistics->toArray());
-    $this->assertEquals($statData, $statistics->toArray());
+$statistics = new Statistics($statData);
+expect($statistics->toArray())->toBeArray();
+expect($statistics->toArray())->toEqual($statData);
+});
+
+it('tests toJson method', function () use ($statData) {
+$statistics = new Statistics($statData);
+$json = $statistics->toJson();
+expect($json)->toEqual(json_encode($statData));
 });

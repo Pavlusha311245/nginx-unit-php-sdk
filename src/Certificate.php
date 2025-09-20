@@ -13,7 +13,7 @@ use UnitPhpSdk\Contracts\CertificateInterface;
  *
  * @implements CertificateInterface
  */
-readonly class Certificate implements CertificateInterface, Arrayable
+class Certificate implements CertificateInterface, Arrayable
 {
     /**
      * @var array $chain

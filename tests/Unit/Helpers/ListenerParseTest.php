@@ -47,7 +47,7 @@ it('throws a ParseError for invalid listener pass strings', function () {
 
     foreach ($invalidStrings as $string) {
         $this->expectException(ParseError::class);
-        $this->expectExceptionMessage('Error when try to parse listenerPass');
+        $this->expectExceptionMessage('Invalid format. The string must start with applications, routes, or upstreams, followed by up to three optional segments separated by slashes, where each segment can contain letters, digits, underscores, or hyphens.');
 
         parse_listener_pass($string);
     }

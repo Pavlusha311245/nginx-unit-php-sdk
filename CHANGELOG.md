@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v0.9.0 - [2025/09/20]
+
+- Added new class `Telemetry` and `TelemetryProtocolEnum` for telemetry support
+- Added `ModuleStatisticsInterface` and class `ModuleStatistics` for module statistics
+- Added enum ApiPathEnum for managing API paths
+- Added methods `getRouteBlock` and `removeRouteBlock` in `Route` class
+
 ## v0.8.0 - [2024/09/10]
 
 - Updated application classes
