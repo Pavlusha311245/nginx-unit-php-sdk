@@ -67,7 +67,7 @@ class Config implements ConfigInterface, Uploadable
      * @param object|null $data
      * @throws UnitException
      */
-    public function __construct(object $data = null, UnitRequest $unitRequest = null)
+    public function __construct(?object $data = null, ?UnitRequest $unitRequest = null)
     {
         $this->unitRequest = $unitRequest;
 
