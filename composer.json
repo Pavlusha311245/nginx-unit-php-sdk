@@ -36,6 +36,7 @@
     "ext-curl": "*"
   },
   "require-dev": {
+    "roave/security-advisories": "dev-latest",
     "pestphp/pest": "^2.36",
     "phpstan/phpstan": "^1.12",
     "mockery/mockery": "^1.6",
