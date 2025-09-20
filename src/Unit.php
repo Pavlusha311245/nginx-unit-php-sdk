@@ -80,12 +80,9 @@ class Unit implements UnitInterface
 
     /**
      * @inheritDoc
-     * @throws UnitException
      */
     public function getConfig(): Contracts\ConfigInterface
     {
-        $this->loadConfig();
-
         return $this->config;
     }
 
@@ -245,7 +242,9 @@ class Unit implements UnitInterface
      */
     private function loadStatistics(): void
     {
-        $result = $this->request->send(ApiPathEnum::STATUS->value);
+        $result = $this->request
+            ->setMethod(HttpMethodsEnum::GET)
+            ->send(ApiPathEnum::STATUS->value);
         $this->statistics = new Statistics($result);
     }
 
@@ -350,7 +349,8 @@ class Unit implements UnitInterface
     /**
      * @throws UnitException
      */
-    #[Override] public function toArray(): array
+    #[Override]
+    public function toArray(): array
     {
         return [
             'certificates' => array_map(fn($certificate) => $certificate->toArray(), $this->getCertificates()),
@@ -376,7 +376,8 @@ class Unit implements UnitInterface
         return true;
     }
 
-    #[Override] public function toJson(int $options = 0): string
+    #[Override]
+    public function toJson(int $options = 0): string
     {
         return json_encode($this->toArray(), $options);
     }
